@@ -5,18 +5,35 @@
  */
 import { StrictMode, useEffect, useRef, useState, type ComponentType } from "react";
 import { createRoot } from "react-dom/client";
+import { dependencies } from "../package.json";
+import { patternCode, patternPrompt, patternStatus } from "./copy";
 import "./gallery.css";
 
 type Meta = { type: string; name: string; purpose: string };
-type Entry = { folder: string; meta: Meta; Example: ComponentType };
+type Entry = { folder: string; meta: Meta; Example: ComponentType; code: string; prompt: string; status: "draft" | "approved" };
 
 const modules = import.meta.glob<{ default: ComponentType; meta: Meta }>("../patterns/*/*/example.tsx", { eager: true });
+// The repo's own files, as text at build time, so Copy code and Copy prompt can't drift from them.
+const sources = import.meta.glob<string>("../patterns/*/*/*.tsx", { query: "?raw", import: "default", eager: true });
+const readmes = import.meta.glob<string>("../patterns/*/*/README.md", { query: "?raw", import: "default", eager: true });
+const wmdsVersion = dependencies["@thewhatmatters/wmds"];
+
 const entries: Entry[] = Object.entries(modules)
-  .map(([path, mod]) => ({
-    folder: path.replace("../patterns/", "").replace("/example.tsx", ""),
-    meta: mod.meta,
-    Example: mod.default,
-  }))
+  .map(([path, mod]) => {
+    const folder = path.replace("../patterns/", "").replace("/example.tsx", "");
+    // The pattern file is the folder's .tsx that isn't the example.
+    const [, source = ""] =
+      Object.entries(sources).find(([file]) => file.startsWith(`../patterns/${folder}/`) && !file.endsWith("/example.tsx")) ?? [];
+    const readme = readmes[`../patterns/${folder}/README.md`] ?? "";
+    return {
+      folder,
+      meta: mod.meta,
+      Example: mod.default,
+      code: patternCode(folder, source, wmdsVersion),
+      prompt: patternPrompt(folder, readme),
+      status: patternStatus(readme),
+    };
+  })
   .sort((a, b) => a.folder.localeCompare(b.folder));
 
 const widths = [390, 768, 1440] as const;
@@ -50,6 +67,44 @@ function Toggle<T extends string | number>({ label, options, value, onChange }: 
         </button>
       ))}
     </div>
+  );
+}
+
+/**
+ * Copies `text`, says "Copied" in the button (announced politely), and falls back to a dialog with the
+ * text selected when the clipboard is refused.
+ */
+function CopyButton({ label, text }: { label: string; text: string }) {
+  const [copied, setCopied] = useState(false);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const area = useRef<HTMLTextAreaElement>(null);
+
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      dialog.current?.showModal();
+      area.current?.select();
+    }
+  }
+
+  return (
+    <>
+      <button type="button" onClick={copy} className="min-h-8 rounded-md border border-border px-3 text-sm">
+        <span aria-live="polite">{copied ? "Copied" : label}</span>
+      </button>
+      <dialog ref={dialog} aria-label={label} className="m-auto w-[min(48rem,90vw)] rounded-lg border border-border bg-body p-4 text-fg">
+        <p className="mb-2 text-sm">The clipboard isn't available here. The text is selected: press ⌘C or Ctrl+C.</p>
+        <textarea ref={area} readOnly value={text} rows={16} className="w-full rounded-md border border-border bg-surface p-2 font-mono text-xs" />
+        <form method="dialog" className="mt-2 text-right">
+          <button type="submit" className="min-h-8 rounded-md border border-border px-3 text-sm">
+            Close
+          </button>
+        </form>
+      </dialog>
+    </>
   );
 }
 
@@ -97,7 +152,10 @@ function Gallery() {
                     >
                       <span className="block text-sm font-medium">{entry.meta.name}</span>
                       <span className="block text-xs text-muted">{entry.meta.purpose}</span>
-                      <code className="mt-1 block font-mono text-xs text-muted">patterns/{entry.folder}</code>
+                      <code className="mt-1 block font-mono text-xs text-muted">
+                        patterns/{entry.folder}
+                        {entry.status === "draft" ? " · draft" : ""}
+                      </code>
                     </button>
                   </li>
                 ))}
@@ -109,7 +167,14 @@ function Gallery() {
         <div className="flex flex-wrap items-center gap-3 border-b border-border p-3">
           <p className="mr-auto text-sm">
             {current?.meta.name} <code className="ml-2 font-mono text-xs text-muted">patterns/{current?.folder}</code>
+            {current?.status === "draft" ? <span className="ml-2 rounded-sm border border-border px-1.5 py-0.5 font-mono text-xs text-muted">draft</span> : null}
           </p>
+          {current ? (
+            <>
+              <CopyButton label="Copy code" text={current.code} />
+              <CopyButton label="Copy prompt" text={current.prompt} />
+            </>
+          ) : null}
           <Toggle label="Theme" options={["light", "dark"] as const} value={theme} onChange={setTheme} />
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
         </div>

@@ -18,9 +18,11 @@ A pattern is a **starting point**: a page section composed from WMDS parts, in t
 
 ## Index
 
+Patterns marked draft aren't approved yet: prefer approved ones, and say so if you use a draft.
+
 | Pattern | Purpose | Use when | Don't use when | Folder |
 |---|---|---|---|---|
-| Hero — Feature Center | Centred pitch and CTAs over the product in a backlit frame, then a row of client logos | The first screen of a site that sells a product or service and has a product shot or site to show, with proof (logos) under it | The hero is mostly a photo or video, an article or app screen, or an editorial left-aligned layout is wanted | `patterns/hero/feature-center` |
+| Hero — Feature Center (draft) | Centred pitch and CTAs over the product in a backlit frame, then a row of client logos | The first screen of a site that sells a product or service and has a product shot or site to show, with proof (logos) under it | The hero is mostly a photo or video, an article or app screen, or an editorial left-aligned layout is wanted | `patterns/hero/feature-center` |
 
 ## Conventions
 

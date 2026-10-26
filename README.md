@@ -24,15 +24,42 @@ npm install
 npm run gallery     # http://127.0.0.1:5190
 ```
 
-Patterns are grouped by type, each with its name, purpose and folder, so you can say "use hero/feature-center with no product visual". Toggle light/dark and 390 / 768 / 1440.
+Patterns are grouped by type, each with its name, purpose, folder and status (draft or approved), so you can say "use hero/feature-center with no product visual". Toggle light/dark and 390 / 768 / 1440.
 
-## Add a pattern
+Each pattern has two buttons:
+- **Copy code** copies the pattern's `.tsx` file as it is in the repo, under a three-line header: the pattern, `npm i @thewhatmatters/wmds@<pinned>`, and the styles import. It works pasted anywhere (v0, Lovable, a developer).
+- **Copy prompt** copies a short brief for a Cadre teammate or Claude Code, with blanks for the client and page, the copy and the changes. It's generated from the pattern's folder and README, so nobody writes it by hand.
 
-1. Make `patterns/<type>/<variant>/` with the pattern file, `example.tsx` (export `meta = { type, name, purpose }` and a default component), `README.md`, and the three screenshots.
-2. Add its row to the index in `SKILL.md`.
-3. Run `npm run check`. The gallery picks the folder up on its own.
+## How we add or change a pattern
 
-Rules: import only from `@thewhatmatters/wmds` and React; parts that change per page are slots (`ReactNode` props); never bake in a nav (an optional `nav` slot at most); no animation by default; base WMDS type, shapes and colours.
+Patterns are built and reviewed here, not in WMDS's Storybook.
+
+**Who builds it**
+- **Lead Engineer builds patterns alone**, after loading the house-taste and emil-design-eng skills.
+- **Product Designer comes in only for:**
+  - **a new type of pattern** (the first footer, the first content box): one short spec up front on its structure and parts;
+  - **one review pass before Randy sees a new pattern:** break-ui with worst-case content, 390px and accessibility. Fix what it finds, then send Randy the gallery link.
+- **Skip Product Designer** for small variants and changes to an existing pattern.
+- **Randy gives the design direction** in the gallery. Keep teammate hand-offs to that one review (it stays clear of Cadre's bot-to-bot hop limit).
+
+**The flow**
+1. **Build:** one branch per new pattern or change, named `<type>/<variant>` (e.g. `hero/split-image`). Make `patterns/<type>/<variant>/` with:
+   - the pattern file;
+   - `example.tsx`, exporting `meta = { type, name, purpose }` and a default component;
+   - `README.md`, with `status: draft`, a "Slots and props" table and an "Adapt it" list, whose first item is the example Copy prompt uses;
+   - the three screenshots.
+
+   Add its row to the index in `SKILL.md`, and run `npm run check`. The gallery picks the folder up on its own.
+2. **Review:** run `npm run gallery` from that branch and give Randy the Cadre preview link. He gives feedback there; change the code and he sees it live. Re-shoot the PNGs when the back-and-forth settles.
+3. **Approve:** when Randy approves, set `status: approved` in the pattern's README and tell Chief of Staff. Chief of Staff merges to `main` and pushes, and GitHub Pages publishes it. Teammates never push.
+4. **WMDS gaps:** if a pattern needs something WMDS can't do, mark it `WMDS-GAP` in the pattern's README. The fix goes into WMDS on its own branch and is reviewed in Storybook as usual. The pattern picks it up in the next WMDS release: bump the pinned version, and the check confirms it. Never patch around a gap in the pattern.
+
+**Rules:**
+- Import only from `@thewhatmatters/wmds` and React.
+- Parts that change per page are slots (`ReactNode` props).
+- Never bake in a nav: an optional `nav` slot at most.
+- No animation by default.
+- Base WMDS type, shapes and colours.
 
 ## The check
 

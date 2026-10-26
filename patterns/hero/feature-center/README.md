@@ -1,6 +1,8 @@
 # Hero — Feature Center
 
-**Status:** draft (Randy approved the look on 2026-10-26; the move out of WMDS is new).
+status: draft
+
+Randy approved the look in WMDS's Storybook on 2026-10-26; it's draft here until he approves it in this repo.
 **File:** `HeroFeatureCenter.tsx` (copy it). **Example:** `example.tsx` (filled in with placeholder content).
 
 A centred hero: an eyebrow pill, a 2-line headline, a subhead and a CTA row, then the product in a framed window lit from behind, then an optional row of client logos.
@@ -52,10 +54,12 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 
 ## Adapt it
 
+The first item is the example the gallery's Copy prompt uses.
+
+- **No product visual:** leave `visual` empty; the logos follow the CTAs.
 - **Different copy:** change the props. If the headline runs past 2 lines at desktop, shorten it or lower `--text-display-1-size`.
 - **More or fewer logos:** pass more or fewer to `HeroFeatureCenterLogos`. Over about 8, use a marquee in the `logos` slot instead of more rows.
 - **Marquee:** put any marquee in the `logos` slot; nothing else changes.
-- **No product visual:** leave `visual` empty; the logos follow the CTAs.
 - **One CTA, or three:** whatever you put in `actions`.
 - **Animation:** none by default. Add it in your copy (e.g. wrap the headline in WMDS `TextSequence`, or ease the visual in with `motion`).
 
