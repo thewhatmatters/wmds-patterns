@@ -51,7 +51,7 @@ Patterns are built and reviewed here, not in WMDS's Storybook.
 
    Add its row to the index in `SKILL.md`, and run `npm run check`. The gallery picks the folder up on its own.
 2. **Review:** run `npm run gallery` from that branch and give Randy the Cadre preview link. He gives feedback there; change the code and he sees it live. Re-shoot the PNGs when the back-and-forth settles.
-3. **Approve:** when Randy approves, set `status: approved` in the pattern's README and tell Chief of Staff. Chief of Staff merges to `main` and pushes, and GitHub Pages publishes it. Teammates never push.
+3. **Approve:** when Randy approves, set `status: approved` in the pattern's README and tell Claude Code on the Mini, which merges to `main` and pushes, and GitHub Pages publishes it. Teammates never push.
 4. **WMDS gaps:** if a pattern needs something WMDS can't do, mark it `WMDS-GAP` in the pattern's README. The fix goes into WMDS on its own branch and is reviewed in Storybook as usual. The pattern picks it up in the next WMDS release: bump the pinned version, and the check confirms it. Never patch around a gap in the pattern.
 
 **Rules:**
