@@ -23,6 +23,7 @@ Patterns marked draft aren't approved yet: prefer approved ones, and say so if y
 | Pattern | Purpose | Use when | Don't use when | Folder |
 |---|---|---|---|---|
 | Hero — Feature Center (draft) | Centred pitch and CTAs over the product in a backlit frame, then a row of client logos | The first screen of a site that sells a product or service and has a product shot or site to show, with proof (logos) under it | The hero is mostly a photo or video, an article or app screen, or an editorial left-aligned layout is wanted | `patterns/hero/feature-center` |
+| Hero — Phone Center (draft) | Centred pitch and CTAs over a wide photo or video, with an iPhone frame showing the app in the middle | An app or mobile-first service whose story is what happens on the phone, with a photo or video to set the mood | There's no phone to show, or the product is a desktop app or a website (use hero/feature-center) | `patterns/hero/phone-center` |
 
 ## Conventions
 
