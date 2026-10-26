@@ -8,10 +8,12 @@
     "gallery": "vite --config gallery/vite.config.ts gallery --port 5190 --strictPort --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config check/vitest.config.ts",
-    "check": "npm run typecheck && npm run test && vite build --config gallery/vite.config.ts gallery --outDir ../.gallery-dist --emptyOutDir"
+    "check": "npm run typecheck && npm run test && npm run build:pages",
+    "build:pages": "vite build --config gallery/vite.config.ts gallery --mode pages --outDir ../dist-pages --emptyOutDir",
+    "preview:pages": "vite preview --config gallery/vite.config.ts gallery --mode pages --outDir ../dist-pages --port 5191 --strictPort --host 127.0.0.1"
   },
   "dependencies": {
-    "@thewhatmatters/wmds": "file:vendor/thewhatmatters-wmds-0.4.28.tgz",
+    "@thewhatmatters/wmds": "0.4.27",
     "lucide-react": "^1.33.0",
     "motion": "^13.0.0",
     "react": "^19.2.0",

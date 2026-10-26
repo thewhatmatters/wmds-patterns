@@ -35,7 +35,7 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 
 | Prop | Kind | Notes |
 |---|---|---|
-| `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>`; on the brand surface give it `tone="inverse"` |
+| `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>` |
 | `eyebrow` | ReactNode | A short line shown as a pill (Badge) |
 | `headline` | ReactNode | The page's only H1. Static |
 | `subhead` | ReactNode | Regular weight, about 42rem wide |
@@ -43,13 +43,12 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 | `primaryAction` / `secondaryAction` | `{ label, href }` | Shorthand for a primary and a secondary button |
 | `visual` | slot, optional | What goes in the framed window: product shot, site, video. Decorative (`aria-hidden`) unless you change that |
 | `logos` | slot, optional | Proof under the visual. `<HeroFeatureCenterLogos logos={[{ name, logo }]} />` (6 is typical; 3 per row on phones, 6 at desktop; a short row centres), or a marquee, a quote, a stats row |
-| `surface` | `"page"` \| `"brand"` | `page` (default) follows light/dark; `brand` puts the hero on the dark brand surface |
 
 ## Knobs
 
 - `--text-display-1-size`: the headline uses WMDS `type-display-1` (fluid 40px → 80px). About 58 characters take 2 lines from 1024px up, 3 on tablets, 4 on phones. Lower it for a longer headline.
-- `--hero-glow`: the backlight colour. Default: a light tint of `--color-brand-outline` on the page surface; on the brand surface, the primary pulled toward the ink.
-- WMDS brand knobs as usual: `--radius-control`, `--radius-surface`, `--font-family-*`, `--color-primary`, `--color-brand-surface`.
+- `--hero-glow`: the backlight colour. Default: a light tint of `--color-brand-outline` (follows light and dark).
+- WMDS brand knobs as usual: `--radius-control`, `--radius-surface`, `--font-family-*`, `--color-primary`.
 
 ## Adapt it
 
@@ -67,6 +66,6 @@ Nav→eyebrow 48 / 96 (phone / desktop), headline→subhead 24, subhead→CTAs 3
 ## WMDS-GAPs
 
 - `--hero-glow` is a pattern knob, not an allow-listed WMDS knob.
-- On the brand (inverse) surface the CTA should be the light ink; today a site sets `--color-primary` / `--color-on-primary` under `[data-tone="inverse"]` in its brand.css. A per-tone primary knob is an open WMDS gap.
+- **No dark brand-surface version yet.** It needs WMDS `Band` tones (`tone="inverse"`), which aren't in the published 0.4.27. Until they ship, a dark hero is the page in dark mode. When they do, wrap the section in `<Band tone="inverse">` and give the CTA the light ink (a per-tone primary knob is also an open WMDS gap).
 - CSS can't fit a headline to a line count; long headlines need a smaller size by hand.
-- Needs WMDS **0.4.28+** (`Band`, `SiteNav.Brand wordmark`); 0.4.27 on npm doesn't have them.
+- Checked against **@thewhatmatters/wmds 0.4.27** (npm). In 0.4.27 `type-large` is semibold, so the subhead sets `font-normal` itself.

@@ -5,9 +5,7 @@
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
  */
 import { useId, type ReactNode } from "react";
-import { Badge, Band, Button, cn } from "@thewhatmatters/wmds";
-
-export type HeroFeatureCenterSurface = "page" | "brand";
+import { Badge, Button, cn } from "@thewhatmatters/wmds";
 
 export interface HeroFeatureCenterAction {
   label: string;
@@ -15,11 +13,8 @@ export interface HeroFeatureCenterAction {
 }
 
 export interface HeroFeatureCenterProps {
-  /** `page` (default) follows the light or dark theme; `brand` puts the hero on the dark brand surface in either theme. */
-  surface?: HeroFeatureCenterSurface;
   /**
-   * Slot, optional: a nav above the hero. Leave it empty when the page already has a nav (the usual
-   * case). On the `brand` surface give your SiteNav `tone="inverse"`.
+   * Slot, optional: a nav above the hero. Leave it empty when the page already has a nav (the usual case).
    */
   nav?: ReactNode;
   /** A short line above the headline, shown as a pill. */
@@ -44,40 +39,31 @@ export interface HeroFeatureCenterProps {
 
 /** Full-width wrapper: the glow's overflow is clipped here, never on a narrower element. */
 const rootClasses = "relative w-full overflow-x-clip";
+/** The section lays its content on the WMDS page grid (centred, gutters, columns by breakpoint). */
+const sectionClasses = "grid-page relative !py-0";
 /** Centred copy across the page grid; the headline needs the width for 2 lines. Nav→eyebrow 48 / 96. */
 const copyClasses = "relative col-span-full flex flex-col items-center pt-12 text-center lg:pt-24";
 /** WMDS type-display-1 as it is (fluid 40px → 80px): about 58 characters take 2 lines at desktop. */
 const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
-/** Headline→subhead 24, regular weight, about 42rem measure. */
-const subheadClasses = "mt-6 max-w-[42rem] text-pretty text-muted type-large";
+/** Headline→subhead 24, regular weight (type-large is semibold in some WMDS versions), about 42rem measure. */
+const subheadClasses = "mt-6 max-w-[42rem] text-pretty font-normal text-muted type-large";
 /** Subhead→CTAs 32. */
 const actionsClasses = "mt-8 flex flex-wrap items-center justify-center gap-3";
 /** The visual spans columns 2–11 at lg. CTAs→visual 64 (plus the grid's row gap). */
 const visualWrapClasses = "relative col-span-full mt-16 lg:col-start-2 lg:col-end-12";
 
 /**
- * The backlight. `--hero-glow` sets its colour (a pattern knob). Default on the page surface: a light tint
- * of `--color-brand-outline` (navy in light, a lighter navy in dark); on the brand surface: the primary
- * pulled toward the tone's ink, so it reads as light. Two layers, both behind the frame: a wide radial
- * gradient with eased stops, centred just inside the frame's top, and a halo the shape of the frame.
+ * The backlight. `--hero-glow` sets its colour (a pattern knob); default, a light tint of
+ * `--color-brand-outline` (navy in light, a lighter navy in dark). Two layers, both behind the frame: a
+ * wide radial gradient with eased stops, centred just inside the frame's top, and a halo the shape of
+ * the frame.
  */
-const glowColorClasses = {
-  page: "[--hero-glow-c:var(--hero-glow,color-mix(in_srgb,var(--color-brand-outline)_18%,transparent))]",
-  brand:
-    "[--hero-glow-c:var(--hero-glow,color-mix(in_srgb,color-mix(in_srgb,var(--color-primary)_65%,var(--color-text-primary))_40%,transparent))]",
-} as const;
+const glowColorClasses = "[--hero-glow-c:var(--hero-glow,color-mix(in_srgb,var(--color-brand-outline)_18%,transparent))]";
 const glowGradient =
   "bg-[radial-gradient(in_oklab_closest-side,var(--hero-glow-c),color-mix(in_srgb,var(--hero-glow-c)_72%,transparent)_18%,color-mix(in_srgb,var(--hero-glow-c)_44%,transparent)_38%,color-mix(in_srgb,var(--hero-glow-c)_20%,transparent)_58%,color-mix(in_srgb,var(--hero-glow-c)_6%,transparent)_80%,transparent)]";
-/** Brand: screen-blended so it only adds light. Page: blended normally. */
-const glowClasses = {
-  page: cn("pointer-events-none absolute inset-x-[-20%] -top-60 h-[36rem]", glowGradient),
-  brand: cn("pointer-events-none absolute inset-x-[-20%] -top-60 h-[36rem] mix-blend-screen", glowGradient),
-} as const;
+const glowClasses = cn("pointer-events-none absolute inset-x-[-20%] -top-60 h-[36rem]", glowGradient);
 const haloClasses =
   "pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-[var(--radius-surface)] shadow-[0_-16px_72px_4px_var(--hero-glow-c)]";
-/** Brand only: a lit rim on the frame's top edge (on a light page it would read as a dark line). */
-const rimClasses =
-  "pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-[linear-gradient(to_right,transparent,color-mix(in_srgb,var(--color-text-primary)_45%,transparent),transparent)]";
 /** The window: fades out over its last 30%, like a cropped app screen. */
 const frameClasses =
   "relative overflow-hidden rounded-[var(--radius-surface)] border border-border bg-surface [mask-image:linear-gradient(to_bottom,black_70%,transparent)]";
@@ -85,7 +71,6 @@ const frameClasses =
 const logosWrapClasses = "relative col-span-full pb-16 lg:pb-24";
 
 export function HeroFeatureCenter({
-  surface = "page",
   nav,
   eyebrow,
   headline,
@@ -98,12 +83,11 @@ export function HeroFeatureCenter({
   className,
 }: HeroFeatureCenterProps) {
   const headingId = useId();
-  const brand = surface === "brand";
 
   return (
-    <div className={cn(rootClasses, className)} data-pattern="hero-feature-center" data-surface={surface}>
+    <div className={cn(rootClasses, className)} data-pattern="hero-feature-center">
       {nav}
-      <Band tone={brand ? "inverse" : "default"} spacing="none" aria-labelledby={headingId}>
+      <section aria-labelledby={headingId} className={sectionClasses}>
         <div className={copyClasses}>
           {eyebrow != null ? (
             <div className="mb-6">
@@ -133,11 +117,10 @@ export function HeroFeatureCenter({
         </div>
 
         {visual != null ? (
-          <div className={cn(visualWrapClasses, glowColorClasses[surface])} aria-hidden data-hero-visual="">
-            <div className={glowClasses[surface]} />
+          <div className={cn(visualWrapClasses, glowColorClasses)} aria-hidden data-hero-visual="">
+            <div className={glowClasses} />
             <div className={haloClasses} />
             <div className={frameClasses}>
-              {brand ? <span className={rimClasses} /> : null}
               {visual}
             </div>
           </div>
@@ -148,7 +131,7 @@ export function HeroFeatureCenter({
             {logos}
           </div>
         ) : null}
-      </Band>
+      </section>
     </div>
   );
 }

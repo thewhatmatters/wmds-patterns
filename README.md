@@ -36,17 +36,14 @@ Rules: import only from `@thewhatmatters/wmds` and React; parts that change per 
 
 ## The check
 
-`npm run check` typechecks every pattern against the installed WMDS, renders each example (one `h1`, no nav when `nav` is left out), checks each folder ships its files, imports only WMDS and React, and is listed in `SKILL.md`, then builds the gallery.
+`npm run check` typechecks every pattern against the installed WMDS, renders each example (one `h1`, no nav when `nav` is left out), checks each folder ships its files, imports only WMDS and React, and is listed in `SKILL.md`, then builds the gallery for Pages (`dist-pages/`).
 
 ## WMDS version
 
-Checked against **@thewhatmatters/wmds 0.4.28**: the unreleased stack on the `pattern/hero` branch (`4c63d9a`). The published 0.4.27 lacks `Band` and `SiteNav.Brand`'s `wordmark`, which the hero needs. Until 0.4.28 is published, build the tarball from a WMDS checkout of that branch:
+Checked against **@thewhatmatters/wmds 0.4.27**, pinned exactly in `package.json` and installed from npm (public, no token). When WMDS publishes a new version, bump the pin, run `npm run check`, and fix any pattern it breaks.
 
-```sh
-# in the WMDS checkout
-npm run build && npm pack --pack-destination <this repo>/vendor
-# here
-npm install
-```
+## GitHub Pages
 
-`vendor/` is ignored by git. When 0.4.28 is on npm, change the dependency to `"@thewhatmatters/wmds": "^0.4.28"` and delete `vendor/`.
+The gallery is published at https://thewhatmatters.github.io/wmds-patterns/ by `.github/workflows/pages.yml` on every push to `main`: `npm ci`, then `npm run check` (which builds the gallery with `--mode pages`, base `/wmds-patterns/`), then deploy. Only the built gallery is published, with no source maps.
+
+Locally: `npm run build:pages && npm run preview:pages` serves it at http://127.0.0.1:5191/wmds-patterns/.

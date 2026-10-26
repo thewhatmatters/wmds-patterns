@@ -81,7 +81,7 @@ export const exampleNav = (
   <SiteNav
     placement="inline"
     state="expanded"
-    start={<SiteNav.Brand href="#home" wordmark="WhatMatters" />}
+    start={<SiteNav.Brand href="#home">WhatMatters</SiteNav.Brand>}
     middle={
       <SiteNav.Links>
         <SiteNav.Link href="#services">Services</SiteNav.Link>
