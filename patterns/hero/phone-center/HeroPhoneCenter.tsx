@@ -31,6 +31,12 @@ export interface HeroPhoneCenterProps {
    * `aria-live="polite"`.
    */
   screen?: ReactNode;
+  /**
+   * Slot, optional: a full app screen on the phone, edge to edge under the glass: a screenshot, a
+   * recording (`<video>` 9:19.5, e.g. 1206 × 2622) or live UI. It's cropped to the screen's shape. A
+   * recording that plays on its own for over 5 seconds needs a pause control in your page.
+   */
+  app?: ReactNode;
   className?: string;
 }
 
@@ -79,6 +85,10 @@ const screenClasses =
   "px-[10%] pt-[22%] text-center text-fg " +
   "before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-surface)_88%,transparent),transparent)]";
 const screenTextClasses = "relative line-clamp-3 type-large font-normal";
+/** The `app` slot: the screen rect, edge to edge, under the glass (the frame SVG sits above it). */
+const appClasses =
+  "absolute inset-x-[5.64%] top-[2.6%] bottom-[2.6%] overflow-hidden rounded-[15.3%/6.6%] bg-surface " +
+  "[&>img]:size-full [&>img]:object-cover [&>video]:size-full [&>video]:object-cover";
 /** The Pause / Play control for `video`: a 44px icon button at the stage's right edge, clear of the phone and above the fade. */
 const videoControlClasses = "absolute right-0 bottom-[32%] z-20";
 
@@ -175,7 +185,7 @@ function HeroVideo({ src, poster }: { src: string; poster?: string }) {
   );
 }
 
-export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, media, video, screen, className }: HeroPhoneCenterProps) {
+export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, media, video, screen, app, className }: HeroPhoneCenterProps) {
   const headingId = useId();
   const frameId = useId().replace(/:/g, "");
 
@@ -208,7 +218,12 @@ export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, medi
             </div>
           ) : null}
           <div className={phoneClasses}>
-            <PhoneFrame id={frameId} empty={video == null && media == null} />
+            {app != null ? (
+              <div className={appClasses} data-hero-app="">
+                {app}
+              </div>
+            ) : null}
+            <PhoneFrame id={frameId} empty={video == null && media == null && app == null} />
             {screen != null ? (
               <div className={screenClasses} data-hero-screen="">
                 <div className={screenTextClasses}>{screen}</div>

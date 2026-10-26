@@ -2,3 +2,4 @@ node_modules/
 .gallery-dist/
 dist-pages/
 vendor/
+gallery/public/local/

@@ -40,6 +40,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 | `media` | slot | The picture behind the phone, usually decorative: `<img src alt="">` (give real alt text only if it carries meaning). Cropped to fill the stage (`object-cover`) and faded at every edge |
 | `video` | `{ src, poster? }`, optional | A looping background video instead of `media`: muted, `playsInline`, hidden from screen readers, with a **Pause / Play** button (WCAG 2.2.2). It doesn't start on its own under `prefers-reduced-motion` |
 | `screen` | slot, optional | A short caption on the phone's screen: about 40 characters, 3 lines at most, on a scrim so it reads over any picture. If it changes (a status), wrap it in `aria-live="polite"` |
+| `app` | slot, optional | A full app screen on the phone, edge to edge under the glass: a screenshot, a 9:19.5 screen recording (e.g. 1206 × 2622) or live UI. A recording that plays on its own for over 5 seconds needs a pause control in your page |
 
 ## Knobs
 
@@ -51,7 +52,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 
 The first item is the example the gallery's Copy prompt uses.
 
-- **App screen instead of a caption:** put a screenshot or a live UI in `screen`, and drop or dim `media`.
+- **App screen instead of a caption:** put a screenshot or a screen recording in `app` (it fills the screen edge to edge); keep `media` behind it or leave it empty.
 - **Different copy:** change the props; keep the headline to about three lines.
 - **Video:** pass `video={{ src, poster }}`; the pattern adds the Pause / Play button and holds it still under reduced motion.
 - **No media:** leave `media` and `video` empty; the phone stands on the page alone, its screen filled.
