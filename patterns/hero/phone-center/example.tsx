@@ -1,6 +1,7 @@
 /**
- * Example content for Hero — Phone Center. The media here is an abstract SVG gradient standing in for
- * the photo or video a real page passes; replace it, the copy and the caption with real content.
+ * Example content for Hero — Phone Center. The video is Mixkit's free clip "A girl's face in detail
+ * while smiling" (Mixkit License, free to use, no attribution), loaded from Mixkit; replace it, the copy
+ * and the caption with the client's own. `ExampleMedia` is a still stand-in for when there's no media yet.
  */
 import { Button } from "@thewhatmatters/wmds";
 import { HeroPhoneCenter, type HeroPhoneCenterProps } from "./HeroPhoneCenter";
@@ -43,7 +44,7 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
     <HeroPhoneCenter
       eyebrow="New · Free homepage sketch in 48 hours"
       headline="Your site, sketched on your phone by tomorrow"
-      subhead="Tell us about your business. We send back a homepage you can tap through."
+      subhead="A homepage you can tap through, free."
       actions={
         <>
           <Button role="primary" render={<a href="#sketch" />}>
@@ -54,7 +55,7 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
           </Button>
         </>
       }
-      media={<ExampleMedia />}
+      video={{ src: "https://assets.mixkit.co/videos/4883/4883-720.mp4", poster: "https://assets.mixkit.co/videos/4883/4883-thumb-720-0.jpg" }}
       screen="Sketch in progress…"
       {...props}
     />

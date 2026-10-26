@@ -49,7 +49,7 @@ const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-1
  */
 const headlineClasses =
   "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.035em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
-/** Regular weight (type-large is semibold in some WMDS versions). Headline→subhead 24. */
+/** One short line (about 40 characters). Regular weight (type-large is semibold in some WMDS versions). Headline→subhead 24. */
 const subheadClasses = "mt-6 max-w-[36rem] text-pretty font-normal text-muted type-large";
 /** Subhead→CTAs 32. On phones the buttons stack full width (up to 20rem); from sm they sit in a row. */
 const actionsClasses =
@@ -79,8 +79,8 @@ const screenClasses =
   "px-[10%] pt-[22%] text-center text-fg " +
   "before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-surface)_88%,transparent),transparent)]";
 const screenTextClasses = "relative line-clamp-3 type-large font-normal";
-/** The Pause / Play control for `video`: top right of the stage, where the stage's fade doesn't reach. */
-const videoControlClasses = "absolute top-0 right-0 z-10";
+/** The Pause / Play control for `video`: a 44px icon button at the stage's right edge, clear of the phone and above the fade. */
+const videoControlClasses = "absolute right-0 bottom-[32%] z-20";
 
 /**
  * An iPhone outline: a thin rounded bezel in the page's surface colour, a glass screen that lets the
@@ -155,8 +155,20 @@ function HeroVideo({ src, poster }: { src: string; poster?: string }) {
         <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" aria-hidden />
       </div>
       <div className={videoControlClasses}>
-        <Button role="secondary" size="sm" className="min-h-11" onClick={toggle}>
-          {playing ? "Pause background video" : "Play background video"}
+        <Button
+          role="secondary"
+          size="sm"
+          className="!size-11 !p-0"
+          onClick={toggle}
+          aria-label={playing ? "Pause background video" : "Play background video"}
+        >
+          <svg viewBox="0 0 16 16" className="size-4" aria-hidden focusable="false">
+            {playing ? (
+              <path fill="currentColor" d="M4 3h3v10H4zM9 3h3v10H9z" />
+            ) : (
+              <path fill="currentColor" d="M5 3l8 5-8 5z" />
+            )}
+          </svg>
         </Button>
       </div>
     </>

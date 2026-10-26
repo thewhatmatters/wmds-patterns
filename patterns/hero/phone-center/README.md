@@ -35,7 +35,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 | `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>` |
 | `eyebrow` | ReactNode | A short line shown as a pill (Badge). About 30 characters; longer is cut with an ellipsis |
 | `headline` | ReactNode | The page's only H1, narrow like the phone: WMDS `type-display-2` (32px → 50px) set tight (-0.035em, line height 1.05), about 11em wide, 2–3 lines. Static. `hyphens-auto` needs the page's `lang` |
-| `subhead` | ReactNode | Regular weight, about 36rem wide |
+| `subhead` | ReactNode | One short line, about 40 characters (like Lovi's). Regular weight |
 | `actions` | slot, optional | The CTA row: at most two buttons (make a third a text link) or app-store badges. On phones they stack full width |
 | `media` | slot | The picture behind the phone, usually decorative: `<img src alt="">` (give real alt text only if it carries meaning). Cropped to fill the stage (`object-cover`) and faded at every edge |
 | `video` | `{ src, poster? }`, optional | A looping background video instead of `media`: muted, `playsInline`, hidden from screen readers, with a **Pause / Play** button (WCAG 2.2.2). It doesn't start on its own under `prefers-reduced-motion` |
