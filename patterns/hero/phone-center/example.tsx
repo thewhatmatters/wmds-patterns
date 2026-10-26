@@ -55,7 +55,7 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
         </>
       }
       media={<ExampleMedia />}
-      screen={<p className="px-4 type-large font-normal">Sketch in progress…</p>}
+      screen="Sketch in progress…"
       {...props}
     />
   );
