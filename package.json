@@ -1,0 +1,30 @@
+{
+  "name": "wmds-patterns",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Page patterns built on WMDS, for agents to copy and adapt. Also a skill (SKILL.md).",
+  "type": "module",
+  "scripts": {
+    "gallery": "vite --config gallery/vite.config.ts gallery --port 5190 --strictPort --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --config check/vitest.config.ts",
+    "check": "npm run typecheck && npm run test && vite build --config gallery/vite.config.ts gallery --outDir ../.gallery-dist --emptyOutDir"
+  },
+  "dependencies": {
+    "@thewhatmatters/wmds": "file:vendor/thewhatmatters-wmds-0.4.28.tgz",
+    "lucide-react": "^1.33.0",
+    "motion": "^13.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "tailwindcss": "^4.3.3",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.11"
+  }
+}

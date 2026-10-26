@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "@thewhatmatters/wmds/theme.css";
+
+/* Tailwind must see the patterns' classes and the gallery's own. */
+@source "../patterns";
+@source "./";

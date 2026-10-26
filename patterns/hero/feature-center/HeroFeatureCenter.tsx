@@ -1,0 +1,183 @@
+/**
+ * Hero — Feature Center (wmds-patterns, draft). Copy this file into your app and edit it freely.
+ * A centred hero: eyebrow, headline, subhead, a CTA row, the product in a framed window lit from behind,
+ * and an optional proof strip (client logos). Built only from @thewhatmatters/wmds parts.
+ * Your Tailwind must scan this file (it does if it sits in your app's source folders).
+ */
+import { useId, type ReactNode } from "react";
+import { Badge, Band, Button, cn } from "@thewhatmatters/wmds";
+
+export type HeroFeatureCenterSurface = "page" | "brand";
+
+export interface HeroFeatureCenterAction {
+  label: string;
+  href: string;
+}
+
+export interface HeroFeatureCenterProps {
+  /** `page` (default) follows the light or dark theme; `brand` puts the hero on the dark brand surface in either theme. */
+  surface?: HeroFeatureCenterSurface;
+  /**
+   * Slot, optional: a nav above the hero. Leave it empty when the page already has a nav (the usual
+   * case). On the `brand` surface give your SiteNav `tone="inverse"`.
+   */
+  nav?: ReactNode;
+  /** A short line above the headline, shown as a pill. */
+  eyebrow?: ReactNode;
+  /** The page's only H1. Static: animate it in your page if you want (e.g. wrap it in TextSequence). */
+  headline: ReactNode;
+  subhead?: ReactNode;
+  /** Slot, optional: the CTA row (any buttons or links). When set, `primaryAction` / `secondaryAction` are ignored. */
+  actions?: ReactNode;
+  /** Shorthand for the CTA row: a primary button. */
+  primaryAction?: HeroFeatureCenterAction;
+  /** Shorthand: a secondary button beside it. */
+  secondaryAction?: HeroFeatureCenterAction;
+  /** Slot, optional: what goes in the framed window (a product shot, a site, a video). Decorative unless it carries content. */
+  visual?: ReactNode;
+  /** Slot, optional: proof under the visual. Usually `<HeroFeatureCenterLogos logos={…} />`; a marquee, quote or stats row works too. */
+  logos?: ReactNode;
+  className?: string;
+}
+
+/* Every class is written out in full (never interpolated) so Tailwind sees it. */
+
+/** Full-width wrapper: the glow's overflow is clipped here, never on a narrower element. */
+const rootClasses = "relative w-full overflow-x-clip";
+/** Centred copy across the page grid; the headline needs the width for 2 lines. Nav→eyebrow 48 / 96. */
+const copyClasses = "relative col-span-full flex flex-col items-center pt-12 text-center lg:pt-24";
+/** WMDS type-display-1 as it is (fluid 40px → 80px): about 58 characters take 2 lines at desktop. */
+const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
+/** Headline→subhead 24, regular weight, about 42rem measure. */
+const subheadClasses = "mt-6 max-w-[42rem] text-pretty text-muted type-large";
+/** Subhead→CTAs 32. */
+const actionsClasses = "mt-8 flex flex-wrap items-center justify-center gap-3";
+/** The visual spans columns 2–11 at lg. CTAs→visual 64 (plus the grid's row gap). */
+const visualWrapClasses = "relative col-span-full mt-16 lg:col-start-2 lg:col-end-12";
+
+/**
+ * The backlight. `--hero-glow` sets its colour (a pattern knob). Default on the page surface: a light tint
+ * of `--color-brand-outline` (navy in light, a lighter navy in dark); on the brand surface: the primary
+ * pulled toward the tone's ink, so it reads as light. Two layers, both behind the frame: a wide radial
+ * gradient with eased stops, centred just inside the frame's top, and a halo the shape of the frame.
+ */
+const glowColorClasses = {
+  page: "[--hero-glow-c:var(--hero-glow,color-mix(in_srgb,var(--color-brand-outline)_18%,transparent))]",
+  brand:
+    "[--hero-glow-c:var(--hero-glow,color-mix(in_srgb,color-mix(in_srgb,var(--color-primary)_65%,var(--color-text-primary))_40%,transparent))]",
+} as const;
+const glowGradient =
+  "bg-[radial-gradient(in_oklab_closest-side,var(--hero-glow-c),color-mix(in_srgb,var(--hero-glow-c)_72%,transparent)_18%,color-mix(in_srgb,var(--hero-glow-c)_44%,transparent)_38%,color-mix(in_srgb,var(--hero-glow-c)_20%,transparent)_58%,color-mix(in_srgb,var(--hero-glow-c)_6%,transparent)_80%,transparent)]";
+/** Brand: screen-blended so it only adds light. Page: blended normally. */
+const glowClasses = {
+  page: cn("pointer-events-none absolute inset-x-[-20%] -top-60 h-[36rem]", glowGradient),
+  brand: cn("pointer-events-none absolute inset-x-[-20%] -top-60 h-[36rem] mix-blend-screen", glowGradient),
+} as const;
+const haloClasses =
+  "pointer-events-none absolute inset-x-0 top-0 h-1/2 rounded-[var(--radius-surface)] shadow-[0_-16px_72px_4px_var(--hero-glow-c)]";
+/** Brand only: a lit rim on the frame's top edge (on a light page it would read as a dark line). */
+const rimClasses =
+  "pointer-events-none absolute inset-x-0 top-0 z-10 h-px bg-[linear-gradient(to_right,transparent,color-mix(in_srgb,var(--color-text-primary)_45%,transparent),transparent)]";
+/** The window: fades out over its last 30%, like a cropped app screen. */
+const frameClasses =
+  "relative overflow-hidden rounded-[var(--radius-surface)] border border-border bg-surface [mask-image:linear-gradient(to_bottom,black_70%,transparent)]";
+/** Visual→proof is the grid's 24px row gap (the frame's faded foot already reads as space); proof→next 96. */
+const logosWrapClasses = "relative col-span-full pb-16 lg:pb-24";
+
+export function HeroFeatureCenter({
+  surface = "page",
+  nav,
+  eyebrow,
+  headline,
+  subhead,
+  actions,
+  primaryAction,
+  secondaryAction,
+  visual,
+  logos,
+  className,
+}: HeroFeatureCenterProps) {
+  const headingId = useId();
+  const brand = surface === "brand";
+
+  return (
+    <div className={cn(rootClasses, className)} data-pattern="hero-feature-center" data-surface={surface}>
+      {nav}
+      <Band tone={brand ? "inverse" : "default"} spacing="none" aria-labelledby={headingId}>
+        <div className={copyClasses}>
+          {eyebrow != null ? (
+            <div className="mb-6">
+              <Badge variant="neutral">{eyebrow}</Badge>
+            </div>
+          ) : null}
+          <h1 id={headingId} className={headlineClasses}>
+            {headline}
+          </h1>
+          {subhead != null ? <p className={subheadClasses}>{subhead}</p> : null}
+          <div className={actionsClasses}>
+            {actions ?? (
+              <>
+                {primaryAction != null ? (
+                  <Button role="primary" render={<a href={primaryAction.href} />}>
+                    {primaryAction.label}
+                  </Button>
+                ) : null}
+                {secondaryAction != null ? (
+                  <Button role="secondary" render={<a href={secondaryAction.href} />}>
+                    {secondaryAction.label}
+                  </Button>
+                ) : null}
+              </>
+            )}
+          </div>
+        </div>
+
+        {visual != null ? (
+          <div className={cn(visualWrapClasses, glowColorClasses[surface])} aria-hidden data-hero-visual="">
+            <div className={glowClasses[surface]} />
+            <div className={haloClasses} />
+            <div className={frameClasses}>
+              {brand ? <span className={rimClasses} /> : null}
+              {visual}
+            </div>
+          </div>
+        ) : null}
+
+        {logos != null ? (
+          <div className={logosWrapClasses} data-hero-logos="">
+            {logos}
+          </div>
+        ) : null}
+      </Band>
+    </div>
+  );
+}
+
+export interface HeroFeatureCenterLogo {
+  /** The client's name: the logo's accessible name. */
+  name: string;
+  /** A monochrome mark drawn in `currentColor` (an `<svg>`), shown muted. */
+  logo: ReactNode;
+}
+
+/**
+ * The default content for the `logos` slot: one muted row of client marks, equal cells, 3 per row on
+ * phones and 6 from lg; a short row centres. Never a sideways scroller (use a marquee in the slot instead).
+ */
+export function HeroFeatureCenterLogos({ logos, label = "Clients" }: { logos: HeroFeatureCenterLogo[]; label?: string }) {
+  return (
+    <ul className="flex flex-wrap justify-center" aria-label={label}>
+      {logos.map((item) => (
+        <li
+          key={item.name}
+          aria-label={item.name}
+          className="flex min-w-0 basis-1/3 items-center justify-center px-1 py-5 text-muted lg:basis-1/6 [&_svg]:h-6 [&_svg]:w-auto [&_svg]:max-w-none lg:[&_svg]:h-8"
+        >
+          <span aria-hidden className="contents">
+            {item.logo}
+          </span>
+        </li>
+      ))}
+    </ul>
+  );
+}
