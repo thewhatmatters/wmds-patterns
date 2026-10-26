@@ -1,6 +1,6 @@
 /**
- * Example content for Hero — Phone Center. The video is Mixkit's free clip "A girl's face in detail
- * while smiling" (Mixkit License, free to use, no attribution), loaded from Mixkit; replace it, the copy
+ * Example content for Hero — Phone Center. The video is Mixkit's free clip "Brunette skincare model
+ * smiles on white background" (Mixkit 9101, Mixkit License: free to use, no attribution), loaded from Mixkit; replace it, the copy
  * and the caption with the client's own. `ExampleMedia` is a still stand-in for when there's no media yet.
  */
 import { Button } from "@thewhatmatters/wmds";
@@ -55,7 +55,7 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
           </Button>
         </>
       }
-      video={{ src: "https://assets.mixkit.co/videos/4883/4883-720.mp4", poster: "https://assets.mixkit.co/videos/4883/4883-thumb-720-0.jpg" }}
+      video={{ src: "https://assets.mixkit.co/videos/9101/9101-720.mp4", poster: "https://assets.mixkit.co/videos/9101/9101-thumb-720-0.jpg" }}
       screen="Sketch in progress…"
       {...props}
     />
