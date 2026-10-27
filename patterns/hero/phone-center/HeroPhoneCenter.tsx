@@ -230,7 +230,7 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, 
           {eyebrow != null ? (
             // Keep it to about 30 characters; a longer line is cut with an ellipsis rather than spill.
             <div className="mb-6 flex max-w-full justify-center">
-              <Badge variant="neutral" icon={eyebrowIcon}>
+              <Badge variant="neutral" size="md" icon={eyebrowIcon}>
                 <span className="block max-w-[min(30ch,80vw)] truncate">{eyebrow}</span>
               </Badge>
             </div>
