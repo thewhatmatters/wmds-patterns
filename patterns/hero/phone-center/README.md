@@ -1,9 +1,10 @@
 # Hero — Phone Center
 
-status: draft
+status: approved
 
 Structure from lovi.care's hero (Randy's reference, 2026-10-26); nothing copied but the idea.
-**File:** `HeroPhoneCenter.tsx` (copy it). **Example:** `example.tsx` (abstract gradient standing in for a real photo or video).
+Randy approved it in the gallery on 2026-10-27.
+**File:** `HeroPhoneCenter.tsx` (copy it). **Example:** `example.tsx`: Mixkit's free clip 9101 (Mixkit License) behind the phone and a caption on the screen; shown in light only (see Light and dark).
 
 A centred hero for an app or a mobile-first service: an eyebrow pill, a headline, a subhead and a CTA row, then a wide photo or video that fades into the page, with an iPhone frame over its centre. The media shows through the phone's glass screen, and a caption can sit on the screen. The whole stage fades out at its foot, like a fold.
 
@@ -73,6 +74,8 @@ The pattern follows the theme, but the media doesn't: footage shot on a white st
 Nav→eyebrow 48 / 96 (phone / desktop), headline→subhead 24, subhead→CTAs 32, CTAs→stage 40 / 64. The stage is `clamp(26rem, 52vw, 40rem)` tall and fades out over its last 28%.
 
 ## WMDS-GAPs
+
+- The eyebrow uses WMDS Badge `md`, the largest size. A Lovi-sized pill (about 36px) needs a larger Badge size in WMDS.
 
 - No WMDS media component (image or video with poster, a pause control, reduced-motion handling); the pattern carries its own small video player until WMDS has one.
 - No WMDS device frame; the iPhone outline is SVG inside the pattern.
