@@ -61,7 +61,7 @@ const factsClasses =
   "col-span-full mt-12 flex flex-col gap-2 text-muted type-eyebrow md:mt-16 md:flex-row md:flex-wrap md:justify-center md:gap-x-3 lg:mt-24 " +
   "[&_a]:text-fg [&_a]:underline";
 const factClasses = "whitespace-nowrap md:[&:not(:first-child)]:before:mr-3 md:[&:not(:first-child)]:before:content-['·'_/_'']";
-const bandWrapClasses = "relative mt-4 w-full md:mt-12 lg:mt-16";
+const bandWrapClasses = "relative mt-2 w-full md:mt-4 lg:mt-6";
 const endClasses = "h-12 md:h-16";
 
 export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], status, moment, className }: FooterLandscapeProps) {
@@ -195,7 +195,7 @@ export function FooterClocks({ cities }: { cities: FooterClock[] }) {
     [cities, reduce],
   );
   return (
-    <ul className="grid grid-cols-2 gap-6 sm:flex sm:flex-wrap sm:gap-8">
+    <ul className="grid grid-cols-2 gap-6 sm:flex sm:flex-wrap sm:justify-between">
       {cities.map((c, i) => (
         <li key={c.city} className="flex flex-col">
           <span className="sr-only" suppressHydrationWarning>
@@ -235,7 +235,7 @@ export interface FooterAsciiBandProps {
 
 const classicRamp = " .:-=+*#%@";
 /** Band height 220 / 300 / 360. */
-const bandClasses = "relative h-[220px] w-full md:h-[300px] lg:h-[360px]";
+const bandClasses = "relative h-[180px] w-full md:h-[240px] lg:h-[280px]";
 /** The drawing: text colour at 55% (45% dark), its top 20% fading into the paper. The toggle sits outside it, at full contrast. */
 const bandArtClasses =
   "absolute inset-0 text-fg opacity-55 [[data-theme=dark]_&]:opacity-45 " +

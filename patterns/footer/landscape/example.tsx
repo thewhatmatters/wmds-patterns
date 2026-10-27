@@ -40,7 +40,7 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
         ]}
         facts={["© 2026 WhatMatters", "whatmatters.studio", <a href="mailto:hello@whatmatters.studio">hello@whatmatters.studio</a>, "Built in Austin"]}
         status="All systems operational"
-        moment={<FooterAsciiBand src={`${base}local/footer-landscape.mp4`} focusY={0.72} />}
+        moment={<FooterAsciiBand src={`${base}local/footer-landscape.mp4`} focusY={1} />}
         {...props}
       />
     </div>
