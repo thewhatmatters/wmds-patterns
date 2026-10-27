@@ -76,24 +76,24 @@ const mediaClasses =
 /** The phone: centred, a little below the stage top, about 300px wide at desktop. */
 const phoneClasses = "absolute top-6 left-1/2 w-[clamp(15rem,24vw,20rem)] -translate-x-1/2 lg:top-14";
 /**
- * The screen area inside the frame (matches the SVG's screen rect: 22/390 in, radius 53/346 × 53/800).
+ * The screen area inside the frame (matches the SVG's screen rect: 14/390 in, radius 55/362 × 55/816, a thin bezel like a real iPhone).
  * A scrim in the page's surface colour fades down from the top, so the caption stays readable over any
  * picture in either theme.
  */
 const screenClasses =
-  "absolute inset-x-[5.64%] top-[2.6%] bottom-[2.6%] flex flex-col items-center overflow-hidden rounded-[15.3%/6.6%] " +
+  "absolute inset-x-[3.59%] top-[1.66%] bottom-[1.66%] flex flex-col items-center overflow-hidden rounded-[15.2%/6.74%] " +
   "px-[10%] pt-[22%] text-center text-fg " +
   "before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-surface)_88%,transparent),transparent)]";
 const screenTextClasses = "relative line-clamp-3 type-large font-normal";
 /** The `app` slot: the screen rect, edge to edge, under the glass (the frame SVG sits above it). */
 const appClasses =
-  "absolute inset-x-[5.64%] top-[2.6%] bottom-[2.6%] overflow-hidden rounded-[15.3%/6.6%] bg-surface " +
+  "absolute inset-x-[3.59%] top-[1.66%] bottom-[1.66%] overflow-hidden rounded-[15.2%/6.74%] bg-surface " +
   "[&>img]:size-full [&>img]:object-cover [&>video]:size-full [&>video]:object-cover";
 /** The Pause / Play control for `video`: a 44px icon button at the stage's right edge, clear of the phone and above the fade. */
 const videoControlClasses = "absolute right-0 bottom-[32%] z-20";
 
 /**
- * An iPhone outline: a thin rounded bezel in the page's surface colour, a glass screen that lets the
+ * An iPhone outline: a thin (14 of 390) rounded bezel in the page's surface colour, a glass screen that lets the
  * media through with a faint sheen, the Dynamic Island, and the side buttons. Drawn at 390 × 844.
  */
 function PhoneFrame({ id, empty }: { id: string; empty: boolean }) {
@@ -120,17 +120,17 @@ function PhoneFrame({ id, empty }: { id: string; empty: boolean }) {
         stroke="var(--color-border-emphasized)"
         strokeWidth="1.5"
         d="M64 1h262a63 63 0 0 1 63 63v716a63 63 0 0 1-63 63H64A63 63 0 0 1 1 780V64A63 63 0 0 1 64 1Z
-           M75 22h240a53 53 0 0 1 53 53v694a53 53 0 0 1-53 53H75a53 53 0 0 1-53-53V75a53 53 0 0 1 53-53Z"
+           M69 14h252a55 55 0 0 1 55 55v706a55 55 0 0 1-55 55H69a55 55 0 0 1-55-55V69a55 55 0 0 1 55-55Z"
       />
       {/* With no media behind it, the glass is filled so it still reads as a screen */}
       {empty ? (
-        <rect x="22" y="22" width="346" height="800" rx="53" fill="color-mix(in srgb, var(--color-surface) 92%, var(--color-text-primary))" />
+        <rect x="14" y="14" width="362" height="816" rx="55" fill="color-mix(in srgb, var(--color-surface) 92%, var(--color-text-primary))" />
       ) : null}
       {/* Glass: a faint sheen over the media */}
-      <rect x="22" y="22" width="346" height="800" rx="53" fill={`url(#${sheen})`} />
-      <rect x="22" y="22" width="346" height="800" rx="53" fill="none" stroke="black" strokeOpacity="0.18" />
-      {/* Dynamic Island */}
-      <rect x="143" y="40" width="104" height="31" rx="15.5" fill="#0b0b0c" />
+      <rect x="14" y="14" width="362" height="816" rx="55" fill={`url(#${sheen})`} />
+      <rect x="14" y="14" width="362" height="816" rx="55" fill="none" stroke="black" strokeOpacity="0.18" />
+      {/* Dynamic Island (screen recordings leave a gap for it in the status bar) */}
+      <rect x="143" y="30" width="104" height="31" rx="15.5" fill="#0b0b0c" />
     </svg>
   );
 }
