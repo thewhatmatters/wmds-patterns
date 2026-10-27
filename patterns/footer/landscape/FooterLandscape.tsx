@@ -36,13 +36,7 @@ export interface FooterLandscapeProps {
 
 /** Root: the tinted paper. `--color-background-muted` is the paper knob (set it in brand.css). */
 const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-muted)] text-fg";
-/** Faint column rules on the page grid, fading down; hidden on phones (4 rules read as a table). */
-const rulesClasses =
-  "pointer-events-none absolute inset-x-0 top-0 hidden h-12 grid-page !py-0 md:grid lg:h-16 " +
-  "[mask-image:linear-gradient(to_bottom,black,transparent)] " +
-  "[&>span]:border-l [&>span]:border-[var(--color-border)] [&>span:last-child]:border-r " +
-  "[&>span:nth-child(n+9)]:hidden lg:[&>span:nth-child(n+9)]:block";
-/** Content top: ~48px of clear paper below the rules (rules 48 / 64, content 80 / 112). */
+/** Content top: clear paper above the brand (64 / 80 / 112). */
 const gridClasses = "grid-page relative !pt-16 !pb-0 md:!pt-20 lg:!pt-28";
 const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
 const pitchClasses = "max-w-[40ch] text-muted type-body [&_a]:text-fg [&_a]:underline";
@@ -69,11 +63,6 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
   const long = links.length >= 3;
   return (
     <footer className={cn(rootClasses, className)} data-pattern="footer-landscape">
-      <div className={rulesClasses} aria-hidden>
-        {Array.from({ length: 12 }, (_, i) => (
-          <span key={i} />
-        ))}
-      </div>
       <div className={gridClasses}>
         <div className={brandBlockClasses}>
           <div data-slot="brand">{brand}</div>
