@@ -11,7 +11,7 @@ const base = import.meta.env.BASE_URL;
 export const meta = {
   type: "Footer",
   name: "Footer — Landscape",
-  purpose: "Calm footer on tinted paper: brand, live world clocks, link columns, a fact strip, and a landscape drawn live in dots.",
+  purpose: "Calm footer on the muted background: brand, live world clocks, link columns, a fact strip, and a landscape drawn live in dots.",
 };
 
 export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {

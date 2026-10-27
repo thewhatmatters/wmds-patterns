@@ -1,6 +1,6 @@
 /**
  * Footer — Landscape (wmds-patterns, draft). Copy this file into your app and edit it freely.
- * A calm footer on tinted paper (after Pengon): brand and a one-line pitch, live world clocks, short link
+ * A calm footer on the WMDS muted background (after Pengon): brand and a one-line pitch, live world clocks, short link
  * columns, a mono fact strip with a status dot, and a full-width landscape band drawn live as dots from a
  * video by `FooterAsciiBand` (the wm-tools ASCII media technique). Built only from @thewhatmatters/wmds parts.
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
@@ -34,7 +34,7 @@ export interface FooterLandscapeProps {
   className?: string;
 }
 
-/** Root: the tinted paper. `--color-background-muted` is the paper knob (set it in brand.css). */
+/** Root: the WMDS muted background (`--color-background-muted`; brands set it in brand.css). */
 const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-muted)] text-fg";
 /** Section padding: 48px on phones, 64px (4rem) from md, top and bottom (the band, when present, is the bottom). */
 const gridClasses = "grid-page relative !pt-12 !pb-0 md:!pt-16";

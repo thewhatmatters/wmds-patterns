@@ -1,11 +1,11 @@
 # Footer — Landscape
 
-status: draft
+status: approved
 
 After Pengon's footer (Inspiration #12), with our twist: the landscape is drawn live in dots from a video, the wm-tools ASCII media technique. Spec: Product Designer, 2026-10-27.
 **File:** `FooterLandscape.tsx` (copy it; it holds `FooterLandscape`, `FooterClocks` and `FooterAsciiBand`). **Example:** `example.tsx`.
 
-A calm footer on tinted paper: brand and a one-line pitch, ticking world clocks, short link columns, a centred mono fact strip with a status dot, and a full-width landscape band that rises out of the paper and bleeds off the bottom.
+A calm footer on the WMDS muted background: brand and a one-line pitch, ticking world clocks, short link columns, a centred mono fact strip with a status dot, and a full-width landscape band that rises out of the paper and bleeds off the bottom.
 
 | Light | Dark | Mobile (390) |
 |---|---|---|
@@ -59,6 +59,6 @@ The first item is the example the gallery's Copy prompt uses.
 ## WMDS-GAPs
 
 - Checked against **@thewhatmatters/wmds 0.4.27**. No WMDS gap found: the tokens cover it.
-- Example clip: Envato "Abstract Mountain Range Flyover Animation" (Randy's pick, 2026-10-27). Until the licensed file is downloaded, the gallery plays Envato's preview from `gallery/public/local/` (not committed, not for publishing).
+- Example clip: Envato "Abstract Mountain Range Flyover Animation" (Randy's pick, 2026-10-27). Until the licensed file is downloaded, the gallery plays Envato's preview from `gallery/public/local/` (not committed, not for publishing). On the published gallery the band stays empty until the licensed file is added at `gallery/public/examples/footer-landscape/` and the example points to it.
 
 Spacing: full width; 48px top and bottom on phones, 64px (4rem) from tablet up. With a band, the band is the bottom edge.
