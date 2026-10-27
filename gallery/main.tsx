@@ -9,7 +9,9 @@ import { dependencies } from "../package.json";
 import { patternCode, patternPrompt, patternStatus } from "./copy";
 import "./gallery.css";
 
-type Meta = { type: string; name: string; purpose: string };
+/** `themes` limits a pattern to the themes its example suits; both when left out. */
+type Theme = "light" | "dark";
+type Meta = { type: string; name: string; purpose: string; themes?: Theme[] };
 type Entry = { folder: string; meta: Meta; Example: ComponentType; code: string; prompt: string; status: "draft" | "approved" };
 
 const modules = import.meta.glob<{ default: ComponentType; meta: Meta }>("../patterns/*/*/example.tsx", { eager: true });
@@ -37,7 +39,6 @@ const entries: Entry[] = Object.entries(modules)
   .sort((a, b) => a.folder.localeCompare(b.folder));
 
 const widths = [390, 768, 1440] as const;
-type Theme = "light" | "dark";
 
 /** Inside the iframe: just the pattern, on the page background, in the chosen theme. */
 function Frame({ entry, theme }: { entry: Entry; theme: Theme }) {
@@ -125,6 +126,8 @@ function Gallery() {
     return () => observer.disconnect();
   }, []);
   const scale = Math.min(1, available / width);
+  const themes: readonly Theme[] = current?.meta.themes ?? ["light", "dark"];
+  const shownTheme: Theme = themes.includes(theme) ? theme : themes[0];
 
   useEffect(() => {
     history.replaceState(null, "", `?pattern=${folder}&theme=${theme}`);
@@ -175,15 +178,16 @@ function Gallery() {
               <CopyButton label="Copy prompt" text={current.prompt} />
             </>
           ) : null}
-          <Toggle label="Theme" options={["light", "dark"] as const} value={theme} onChange={setTheme} />
+          <Toggle label="Theme" options={themes} value={shownTheme} onChange={setTheme} />
+          {themes.length === 1 ? <span className="text-xs text-muted">{themes[0]} only</span> : null}
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
         </div>
         <div ref={stage} className="flex-1 overflow-auto bg-[color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] p-4">
           {current ? (
             <iframe
-              key={`${current.folder}-${theme}`}
+              key={`${current.folder}-${shownTheme}`}
               title={current.meta.name}
-              src={`?frame=${current.folder}&theme=${theme}`}
+              src={`?frame=${current.folder}&theme=${shownTheme}`}
               style={{ width, height: 1000 / scale, zoom: scale }}
               className="mx-auto block border border-border bg-body"
             />

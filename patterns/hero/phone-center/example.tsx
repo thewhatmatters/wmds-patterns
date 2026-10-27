@@ -36,6 +36,8 @@ export const meta = {
   type: "Hero",
   name: "Hero — Phone Center",
   purpose: "Centred pitch and CTAs over a wide photo or video, with an iPhone frame showing the app in the middle.",
+  // The example's footage is shot on white, so it's shown in light only (see README → Light and dark).
+  themes: ["light"],
 };
 
 /** The pattern filled with the example content. */

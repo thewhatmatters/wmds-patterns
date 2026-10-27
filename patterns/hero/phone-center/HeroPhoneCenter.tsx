@@ -5,8 +5,8 @@
  * glass screen; an optional caption sits on the screen. Built only from @thewhatmatters/wmds parts.
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
  */
-import { useEffect, useId, useRef, useState, type ReactElement, type ReactNode } from "react";
-import { Badge, Button, cn } from "@thewhatmatters/wmds";
+import { useEffect, useId, useRef, type ReactElement, type ReactNode } from "react";
+import { Badge, cn } from "@thewhatmatters/wmds";
 
 export interface HeroPhoneCenterProps {
   /** Slot, optional: a nav above the hero. Leave it empty when the page already has a nav (the usual case). */
@@ -25,7 +25,7 @@ export interface HeroPhoneCenterProps {
    * stage. For a video use `video` instead, which adds the pause control moving media needs.
    */
   media?: ReactNode;
-  /** A looping background video (muted, no sound) with a Pause control. Used instead of `media`. */
+  /** A looping background video (muted, no controls). Used instead of `media`. Held on its poster under reduced motion. */
   video?: { src: string; poster?: string };
   /**
    * Slot, optional: a short caption on the phone's screen over the media (about 40 characters, 3 lines
@@ -103,8 +103,6 @@ const appClasses =
   "absolute inset-x-[3.59%] top-[1.66%] bottom-[1.66%] overflow-hidden rounded-[15.2%/6.74%] " +
   "bg-[color-mix(in_srgb,var(--color-surface)_var(--hero-screen-tint,45%),transparent)] backdrop-blur-[3px] " +
   "[&>img]:size-full [&>img]:object-cover [&>video]:size-full [&>video]:object-cover";
-/** The Pause / Play control for `video`: a 44px icon button at the stage's right edge, clear of the phone and above the fade. */
-const videoControlClasses = "absolute right-0 bottom-[32%] z-20";
 
 /**
  * An iPhone outline: a thin (14 of 390) rounded bezel in the page's surface colour, a glass screen that lets the
@@ -150,52 +148,22 @@ function PhoneFrame({ id, empty }: { id: string; empty: boolean }) {
 }
 
 /**
- * A muted, looping background video with a Pause / Play control (WCAG 2.2.2). It doesn't start on its own
- * when the visitor prefers reduced motion; the control still lets them play it.
+ * A muted, looping background video with no controls (Randy, 2026-10-27: "no play button or pause
+ * button"). It doesn't start on its own when the visitor prefers reduced motion; the poster stays.
  */
 function HeroVideo({ src, poster }: { src: string; poster?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [playing, setPlaying] = useState(false);
 
   useEffect(() => {
     const video = ref.current;
     if (!video || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    video.play().then(() => setPlaying(true), () => setPlaying(false));
+    video.play().catch(() => {});
   }, [src]);
 
-  function toggle() {
-    const video = ref.current;
-    if (!video) return;
-    if (video.paused) video.play().then(() => setPlaying(true), () => setPlaying(false));
-    else {
-      video.pause();
-      setPlaying(false);
-    }
-  }
-
   return (
-    <>
-      <div className={mediaClasses} data-hero-media="">
-        <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" aria-hidden />
-      </div>
-      <div className={videoControlClasses}>
-        <Button
-          role="secondary"
-          size="sm"
-          className="!size-11 !p-0"
-          onClick={toggle}
-          aria-label={playing ? "Pause background video" : "Play background video"}
-        >
-          <svg viewBox="0 0 16 16" className="size-4" aria-hidden focusable="false">
-            {playing ? (
-              <path fill="currentColor" d="M4 3h3v10H4zM9 3h3v10H9z" />
-            ) : (
-              <path fill="currentColor" d="M5 3l8 5-8 5z" />
-            )}
-          </svg>
-        </Button>
-      </div>
-    </>
+    <div className={mediaClasses} data-hero-media="">
+      <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" aria-hidden />
+    </div>
   );
 }
 

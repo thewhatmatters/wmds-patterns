@@ -39,7 +39,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 | `subhead` | ReactNode | One short line, about 40 characters (like Lovi's). Regular weight |
 | `actions` | slot, optional | The CTA row: at most two buttons (make a third a text link) or app-store badges. On phones they stack full width |
 | `media` | slot | The picture behind the phone, usually decorative: `<img src alt="">` (give real alt text only if it carries meaning). Cropped to fill the stage (`object-cover`) and faded at every edge |
-| `video` | `{ src, poster? }`, optional | A looping background video instead of `media`: muted, `playsInline`, hidden from screen readers, with a **Pause / Play** button (WCAG 2.2.2). It doesn't start on its own under `prefers-reduced-motion` |
+| `video` | `{ src, poster? }`, optional | A looping background video instead of `media`: muted, `playsInline`, no controls, hidden from screen readers. It holds on its poster under `prefers-reduced-motion`. No pause control, by Randy's call; a page that needs WCAG 2.2.2 (moving content over 5 seconds) should add one |
 | `screen` | slot, optional | A short caption on the phone's screen: about 40 characters, 3 lines at most, on a scrim so it reads over any picture. If it changes (a status), wrap it in `aria-live="polite"` |
 | `app` | slot, optional | A full app screen on the phone, edge to edge under the glass: a screenshot, a 9:19.5 screen recording (e.g. 1206 × 2622) or live UI. A recording that plays on its own for over 5 seconds needs a pause control in your page |
 | `edgeBlur` | boolean, default `false` | A progressive blur along the top of the viewport: content scrolling up under it blurs and fades out (like Lovi). Static CSS, no script. Once per page; skip it if the page's sticky nav already covers the top |
@@ -59,10 +59,14 @@ The first item is the example the gallery's Copy prompt uses.
 - **See-through app recording (like Lovi):** export the recording with an alpha channel so the media shows through the app's background: HEVC with alpha (`.mov`, Safari) and VP9 with alpha (`.webm`, Chrome, Firefox). List the HEVC source first, since Safari plays VP9 without its alpha:
   `<video autoPlay muted loop playsInline aria-hidden poster="…-poster.png"><source src="….mov" type='video/mp4; codecs="hvc1"' /><source src="….webm" type="video/webm" /></video>`
 - **Different copy:** change the props; keep the headline to about three lines.
-- **Video:** pass `video={{ src, poster }}`; the pattern adds the Pause / Play button and holds it still under reduced motion.
+- **Video:** pass `video={{ src, poster }}`; it plays on its own, and holds still under reduced motion.
 - **No media:** leave `media` and `video` empty; the phone stands on the page alone, its screen filled.
 - **App-store badges:** put them in `actions` (official badge artwork, each a link with an accessible name).
 - **Animation:** none by default. Add it in your copy (e.g. ease the phone up into place with `motion`).
+
+## Light and dark
+
+The pattern follows the theme, but the media doesn't: footage shot on a white studio background glows like a spotlight on a dark page. Use footage shot on a background close to the page colour: light footage for a light page, dark footage for a dark one. The gallery example (white-studio footage) is shown in light only.
 
 ## Spacing
 
