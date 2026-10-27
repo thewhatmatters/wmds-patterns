@@ -55,8 +55,8 @@ export interface HeroPhoneCenterProps {
 const rootClasses = "relative w-full overflow-x-clip";
 /** The section lays its content on the WMDS page grid. */
 const sectionClasses = "grid-page relative !py-0";
-/** Centred copy. Nav→eyebrow 48 / 96. */
-const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-12 text-center lg:pt-24";
+/** Centred copy. Section padding 48 / 64 at the top; the fading stage is the bottom edge. */
+const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-12 text-center md:pt-16";
 /**
  * A narrow H1, like the phone it sits over: WMDS type-display-2 (fluid 32px → 50px), kept to about 11em
  * so a short headline sets in 2–3 lines, set tight (-0.035em, line height 1.05) like a display line.
