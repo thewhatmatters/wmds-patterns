@@ -42,8 +42,8 @@ export interface HeroFeatureCenterProps {
 const rootClasses = "relative w-full overflow-x-clip";
 /** The section lays its content on the WMDS page grid (centred, gutters, columns by breakpoint). */
 const sectionClasses = "grid-page relative !py-0";
-/** Centred copy across the page grid; the headline needs the width for 2 lines. Nav→eyebrow 48 / 96. */
-const copyClasses = "relative col-span-full flex flex-col items-center pt-12 text-center lg:pt-24";
+/** Centred copy across the page grid; the headline needs the width for 2 lines. Section padding 48 / 64 (the logos row closes with the same). */
+const copyClasses = "relative col-span-full flex flex-col items-center pt-12 text-center md:pt-16";
 /** WMDS type-display-1 as it is (fluid 40px → 80px): about 58 characters take 2 lines at desktop. */
 const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
 /** Headline→subhead 24, regular weight (type-large is semibold in some WMDS versions), about 42rem measure. */
@@ -68,8 +68,8 @@ const haloClasses =
 /** The window: fades out over its last 30%, like a cropped app screen. */
 const frameClasses =
   "relative overflow-hidden rounded-[var(--radius-surface)] border border-border bg-surface [mask-image:linear-gradient(to_bottom,black_70%,transparent)]";
-/** Visual→proof is the grid's 24px row gap (the frame's faded foot already reads as space); proof→next 96. */
-const logosWrapClasses = "relative col-span-full pb-16 lg:pb-24";
+/** Visual→proof is the grid's 24px row gap (the frame's faded foot already reads as space); bottom padding 48 / 64. */
+const logosWrapClasses = "relative col-span-full pb-12 md:pb-16";
 
 export function HeroFeatureCenter({
   nav,

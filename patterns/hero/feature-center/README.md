@@ -65,7 +65,7 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## Spacing
 
-Nav→eyebrow 48 / 96 (phone / desktop), headline→subhead 24, subhead→CTAs 32, CTAs→visual 64, visual→logos 24 (the frame's faded foot already reads as space), logos→next section 64 / 96.
+Section padding 48 / 64 top and bottom (phone / tablet and up), headline→subhead 24, subhead→CTAs 32, CTAs→visual 64, visual→logos 24 (the frame's faded foot already reads as space), logos→section bottom 48 / 64.
 
 ## WMDS-GAPs
 
