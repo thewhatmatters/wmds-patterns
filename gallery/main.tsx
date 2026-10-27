@@ -250,15 +250,23 @@ function Gallery() {
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
           <Toggle label="Slots" options={["off", "on"] as const} value={slots} onChange={setSlots} />
           <Toggle label="Measure" options={["off", "on"] as const} value={measure} onChange={setMeasure} />
+          {measure === "on" ? (
+            <p className="flex items-center gap-3 text-xs text-muted">
+              <span className="flex items-center gap-1"><span aria-hidden className="size-2.5 rounded-sm bg-[#15803d]" />padding</span>
+              <span className="flex items-center gap-1"><span aria-hidden className="size-2.5 rounded-sm bg-[#c2410c]" />margin</span>
+              <span className="flex items-center gap-1"><span aria-hidden className="size-2.5 rounded-sm bg-[#7e22ce]" />gap</span>
+            </p>
+          ) : null}
         </div>
-        <div ref={stage} className="flex-1 overflow-auto bg-[color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] p-4">
+        <div ref={stage} className="flex flex-1 overflow-auto bg-[color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] p-4">
           {current ? (
             <iframe
               key={`${current.folder}-${shownTheme}${overlays}`}
               title={current.meta.name}
               src={`?frame=${current.folder}&theme=${shownTheme}${overlays}`}
               style={{ width, height, zoom: scale }}
-              className="mx-auto block border border-border bg-body"
+              // Auto margins centre it both ways when it fits, and fall back to the top-left when it overflows (so nothing is cut off).
+              className="m-auto block shrink-0 border border-border bg-body"
             />
           ) : (
             <p className="text-muted">No patterns yet: add a folder under patterns/&lt;type&gt;/&lt;variant&gt;/.</p>
