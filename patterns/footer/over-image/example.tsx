@@ -1,6 +1,6 @@
 /**
- * Example content for Footer — Over Image. The video is Envato's "Blur view of train platform"
- * (leungchopan, Randy's pick, 2026-10-27). Until the licensed file is in, it plays from
+ * Example content for Footer — Over Image. The video is Envato's "Blurred Restaurant Interior With
+ * Bartender in Background" (guyswhoshoot, Randy's pick, 2026-10-27). Until the licensed file is in, it plays from
  * gallery/public/local/ (not committed). Replace the copy, links, logo and video with the client's own.
  */
 import { Button, IconButton } from "@thewhatmatters/wmds";

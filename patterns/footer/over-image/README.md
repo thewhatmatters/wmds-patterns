@@ -3,7 +3,7 @@
 status: draft
 
 After Unify's footer (Inspiration board; Randy's reference, 2026-10-27). Nothing copied but the idea.
-**File:** `FooterOverImage.tsx` (copy it). **Example:** `example.tsx`, with Envato's "Blur view of train platform" (leungchopan, Randy's pick) behind it.
+**File:** `FooterOverImage.tsx` (copy it). **Example:** `example.tsx`, with Envato's "Blurred Restaurant Interior With Bartender in Background" (guyswhoshoot, Randy's pick) behind it.
 
 A closing call to action set on a full-width picture or looping video, with the footer as a contained WMDS Card floating over the picture: link columns, a "Follow us" column, an optional second row (case studies, latest posts), a big brand mark at the bottom left and the legal line at the bottom right. The picture shows around the card and runs to the page's bottom edge.
 
@@ -69,4 +69,4 @@ Full width. Section padding 48 / 64 at the top (phone / tablet and up); headline
 ## WMDS
 
 - Built on **@thewhatmatters/wmds 0.4.28**: `Card`, `TextLink`, `IconButton`, `Button`. No gap.
-- Example video: Envato "Blur view of train platform" (Randy's pick, 2026-10-27). Until the licensed file is downloaded, the gallery plays Envato's watermarked preview from `gallery/public/local/` (not committed, not for publishing). On the published gallery the picture stays empty until the licensed file is added at `gallery/public/examples/footer-over-image/` and the example points to it.
+- Example video: Envato "Blurred Restaurant Interior With Bartender in Background" (Randy's pick, 2026-10-27; https://app.envato.com/stock-video/24519876-74bd-432c-a8ad-01d142e906b0). Until the licensed file is downloaded, the gallery plays Envato's watermarked preview from `gallery/public/local/` (not committed, not for publishing). On the published gallery the picture stays empty until the licensed file is added at `gallery/public/examples/footer-over-image/` and the example points to it.
