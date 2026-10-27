@@ -42,7 +42,7 @@ describe.each(folders)("patterns/%s", (folder) => {
     expect(skill).toContain(`patterns/${folder}`);
   });
 
-  it("renders its example with the installed WMDS: one h1, no nav when nav is left out", async () => {
+  it("renders its example with the installed WMDS, with the landmarks its type needs", async () => {
     const load = examples[`../patterns/${folder}/example.tsx`];
     expect(load, `${folder}/example.tsx`).toBeDefined();
     const mod = await load();
@@ -50,11 +50,19 @@ describe.each(folders)("patterns/%s", (folder) => {
     expect(mod.meta.purpose).toBeTruthy();
     const Example = mod.default;
     const html = renderToString(<Example />);
-    expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
-    const bare = renderToString(<Example nav={undefined} />);
-    expect(bare).not.toMatch(/<header[\s>]/);
-    expect(bare).not.toMatch(/<nav[\s>]/);
+    if (mod.meta.type === "Footer") {
+      // A footer is the page's contentinfo landmark and never holds the page's h1.
+      expect(html).toMatch(/<footer[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+    } else {
+      // A hero holds the page's one h1, and renders no site nav when `nav` is left out.
+      expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+      const bare = renderToString(<Example nav={undefined} />);
+      expect(bare).not.toMatch(/<header[\s>]/);
+      expect(bare).not.toMatch(/<nav[\s>]/);
+    }
   });
+
 });
 
 it("finds at least one pattern", () => {
