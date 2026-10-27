@@ -27,3 +27,45 @@
   font: 11px/1 ui-monospace, "Geist Mono", monospace;
   white-space: nowrap;
 }
+
+/* Measure view (gallery only): padding green, margin orange, gap purple; px labels; hover for classes. */
+[data-measure-layer] {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000;
+  pointer-events: none;
+  font: 10px/1 ui-monospace, "Geist Mono", monospace;
+}
+[data-measure],
+[data-measure-outline] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: grid;
+  place-items: center;
+}
+[data-measure="padding"] { background: rgb(22 163 74 / 0.18); }
+[data-measure="margin"] { background: rgb(234 88 12 / 0.18); }
+[data-measure="gap"] { background: repeating-linear-gradient(45deg, rgb(147 51 234 / 0.22) 0 4px, rgb(147 51 234 / 0.08) 4px 8px); }
+[data-measure] > span {
+  padding: 2px 4px;
+  border-radius: 3px;
+  color: #fff;
+  white-space: nowrap;
+}
+[data-measure="padding"] > span { background: #15803d; }
+[data-measure="margin"] > span { background: #c2410c; }
+[data-measure="gap"] > span { background: #7e22ce; }
+[data-measure-hover] { z-index: 1; outline: 1px solid currentColor; }
+[data-measure-hover] > span { font-size: 11px; }
+[data-measure-outline] {
+  z-index: 2;
+  outline: 1px solid #2563eb;
+  place-items: start end;
+}
+[data-measure-outline] > span {
+  translate: 0 -100%;
+  padding: 2px 4px;
+  background: #2563eb;
+  color: #fff;
+}

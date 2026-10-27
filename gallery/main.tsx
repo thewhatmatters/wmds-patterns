@@ -8,6 +8,7 @@ import { createRoot } from "react-dom/client";
 import { dependencies } from "../package.json";
 import { patternCode, patternPrompt, patternStatus } from "./copy";
 import "./gallery.css";
+import { useMeasure } from "./measure";
 
 /** `themes` limits a pattern to the themes its example suits; both when left out. */
 type Theme = "light" | "dark";
@@ -80,12 +81,13 @@ function useSlotOutlines(on: boolean) {
 }
 
 /** Inside the iframe: just the pattern, on the page background, in the chosen theme. */
-function Frame({ entry, theme, slots }: { entry: Entry; theme: Theme; slots: boolean }) {
+function Frame({ entry, theme, slots, measure }: { entry: Entry; theme: Theme; slots: boolean; measure: boolean }) {
   useEffect(() => {
     if (theme === "dark") document.documentElement.dataset.theme = "dark";
     else document.documentElement.removeAttribute("data-theme");
   }, [theme]);
   useSlotOutlines(slots);
+  useMeasure(measure);
   return (
     <div className="min-h-svh bg-body text-fg">
       <entry.Example />
@@ -155,6 +157,9 @@ function Gallery() {
   const [theme, setTheme] = useState<Theme>(params.get("theme") === "dark" ? "dark" : "light");
   const [width, setWidth] = useState<(typeof widths)[number]>(1440);
   const [slots, setSlots] = useState<"off" | "on">(params.get("slots") === "on" ? "on" : "off");
+  const [measure, setMeasure] = useState<"off" | "on">(params.get("measure") === "on" ? "on" : "off");
+  // The overlays' query string, shared by the address bar and the frame.
+  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}`;
   const current = entries.find((entry) => entry.folder === folder) ?? entries[0];
   // Scale a frame wider than the pane down to fit; it still lays out at its real width.
   const stage = useRef<HTMLDivElement>(null);
@@ -171,8 +176,8 @@ function Gallery() {
   const shownTheme: Theme = themes.includes(theme) ? theme : themes[0];
 
   useEffect(() => {
-    history.replaceState(null, "", `?pattern=${folder}&theme=${theme}${slots === "on" ? "&slots=on" : ""}`);
-  }, [folder, theme, slots]);
+    history.replaceState(null, "", `?pattern=${folder}&theme=${theme}${overlays}`);
+  }, [folder, theme, overlays]);
 
   const types = [...new Set(entries.map((entry) => entry.meta.type))];
 
@@ -223,13 +228,14 @@ function Gallery() {
           {themes.length === 1 ? <span className="text-xs text-muted">{themes[0]} only</span> : null}
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
           <Toggle label="Slots" options={["off", "on"] as const} value={slots} onChange={setSlots} />
+          <Toggle label="Measure" options={["off", "on"] as const} value={measure} onChange={setMeasure} />
         </div>
         <div ref={stage} className="flex-1 overflow-auto bg-[color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] p-4">
           {current ? (
             <iframe
-              key={`${current.folder}-${shownTheme}-${slots}`}
+              key={`${current.folder}-${shownTheme}${overlays}`}
               title={current.meta.name}
-              src={`?frame=${current.folder}&theme=${shownTheme}${slots === "on" ? "&slots=on" : ""}`}
+              src={`?frame=${current.folder}&theme=${shownTheme}${overlays}`}
               style={{ width, height: 1000 / scale, zoom: scale }}
               className="mx-auto block border border-border bg-body"
             />
@@ -247,5 +253,5 @@ const frame = params.get("frame");
 const frameEntry = frame ? entries.find((entry) => entry.folder === frame) : undefined;
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} /> : <Gallery />}</StrictMode>,
+  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} measure={params.get("measure") === "on"} /> : <Gallery />}</StrictMode>,
 );
