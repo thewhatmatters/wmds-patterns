@@ -3,6 +3,7 @@
  * Range Flyover Animation"), cropped to the ridges. Until the licensed file is in, it plays from
  * gallery/public/local/ (not committed). Replace the brand, copy, links and clip with the client's own.
  */
+import { TextLink } from "@thewhatmatters/wmds";
 import { FooterAsciiBand, FooterClocks, FooterLandscape, type FooterLandscapeProps } from "./FooterLandscape";
 
 const base = import.meta.env.BASE_URL;
@@ -20,7 +21,7 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
         brand={<span className="type-large font-semibold tracking-tight">WhatMatters</span>}
         pitch={
           <>
-            Websites, video and social for Austin businesses. Built in Austin at <a href="#studio">WhatMatters Studio</a>.
+            Websites, video and social for Austin businesses. Built in Austin at <TextLink href="#studio">WhatMatters Studio</TextLink>.
           </>
         }
         clocks={
@@ -37,7 +38,7 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
           { label: "Studio", links: [{ label: "Work", href: "#work" }, { label: "Pricing", href: "#pricing" }, { label: "Instagram", href: "#ig", external: true }] },
           { label: "Legal", links: [{ label: "Privacy", href: "#privacy" }, { label: "Terms", href: "#terms" }] },
         ]}
-        facts={["© 2026 WhatMatters", "whatmatters.studio", <a href="mailto:hello@whatmatters.studio">hello@whatmatters.studio</a>, "Built in Austin"]}
+        facts={["© 2026 WhatMatters", "whatmatters.studio", <TextLink href="mailto:hello@whatmatters.studio">hello@whatmatters.studio</TextLink>, "Built in Austin"]}
         status="All systems operational"
         moment={<FooterAsciiBand src={`${base}local/footer-landscape.mp4`} focusY={1} />}
         {...props}

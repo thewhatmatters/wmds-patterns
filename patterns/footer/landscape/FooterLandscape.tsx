@@ -6,7 +6,7 @@
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
  */
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { cn } from "@thewhatmatters/wmds";
+import { cn, IconButton, Status, TextLink } from "@thewhatmatters/wmds";
 
 /* Every class is written out in full (never interpolated) so Tailwind sees it. `data-slot` marks where your
    content goes; it does nothing on a page (the gallery outlines slots with it). */
@@ -36,10 +36,10 @@ export interface FooterLandscapeProps {
 
 /** Root: the tinted paper. `--color-background-muted` is the paper knob (set it in brand.css). */
 const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-muted)] text-fg";
-/** Content top: clear paper above the brand (32 / 40 / 48). */
-const gridClasses = "grid-page relative !pt-8 !pb-0 md:!pt-10 lg:!pt-12";
+/** Section padding: 48px on phones, 64px (4rem) from md, top and bottom (the band, when present, is the bottom). */
+const gridClasses = "grid-page relative !pt-12 !pb-0 md:!pt-16";
 const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
-const pitchClasses = "max-w-[40ch] text-muted type-body [&_a]:text-fg [&_a]:underline";
+const pitchClasses = "max-w-[40ch] text-muted type-body";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
 const linksClasses = {
   one: "col-span-full mt-12 md:col-span-2 md:col-start-7 md:mt-0 lg:col-start-11",
@@ -49,13 +49,15 @@ const linksClasses = {
 } as const;
 const longColumnClasses = "col-span-2 lg:col-span-3";
 const linkLabelClasses = "mb-6 text-muted type-eyebrow";
-const linkClasses = "inline-block py-2.5 type-large font-normal text-fg hover:underline focus-visible:underline";
+/** A 44px tap row; the link itself is a WMDS quiet TextLink at the item's size. */
+const linkItemClasses = "type-large font-normal text-fg";
+const linkClasses = "inline-block py-2.5";
 /** Fact strip: centred and dot-separated from md; stacked one per line on phones. */
 const factsClasses =
-  "col-span-full mt-12 flex flex-col gap-2 text-muted type-eyebrow md:mt-16 md:flex-row md:flex-wrap md:justify-center md:gap-x-3 lg:mt-24 " +
-  "[&_a]:text-fg [&_a]:underline";
+  "col-span-full mt-12 flex flex-col gap-2 text-muted type-eyebrow md:mt-16 md:flex-row md:flex-wrap md:justify-center md:gap-x-3 lg:mt-24";
 const factClasses = "whitespace-nowrap md:[&:not(:first-child)]:before:mr-3 md:[&:not(:first-child)]:before:content-['·'_/_'']";
 const bandWrapClasses = "relative mt-2 w-full md:mt-4 lg:mt-6";
+/** Bottom padding when there's no band: the same 48 / 64 as the top. */
 const endClasses = "h-12 md:h-16";
 
 export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], status, moment, className }: FooterLandscapeProps) {
@@ -87,16 +89,10 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
                 </p>
                 <ul aria-labelledby={`${id}-l${i}`}>
                   {column.links.map((link) => (
-                    <li key={link.label}>
-                      <a
-                        href={link.href}
-                        className={linkClasses}
-                        {...(link.external ? { target: "_blank", rel: "noreferrer" } : {})}
-                      >
+                    <li key={link.label} className={linkItemClasses}>
+                      <TextLink href={link.href} variant="quiet" external={link.external} className={linkClasses}>
                         {link.label}
-                        {link.external ? <span aria-hidden> ↗</span> : null}
-                        {link.external ? <span className="sr-only"> (opens in a new tab)</span> : null}
-                      </a>
+                      </TextLink>
                     </li>
                   ))}
                 </ul>
@@ -114,7 +110,7 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
             ))}
             {status != null ? (
               <li className={cn(factClasses, "inline-flex items-center gap-2")}>
-                <span className="inline-block size-2 rounded-full bg-success" aria-hidden />
+                <Status variant="dot" tone="success" besideLabel />
                 <span className="sr-only">Status: </span>
                 {status}
               </li>
@@ -223,18 +219,14 @@ export interface FooterAsciiBandProps {
 }
 
 const classicRamp = " .:-=+*#%@";
-/** Band height 220 / 300 / 360. */
+/** Band height 180 / 240 / 280. */
 const bandClasses = "relative h-[180px] w-full md:h-[240px] lg:h-[280px]";
 /** The drawing: text colour at 55% (45% dark), its top 20% fading into the paper. The toggle sits outside it, at full contrast. */
 const bandArtClasses =
   "absolute inset-0 text-fg opacity-55 [[data-theme=dark]_&]:opacity-45 " +
   "[mask-image:linear-gradient(to_bottom,transparent,black_20%)]";
-/** Quiet pause toggle: a 44px hit area, a 12px glyph, no background until hover or focus. */
-const toggleClasses =
-  "absolute right-2 bottom-2 z-10 grid size-11 place-items-center rounded-full text-muted " +
-  "hover:bg-[color-mix(in_srgb,var(--color-fg)_8%,transparent)] hover:text-fg " +
-  "focus-visible:bg-[color-mix(in_srgb,var(--color-fg)_8%,transparent)] focus-visible:text-fg " +
-  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-fg)]";
+/** The pause toggle: a WMDS ghost IconButton in the band's corner. */
+const toggleClasses = "absolute right-2 bottom-2 z-10";
 
 /**
  * The landscape drawn live as a halftone: each video frame is drawn tiny (one pixel per cell) on a hidden
@@ -409,12 +401,16 @@ export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60, fo
         <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
       </div>
       <video ref={videoRef} src={src} poster={poster} muted loop playsInline preload="auto" crossOrigin="anonymous" className="hidden" aria-hidden />
-      <button type="button" onClick={toggle} className={toggleClasses} aria-pressed={!playing}>
-        <span className="sr-only">{playing ? "Pause background motion" : "Play background motion"}</span>
-        <svg viewBox="0 0 12 12" className="size-3" aria-hidden focusable="false">
-          {playing ? <path fill="currentColor" d="M2 1h3v10H2zM7 1h3v10H7z" /> : <path fill="currentColor" d="M3 1l8 5-8 5z" />}
-        </svg>
-      </button>
+      <IconButton
+        onClick={toggle}
+        className={toggleClasses}
+        aria-label={playing ? "Pause background motion" : "Play background motion"}
+        icon={
+          <svg viewBox="0 0 12 12" aria-hidden focusable="false">
+            {playing ? <path fill="currentColor" d="M2 1h3v10H2zM7 1h3v10H7z" /> : <path fill="currentColor" d="M3 1l8 5-8 5z" />}
+          </svg>
+        }
+      />
     </div>
   );
 }

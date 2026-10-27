@@ -30,5 +30,8 @@ Patterns marked draft aren't approved yet: prefer approved ones, and say so if y
 
 - Folders are `patterns/<type>/<variant>/` (hero, footer, content-box, …).
 - Slots are `ReactNode` props for the parts that change per page (`nav`, `actions`, `visual`, `logos`). Optional slots render nothing when empty.
+- **WMDS base colours only** (tokens like `text-fg`, `text-muted`, `--color-background-muted`); no hex tints from a reference. Brands change colours in their own stylesheet.
+- **WMDS components first** (`Button`, `IconButton`, `TextLink`, `Status`, …). If a pattern needs a part WMDS doesn't have, it's a WMDS gap: raise it, don't hand-build a lookalike.
+- **Sections are full viewport width** with consistent vertical padding: 64px (4rem) top and bottom on desktop, 48px on phones.
 - Patterns import only from `@thewhatmatters/wmds` and React. Nothing animates by default; add motion in the page if the request asks for it.
 - Each pattern is checked against the WMDS version in `README.md` (`npm run check`).
