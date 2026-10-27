@@ -5,7 +5,7 @@
  * video by `FooterAsciiBand` (the wm-tools ASCII media technique). Built only from @thewhatmatters/wmds parts.
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
  */
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { cn } from "@thewhatmatters/wmds";
 
 /* Every class is written out in full (never interpolated) so Tailwind sees it. `data-slot` marks where your
@@ -38,26 +38,30 @@ export interface FooterLandscapeProps {
 const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-muted)] text-fg";
 /** Faint column rules on the page grid, fading down; hidden on phones (4 rules read as a table). */
 const rulesClasses =
-  "pointer-events-none absolute inset-x-0 top-0 hidden h-20 grid-page !py-0 md:grid lg:h-30 " +
+  "pointer-events-none absolute inset-x-0 top-0 hidden h-12 grid-page !py-0 md:grid lg:h-16 " +
   "[mask-image:linear-gradient(to_bottom,black,transparent)] " +
   "[&>span]:border-l [&>span]:border-[var(--color-border)] [&>span:last-child]:border-r " +
   "[&>span:nth-child(n+9)]:hidden lg:[&>span:nth-child(n+9)]:block";
-const gridClasses = "grid-page relative !pt-16 !pb-0 md:!pt-20 lg:!pt-24";
+/** Content top: ~48px of clear paper below the rules (rules 48 / 64, content 80 / 112). */
+const gridClasses = "grid-page relative !pt-16 !pb-0 md:!pt-20 lg:!pt-28";
 const brandBlockClasses = "col-span-full flex flex-col gap-6 md:col-span-5 lg:col-span-6";
 const pitchClasses = "max-w-[40ch] text-muted type-body [&_a]:text-fg [&_a]:underline";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
 const linksClasses = {
-  short: "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:col-span-3 md:col-start-6 md:mt-0 lg:col-span-4 lg:col-start-9",
-  long: "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:mt-16",
+  one: "col-span-full mt-12 md:col-span-2 md:col-start-7 md:mt-0 lg:col-start-11",
+  two: "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:col-span-3 md:col-start-6 md:mt-0 lg:col-span-4 lg:col-start-9",
+  /** 3–4 columns: their own row on the page grid itself (subgrid), so columns line up with the grid. */
+  long: "col-span-full mt-12 grid grid-cols-subgrid gap-y-10 lg:mt-16",
 } as const;
+const longColumnClasses = "col-span-2 lg:col-span-3";
 const linkLabelClasses = "mb-6 text-muted type-eyebrow";
 const linkClasses = "inline-block py-2.5 type-large font-normal text-fg hover:underline focus-visible:underline";
 /** Fact strip: centred and dot-separated from md; stacked one per line on phones. */
 const factsClasses =
   "col-span-full mt-12 flex flex-col gap-2 text-muted type-eyebrow md:mt-16 md:flex-row md:flex-wrap md:justify-center md:gap-x-3 lg:mt-24 " +
   "[&_a]:text-fg [&_a]:underline";
-const factClasses = "whitespace-nowrap md:[&:not(:first-child)]:before:mr-3 md:[&:not(:first-child)]:before:content-['·']";
-const bandWrapClasses = "relative mt-10 w-full md:mt-12 lg:mt-16";
+const factClasses = "whitespace-nowrap md:[&:not(:first-child)]:before:mr-3 md:[&:not(:first-child)]:before:content-['·'_/_'']";
+const bandWrapClasses = "relative mt-4 w-full md:mt-12 lg:mt-16";
 const endClasses = "h-12 md:h-16";
 
 export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], status, moment, className }: FooterLandscapeProps) {
@@ -86,9 +90,9 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
         </div>
 
         {links.length > 0 ? (
-          <nav aria-label="Footer" className={long ? linksClasses.long : linksClasses.short} data-slot="links">
+          <nav aria-label="Footer" className={long ? linksClasses.long : links.length === 1 ? linksClasses.one : linksClasses.two} data-slot="links">
             {links.map((column, i) => (
-              <div key={column.label}>
+              <div key={column.label} className={long ? longColumnClasses : undefined}>
                 <p id={`${id}-l${i}`} className={linkLabelClasses}>
                   {column.label}
                 </p>
@@ -150,46 +154,71 @@ export interface FooterClock {
   timeZone: string;
 }
 
+/** Follows prefers-reduced-motion, including changes while the page is open. */
+function useReducedMotion() {
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => {
+    const query = matchMedia("(prefers-reduced-motion: reduce)");
+    setReduce(query.matches);
+    const onChange = () => setReduce(query.matches);
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+  return reduce;
+}
+
 /**
- * Live world clocks: `<time>` per city, ticking each second (each minute, without seconds, under reduced
- * motion). Not a live region: a ticking announcement is noise; each clock has an aria-label instead.
+ * Live world clocks, ticking each second (HH:MM once a minute under reduced motion). Screen readers get
+ * one plain line per city ("Austin, 8:44 AM"); the ticking digits are hidden from them, and nothing is
+ * a live region (a ticking announcement is noise).
  */
 export function FooterClocks({ cities }: { cities: FooterClock[] }) {
+  const reduce = useReducedMotion();
   const [now, setNow] = useState(() => new Date());
-  const [seconds, setSeconds] = useState(true);
   useEffect(() => {
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    setSeconds(!reduce);
     setNow(new Date());
     const timer = setInterval(() => setNow(new Date()), reduce ? 60_000 : 1_000);
     return () => clearInterval(timer);
-  }, []);
-  return (
-    <ul className="grid grid-cols-2 gap-6 sm:flex sm:flex-wrap sm:gap-8">
-      {cities.map((c) => {
-        const time = new Intl.DateTimeFormat("en-GB", {
+  }, [reduce]);
+  const formats = useMemo(
+    () =>
+      cities.map((c) => ({
+        shown: new Intl.DateTimeFormat("en-GB", {
           timeZone: c.timeZone,
           hour: "2-digit",
           minute: "2-digit",
-          ...(seconds ? { second: "2-digit" } : {}),
+          ...(reduce ? {} : { second: "2-digit" }),
           hour12: false,
-        }).format(now);
-        const spoken = new Intl.DateTimeFormat("en-US", { timeZone: c.timeZone, hour: "numeric", minute: "2-digit" }).format(now);
-        return (
-          <li key={c.city} className="flex flex-col">
-            <time aria-label={`${c.city}, ${spoken}`} className="type-code tabular-nums text-fg" suppressHydrationWarning>
-              {time}
-            </time>
-            <span className="type-caption text-fg">{c.city}</span>
-            {c.region ? <span className="type-eyebrow text-muted">{c.region}</span> : null}
-          </li>
-        );
-      })}
+        }),
+        spoken: new Intl.DateTimeFormat("en-US", { timeZone: c.timeZone, hour: "numeric", minute: "2-digit" }),
+      })),
+    [cities, reduce],
+  );
+  return (
+    <ul className="grid grid-cols-2 gap-6 sm:flex sm:flex-wrap sm:gap-8">
+      {cities.map((c, i) => (
+        <li key={c.city} className="flex flex-col">
+          <span className="sr-only" suppressHydrationWarning>
+            {c.city}, {formats[i].spoken.format(now)}
+          </span>
+          <time aria-hidden className="type-code tabular-nums text-fg" suppressHydrationWarning>
+            {formats[i].shown.format(now)}
+          </time>
+          <span aria-hidden className="type-caption text-fg">
+            {c.city}
+          </span>
+          {c.region ? (
+            <span aria-hidden className="type-eyebrow text-muted">
+              {c.region}
+            </span>
+          ) : null}
+        </li>
+      ))}
     </ul>
   );
 }
 
-/* ---------- The ASCII band ---------- */
+/* ---------- The landscape band ---------- */
 
 export interface FooterAsciiBandProps {
   /** A looping landscape video (or an image): a clean silhouette on a plain sky reads best. Same-origin, or served with CORS. */
@@ -200,30 +229,45 @@ export interface FooterAsciiBandProps {
   ramp?: "dots" | "classic";
   /** 0–441: how far from the sky colour a pixel must be to get a dot. Raise it to blank a hazy sky. */
   threshold?: number;
+  /** 0–1: which part of the video sits in the band vertically (0 top, 1 bottom). Put the ridgeline near the band's middle. */
+  focusY?: number;
 }
 
-const ramps = { dots: " ·•●", classic: " .:-=+*#%@" } as const;
-/** Band height 220 / 300 / 360; its top 20% fades into the paper. */
-const bandClasses =
-  "relative h-[220px] w-full text-fg md:h-[300px] lg:h-[360px] " +
-  "[mask-image:linear-gradient(to_bottom,transparent,black_20%)] opacity-55 dark:opacity-45";
+const classicRamp = " .:-=+*#%@";
+/** Band height 220 / 300 / 360. */
+const bandClasses = "relative h-[220px] w-full md:h-[300px] lg:h-[360px]";
+/** The drawing: text colour at 55% (45% dark), its top 20% fading into the paper. The toggle sits outside it, at full contrast. */
+const bandArtClasses =
+  "absolute inset-0 text-fg opacity-55 [[data-theme=dark]_&]:opacity-45 " +
+  "[mask-image:linear-gradient(to_bottom,transparent,black_20%)]";
+/** Quiet pause toggle: a 44px hit area, a 12px glyph, no background until hover or focus. */
 const toggleClasses =
-  "absolute right-3 bottom-3 z-10 inline-flex min-h-11 items-center rounded-full px-3 text-muted type-eyebrow " +
-  "bg-[color-mix(in_srgb,var(--color-background-muted)_80%,transparent)] hover:text-fg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-fg)]";
+  "absolute right-2 bottom-2 z-10 grid size-11 place-items-center rounded-full text-muted " +
+  "hover:bg-[color-mix(in_srgb,var(--color-fg)_8%,transparent)] hover:text-fg " +
+  "focus-visible:bg-[color-mix(in_srgb,var(--color-fg)_8%,transparent)] focus-visible:text-fg " +
+  "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-fg)]";
 
 /**
- * The landscape drawn live as a halftone: each frame the video is drawn tiny (one pixel per cell) on a
- * hidden canvas; each cell's tone (stretched across the land each frame) sets a dot's size, and
- * sky-coloured cells stay empty. `ramp="classic"` draws ASCII characters instead of dots. Draws in the text
- * colour, so it follows light and dark (dark inverts the source, so ridges read as light dots). Pauses
- * off-screen, holds a still frame under reduced motion, and has a Pause motion toggle (WCAG 2.2.2).
+ * The landscape drawn live as a halftone: each video frame is drawn tiny (one pixel per cell) on a hidden
+ * canvas; sky-coloured cells (the top row's median colour) stay empty; the land's tones are stretched
+ * (smoothed over frames, so passing clouds don't make it pulse) and set each dot's size, with the faintest
+ * haze dropped. In dark mode the tone flips, so light land reads as light dots. Draws in the text colour,
+ * pauses off-screen, holds a still frame under reduced motion, and has a pause toggle (WCAG 2.2.2).
  */
-export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60 }: FooterAsciiBandProps) {
+export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60, focusY = 0.5 }: FooterAsciiBandProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const reduce = useReducedMotion();
   const [playing, setPlaying] = useState(true);
   const [drawn, setDrawn] = useState(false);
   const playingRef = useRef(true);
+
+  useEffect(() => {
+    playingRef.current = !reduce;
+    setPlaying(!reduce);
+    const video = videoRef.current;
+    if (video) (reduce ? video.pause() : video.play().catch(() => {}));
+  }, [reduce]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -233,18 +277,12 @@ export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60 }: 
     const sample = document.createElement("canvas");
     const sctx = sample.getContext("2d", { willReadFrequently: true });
     if (!ctx || !sctx) return;
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce) {
-      playingRef.current = false;
-      setPlaying(false);
-    }
-    const chars = ramps[ramp];
-    let raf = 0;
     let visible = true;
-    let cols = 0;
-    let rows = 0;
-    let cell = 7;
-    let cellH = 7;
+    let cols = 0, rows = 0, cell = 7, cellH = 7;
+    let lo = -1, hi = -1; // smoothed tone range
+    let stopped = false;
+    let pending = 0;
+    let firstDrawn = false;
 
     const resize = () => {
       const { width, height } = canvas.getBoundingClientRect();
@@ -264,56 +302,78 @@ export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60 }: 
     };
 
     const draw = () => {
-      if (video.readyState < 2) return;
+      if (video.readyState < 2 || !cols) return;
       const { width, height } = canvas.getBoundingClientRect();
-      // Cover-fit the video into the grid, anchored to the bottom (the ridges).
-      const scale = Math.max(cols / video.videoWidth, (rows * (cellH / cell)) / video.videoHeight);
+      const aspect = cellH / cell;
+      const scale = Math.max(cols / video.videoWidth, (rows * aspect) / video.videoHeight);
       const dw = video.videoWidth * scale;
-      const dh = (video.videoHeight * scale) / (cellH / cell);
-      sctx.drawImage(video, (cols - dw) / 2, rows - dh, dw, dh);
+      const dh = (video.videoHeight * scale) / aspect;
+      sctx.drawImage(video, (cols - dw) / 2, (rows - dh) * focusY, dw, dh);
       const data = sctx.getImageData(0, 0, cols, rows).data;
-      // The sky colour: the top-left sample, so any plain sky works.
-      const sr = data[0], sg = data[1], sb = data[2];
-      // Stretch the tones of the land (not the sky) to the full range each frame, so near and far ridges
-      // get different dot sizes instead of one solid block.
+      // Sky: the median colour of the top row, so a cloud or bird in a corner can't flip the frame.
+      const top = Array.from({ length: cols }, (_, x) => x * 4);
+      const median = (k: number) => top.map((i) => data[i + k]).sort((a, b) => a - b)[cols >> 1];
+      const sr = median(0), sg = median(1), sb = median(2);
+      const color = getComputedStyle(canvas).color;
+      const [ir, ig, ib] = (color.match(/\d+(\.\d+)?/g) ?? ["0", "0", "0"]).map(Number);
+      const lightInk = 0.2126 * ir + 0.7152 * ig + 0.0722 * ib > 128; // dark mode: flip the tone
       const ink = new Float32Array(cols * rows).fill(-1);
-      let lo = 1, hi = 0;
+      let flo = 1, fhi = 0;
       for (let p = 0; p < cols * rows; p++) {
         const i = p * 4, r = data[i], g = data[i + 1], b = data[i + 2];
         if (Math.hypot(r - sr, g - sg, b - sb) < threshold) continue;
-        const v = 1 - (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255;
+        const v = lightInk ? lum : 1 - lum;
         ink[p] = v;
-        if (v < lo) lo = v;
-        if (v > hi) hi = v;
+        if (v < flo) flo = v;
+        if (v > fhi) fhi = v;
+      }
+      // Smooth the range over frames (EMA), so the land doesn't pulse as clouds pass.
+      if (lo < 0) {
+        lo = flo;
+        hi = fhi;
+      } else {
+        lo += (flo - lo) * 0.05;
+        hi += (fhi - hi) * 0.05;
       }
       const span = Math.max(0.05, hi - lo);
       ctx.clearRect(0, 0, width, height);
-      ctx.fillStyle = getComputedStyle(canvas).color;
+      ctx.fillStyle = color;
+      ctx.beginPath();
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
           const v = ink[y * cols + x];
           if (v < 0) continue;
-          // Ease the tone so mid ridges stay open; 0.15 keeps the farthest haze as fine specks.
-          const t = 0.15 + 0.85 * Math.pow((v - lo) / span, 1.8);
+          const t = Math.min(1, Math.max(0, (v - lo) / span)) ** 1.6;
+          if (t < 0.12) continue; // the faintest haze drops out, leaving sky
           const cx = x * cell + cell / 2, cy = y * cellH + cellH / 2;
           if (ramp === "dots") {
             const radius = (cell / 2) * 0.8 * Math.sqrt(t);
-            if (radius < 0.35) continue;
-            ctx.beginPath();
+            ctx.moveTo(cx + radius, cy);
             ctx.arc(cx, cy, radius, 0, Math.PI * 2);
-            ctx.fill();
           } else {
-            const ch = chars[Math.min(chars.length - 1, Math.floor(t * chars.length))];
+            const ch = classicRamp[Math.min(classicRamp.length - 1, Math.floor(t * classicRamp.length))];
             if (ch !== " ") ctx.fillText(ch, cx, cy);
           }
         }
       }
-      setDrawn(true);
+      if (ramp === "dots") ctx.fill();
+      if (!firstDrawn) {
+        firstDrawn = true;
+        setDrawn(true);
+      }
     };
 
-    const loop = () => {
-      if (visible && playingRef.current) draw();
-      raf = requestAnimationFrame(loop);
+    // Draw on each new video frame where the browser supports it, else on animation frames.
+    const v = video as HTMLVideoElement & { requestVideoFrameCallback?: (cb: () => void) => number };
+    const schedule = () => {
+      if (stopped) return;
+      if (v.requestVideoFrameCallback) pending = v.requestVideoFrameCallback(tick);
+      else pending = requestAnimationFrame(tick);
+    };
+    const tick = () => {
+      if (visible) draw();
+      schedule();
     };
 
     const ro = new ResizeObserver(() => {
@@ -332,32 +392,39 @@ export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60 }: 
       draw();
     };
     video.addEventListener("loadeddata", onData);
+    video.addEventListener("seeked", onData);
     resize();
-    if (!reduce) video.play().catch(() => {});
-    loop();
+    schedule();
     return () => {
-      cancelAnimationFrame(raf);
+      stopped = true;
+      cancelAnimationFrame(pending);
       ro.disconnect();
       io.disconnect();
       video.removeEventListener("loadeddata", onData);
+      video.removeEventListener("seeked", onData);
     };
-  }, [ramp, threshold, src]);
+  }, [ramp, threshold, focusY, src]);
 
   const toggle = () => {
     const video = videoRef.current;
     const next = !playingRef.current;
     playingRef.current = next;
     setPlaying(next);
-    if (video) next ? video.play().catch(() => {}) : video.pause();
+    if (video) (next ? video.play().catch(() => {}) : video.pause());
   };
 
   return (
     <div className={bandClasses}>
-      {poster && !drawn ? <img src={poster} alt="" aria-hidden className="absolute inset-0 size-full object-cover object-bottom" /> : null}
-      <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
-      <video ref={videoRef} src={src} muted loop playsInline preload="auto" crossOrigin="anonymous" className="hidden" aria-hidden />
-      <button type="button" onClick={toggle} className={toggleClasses}>
-        {playing ? "Pause motion" : "Play motion"}
+      <div className={bandArtClasses}>
+        {poster && !drawn ? <img src={poster} alt="" aria-hidden className="absolute inset-0 size-full object-cover" /> : null}
+        <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
+      </div>
+      <video ref={videoRef} src={src} poster={poster} muted loop playsInline preload="auto" crossOrigin="anonymous" className="hidden" aria-hidden />
+      <button type="button" onClick={toggle} className={toggleClasses} aria-pressed={!playing}>
+        <span className="sr-only">{playing ? "Pause background motion" : "Play background motion"}</span>
+        <svg viewBox="0 0 12 12" className="size-3" aria-hidden focusable="false">
+          {playing ? <path fill="currentColor" d="M2 1h3v10H2zM7 1h3v10H7z" /> : <path fill="currentColor" d="M3 1l8 5-8 5z" />}
+        </svg>
       </button>
     </div>
   );

@@ -39,11 +39,11 @@ import { FooterAsciiBand, FooterClocks, FooterLandscape } from "./FooterLandscap
 | `status` | ReactNode, optional | A green dot plus text at the end of the strip ("Status:" for screen readers) |
 | `moment` | slot, optional | The band at the bottom, usually `<FooterAsciiBand src poster? ramp? threshold? />`. Leave it out to end on the strip |
 
-`FooterAsciiBand`: `src` a looping landscape video (same-origin, or CORS), `poster` shown until the first frame and under reduced motion, `ramp` `"dots"` (default, reads as halftone) or `"classic"`, `threshold` (0–441, default 60) how far from the sky colour a pixel must be to get a dot. It draws in the text colour at 55% (45% in dark), 220 / 300 / 360px tall, the top 20% fading into the paper; pauses off-screen; a **Pause motion** toggle (WCAG 2.2.2: the loop runs past 5s).
+`FooterAsciiBand`: `src` a looping landscape video (same-origin, or CORS), `poster` shown until the first frame and under reduced motion, `ramp` `"dots"` (default, a true halftone) or `"classic"` (ASCII characters), `threshold` (0–441, default 60) how far from the sky colour a pixel must be to get a dot, `focusY` (0–1, default 0.5) which part of the video sits in the band (put the ridgeline near the middle). It reads the sky as the top row's median colour, stretches the land's tones (smoothed over frames, so it doesn't pulse), drops the faintest haze, and flips the tone in dark mode. It draws in the text colour at 55% (45% in dark), 220 / 300 / 360px tall, the top 20% fading into the paper; pauses off-screen; and has a quiet pause toggle (a 44px button with a 12px glyph, "Pause background motion" for screen readers), since the loop runs past 5s (WCAG 2.2.2).
 
 ## Knobs
 
-- `--color-background-muted`: the paper. Set it per brand in brand.css.
+- `--color-background-muted`: the paper. Set it per brand in brand.css; the example tints it (#ebece7 light, #222321 dark). Muted text on it measured 8.7:1 (light) and 8.3:1 (dark).
 - The band reads the sky colour from the video's top-left corner, so any plain sky works; raise `threshold` for a hazy one.
 
 ## Adapt it
@@ -58,5 +58,5 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## WMDS-GAPs
 
-- Checked against **@thewhatmatters/wmds 0.4.27**. Muted text on the muted paper must hold 4.5:1; the check in this pattern's review measures it.
+- Checked against **@thewhatmatters/wmds 0.4.27**. No WMDS gap found: the tokens cover it.
 - Example clip: Envato "Abstract Mountain Range Flyover Animation" (Randy's pick, 2026-10-27). Until the licensed file is downloaded, the gallery plays Envato's preview from `gallery/public/local/` (not committed, not for publishing).

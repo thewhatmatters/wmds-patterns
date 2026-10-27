@@ -17,6 +17,7 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
   return (
     <div className="flex min-h-svh flex-col justify-end">
       <FooterLandscape
+        className="[--color-background-muted:#ebece7] [[data-theme=dark]_&]:[--color-background-muted:#222321]"
         brand={<span className="type-large font-semibold tracking-tight">WhatMatters</span>}
         pitch={
           <>
@@ -39,7 +40,7 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
         ]}
         facts={["© 2026 WhatMatters", "whatmatters.studio", <a href="mailto:hello@whatmatters.studio">hello@whatmatters.studio</a>, "Built in Austin"]}
         status="All systems operational"
-        moment={<FooterAsciiBand src={`${base}local/footer-landscape.mp4`} />}
+        moment={<FooterAsciiBand src={`${base}local/footer-landscape.mp4`} focusY={0.72} />}
         {...props}
       />
     </div>
