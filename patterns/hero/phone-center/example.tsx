@@ -42,6 +42,7 @@ export const meta = {
 export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
   return (
     <HeroPhoneCenter
+      edgeBlur
       eyebrow="New · Free homepage sketch in 48 hours"
       headline="Your site, sketched on your phone by tomorrow"
       subhead="A homepage you can tap through, free."

@@ -41,6 +41,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 | `video` | `{ src, poster? }`, optional | A looping background video instead of `media`: muted, `playsInline`, hidden from screen readers, with a **Pause / Play** button (WCAG 2.2.2). It doesn't start on its own under `prefers-reduced-motion` |
 | `screen` | slot, optional | A short caption on the phone's screen: about 40 characters, 3 lines at most, on a scrim so it reads over any picture. If it changes (a status), wrap it in `aria-live="polite"` |
 | `app` | slot, optional | A full app screen on the phone, edge to edge under the glass: a screenshot, a 9:19.5 screen recording (e.g. 1206 × 2622) or live UI. A recording that plays on its own for over 5 seconds needs a pause control in your page |
+| `edgeBlur` | boolean, default `false` | A progressive blur along the top of the viewport: content scrolling up under it blurs and fades out (like Lovi). Static CSS, no script. Once per page; skip it if the page's sticky nav already covers the top |
 
 ## Knobs
 

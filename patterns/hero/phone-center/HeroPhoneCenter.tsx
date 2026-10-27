@@ -37,6 +37,12 @@ export interface HeroPhoneCenterProps {
    * recording that plays on its own for over 5 seconds needs a pause control in your page.
    */
   app?: ReactNode;
+  /**
+   * A progressive blur along the top of the viewport: content scrolling up under it blurs and fades
+   * out, like Lovi's. Static CSS (no script, no animation). Use it once per page; skip it if the page's
+   * own sticky nav already covers the top edge.
+   */
+  edgeBlur?: boolean;
   className?: string;
 }
 
@@ -185,12 +191,30 @@ function HeroVideo({ src, poster }: { src: string; poster?: string }) {
   );
 }
 
-export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, media, video, screen, app, className }: HeroPhoneCenterProps) {
+/**
+ * The top-edge blur: four fixed layers, each blurring a little more than the last and masked to a lower
+ * band, so the blur ramps up toward the very top; a light fade to the page colour finishes it.
+ */
+function EdgeBlur() {
+  const layer = "absolute inset-0";
+  return (
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-24" aria-hidden data-hero-edge-blur="">
+      <div className={cn(layer, "backdrop-blur-[1px] [mask-image:linear-gradient(to_top,transparent,black_40%)]")} />
+      <div className={cn(layer, "backdrop-blur-[2px] [mask-image:linear-gradient(to_top,transparent_25%,black_60%)]")} />
+      <div className={cn(layer, "backdrop-blur-[4px] [mask-image:linear-gradient(to_top,transparent_50%,black_80%)]")} />
+      <div className={cn(layer, "backdrop-blur-[8px] [mask-image:linear-gradient(to_top,transparent_70%,black)]")} />
+      <div className={cn(layer, "bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-surface)_70%,transparent),transparent)]")} />
+    </div>
+  );
+}
+
+export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
   const headingId = useId();
   const frameId = useId().replace(/:/g, "");
 
   return (
     <div className={cn(rootClasses, className)} data-pattern="hero-phone-center">
+      {edgeBlur ? <EdgeBlur /> : null}
       {nav}
       <section aria-labelledby={headingId} className={sectionClasses}>
         <div className={copyClasses}>
