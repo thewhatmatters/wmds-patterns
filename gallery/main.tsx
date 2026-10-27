@@ -88,8 +88,17 @@ function Frame({ entry, theme, slots, measure }: { entry: Entry; theme: Theme; s
   }, [theme]);
   useSlotOutlines(slots);
   useMeasure(measure);
+  // Tell the gallery how tall the pattern is, so the frame fits it (no empty page below a short section).
+  const content = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const element = content.current;
+    if (!element) return;
+    const observer = new ResizeObserver(() => parent.postMessage({ patternHeight: Math.ceil(element.getBoundingClientRect().height) }, location.origin));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
   return (
-    <div className="min-h-svh bg-body text-fg">
+    <div ref={content} className="bg-body text-fg">
       <entry.Example />
     </div>
   );
@@ -97,7 +106,10 @@ function Frame({ entry, theme, slots, measure }: { entry: Entry; theme: Theme; s
 
 function Toggle<T extends string | number>({ label, options, value, onChange }: { label: string; options: readonly T[]; value: T; onChange: (value: T) => void }) {
   return (
-    <div role="group" aria-label={label} className="flex rounded-md border border-border p-0.5">
+    <div role="group" aria-label={label} className="flex items-center rounded-md border border-border p-0.5">
+      <span aria-hidden className="px-2 text-xs text-muted">
+        {label}
+      </span>
       {options.map((option) => (
         <button
           key={option}
@@ -172,6 +184,15 @@ function Gallery() {
     return () => observer.disconnect();
   }, []);
   const scale = Math.min(1, available / width);
+  // The frame's height follows the pattern's (sent from inside the frame).
+  const [height, setHeight] = useState(1000);
+  useEffect(() => {
+    const onMessage = (event: MessageEvent) => {
+      if (event.origin === location.origin && typeof event.data?.patternHeight === "number") setHeight(event.data.patternHeight);
+    };
+    addEventListener("message", onMessage);
+    return () => removeEventListener("message", onMessage);
+  }, []);
   const themes: readonly Theme[] = current?.meta.themes ?? ["light", "dark"];
   const shownTheme: Theme = themes.includes(theme) ? theme : themes[0];
 
@@ -236,7 +257,7 @@ function Gallery() {
               key={`${current.folder}-${shownTheme}${overlays}`}
               title={current.meta.name}
               src={`?frame=${current.folder}&theme=${shownTheme}${overlays}`}
-              style={{ width, height: 1000 / scale, zoom: scale }}
+              style={{ width, height, zoom: scale }}
               className="mx-auto block border border-border bg-body"
             />
           ) : (
