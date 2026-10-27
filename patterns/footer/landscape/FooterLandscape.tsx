@@ -44,7 +44,7 @@ const rulesClasses =
   "[&>span:nth-child(n+9)]:hidden lg:[&>span:nth-child(n+9)]:block";
 /** Content top: ~48px of clear paper below the rules (rules 48 / 64, content 80 / 112). */
 const gridClasses = "grid-page relative !pt-16 !pb-0 md:!pt-20 lg:!pt-28";
-const brandBlockClasses = "col-span-full flex flex-col gap-3 md:col-span-5 lg:col-span-6";
+const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
 const pitchClasses = "max-w-[40ch] text-muted type-body [&_a]:text-fg [&_a]:underline";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
 const linksClasses = {
@@ -83,7 +83,7 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
             </p>
           ) : null}
           {clocks != null ? (
-            <div className="mt-5" data-slot="clocks" data-slot-optional="">
+            <div className="mt-6.5" data-slot="clocks" data-slot-optional="">
               {clocks}
             </div>
           ) : null}
