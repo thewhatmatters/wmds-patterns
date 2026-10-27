@@ -36,8 +36,8 @@ export interface FooterLandscapeProps {
 
 /** Root: the tinted paper. `--color-background-muted` is the paper knob (set it in brand.css). */
 const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-muted)] text-fg";
-/** Content top: clear paper above the brand (48 / 64 / 80). */
-const gridClasses = "grid-page relative !pt-12 !pb-0 md:!pt-16 lg:!pt-20";
+/** Content top: clear paper above the brand (32 / 40 / 48). */
+const gridClasses = "grid-page relative !pt-8 !pb-0 md:!pt-10 lg:!pt-12";
 const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
 const pitchClasses = "max-w-[40ch] text-muted type-body [&_a]:text-fg [&_a]:underline";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
