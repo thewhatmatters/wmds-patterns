@@ -25,10 +25,11 @@ Patterns marked draft aren't approved yet: prefer approved ones, and say so if y
 | Hero — Feature Center (draft) | Centred pitch and CTAs over the product in a backlit frame, then a row of client logos | The first screen of a site that sells a product or service and has a product shot or site to show, with proof (logos) under it | The hero is mostly a photo or video, an article or app screen, or an editorial left-aligned layout is wanted | `patterns/hero/feature-center` |
 | Hero — Phone Center | Centred pitch and CTAs over a wide photo or video, with an iPhone frame showing the app in the middle | An app or mobile-first service whose story is what happens on the phone, with a photo or video to set the mood | There's no phone to show, or the product is a desktop app or a website (use hero/feature-center) | `patterns/hero/phone-center` |
 | Footer — Landscape | Calm footer on the muted background: brand, live world clocks, link columns, a fact strip, and a landscape drawn live in dots from a video | A product or studio site that wants a quiet footer with one memorable moment at the bottom | A dense sitemap footer with many columns, or a page with no room for motion | `patterns/footer/landscape` |
+| Statement — Inline Pills (draft) | One big centred sentence with its key words in soft pills, each with a small picture that pops in on scroll (opt-in) | A playful hero (`as="h1"`) or an intro / what-we-do statement under the hero, for a brand with three or so things to name | Long copy, more than about four pills, or a serious product where the pop-in would feel flippant | `patterns/statement/inline-pills` |
 
 ## Conventions
 
-- Folders are `patterns/<type>/<variant>/` (hero, footer, content-box, …).
+- Folders are `patterns/<type>/<variant>/` (hero, statement, footer, content-box, …). A **statement** is a full-width section built around one big sentence: an intro under the hero, or the hero itself.
 - Slots are `ReactNode` props for the parts that change per page (`nav`, `actions`, `visual`, `logos`). Optional slots render nothing when empty.
 - **WMDS base colours only** (tokens like `text-fg`, `text-muted`, `--color-background-muted`); no hex tints from a reference. Brands change colours in their own stylesheet.
 - **WMDS components first** (`Button`, `IconButton`, `TextLink`, `Status`, …). If a pattern needs a part WMDS doesn't have, it's a WMDS gap: raise it, don't hand-build a lookalike.

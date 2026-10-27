@@ -12,7 +12,7 @@ const root = join(import.meta.dirname, "..");
 const patternsDir = join(root, "patterns");
 const skill = readFileSync(join(root, "SKILL.md"), "utf8");
 
-type ExampleModule = { default: ComponentType<{ nav?: undefined }>; meta: { name: string; purpose: string; type: string } };
+type ExampleModule = { default: ComponentType<{ nav?: undefined; as?: "h1" | "h2" }>; meta: { name: string; purpose: string; type: string } };
 const examples = import.meta.glob<ExampleModule>("../patterns/*/*/example.tsx");
 
 const folders = readdirSync(patternsDir).flatMap((type) =>
@@ -54,6 +54,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       // A footer is the page's contentinfo landmark and never holds the page's h1.
       expect(html).toMatch(/<footer[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
+    } else if (mod.meta.type === "Statement") {
+      // A statement is a section with one heading (h2 by default, h1 when used as the hero) and no nav.
+      expect(html).toMatch(/<section[\s>]/);
+      expect(html.match(/<h[12][\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(renderToString(<Example as="h1" />).match(/<h1[\s>]/g)).toHaveLength(1);
     } else {
       // A hero holds the page's one h1, and renders no site nav when `nav` is left out.
       expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
