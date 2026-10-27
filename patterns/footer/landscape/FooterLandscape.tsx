@@ -39,7 +39,8 @@ const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-
 /** Section padding: 48px on phones, 64px (4rem) from md, top and bottom (the band, when present, is the bottom). */
 const gridClasses = "grid-page relative !pt-12 !pb-0 md:!pt-16";
 const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
-const pitchClasses = "max-w-[40ch] text-muted type-body";
+/** Up to two short lines, broken at the sentence (the copy sets the break); `text-pretty` keeps a lone word off the last line. */
+const pitchClasses = "max-w-[52ch] text-pretty text-muted type-body";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
 const linksClasses = {
   one: "col-span-full mt-12 md:col-span-2 md:col-start-7 md:mt-0 lg:col-start-11",

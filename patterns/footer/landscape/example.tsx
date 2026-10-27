@@ -20,7 +20,9 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
       brand={<span className="type-large font-semibold tracking-tight">WhatMatters</span>}
       pitch={
         <>
-          Websites, video and social for Austin businesses. Built in Austin at <TextLink href="#studio">WhatMatters Studio</TextLink>.
+          Websites, video and social for Austin businesses.
+          <br />
+          Built in Austin at <TextLink href="#studio">WhatMatters Studio</TextLink>.
         </>
       }
       clocks={

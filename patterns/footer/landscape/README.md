@@ -5,7 +5,7 @@ status: approved
 After Pengon's footer (Inspiration #12), with our twist: the landscape is drawn live in dots from a video, the wm-tools ASCII media technique. Spec: Product Designer, 2026-10-27.
 **File:** `FooterLandscape.tsx` (copy it; it holds `FooterLandscape`, `FooterClocks` and `FooterAsciiBand`). **Example:** `example.tsx`.
 
-A calm footer on the WMDS muted background: brand and a one-line pitch, ticking world clocks, short link columns, a centred mono fact strip with a status dot, and a full-width landscape band that rises out of the paper and bleeds off the bottom.
+A calm footer on the WMDS muted background: brand and a short pitch, ticking world clocks, short link columns, a centred mono fact strip with a status dot, and a full-width landscape band that rises out of the paper and bleeds off the bottom.
 
 | Light | Dark | Mobile (390) |
 |---|---|---|
@@ -32,7 +32,7 @@ import { FooterAsciiBand, FooterClocks, FooterLandscape } from "./FooterLandscap
 | Prop | Kind | Notes |
 |---|---|---|
 | `brand` | slot | The logo lockup; a co-brand is fine |
-| `pitch` | ReactNode | One short line, about 40 characters wide; may hold an inline link |
+| `pitch` | ReactNode | One or two short sentences, each on its own line (put a `<br />` between them, so a line never breaks mid-thought); up to about 52 characters a line; may hold an inline link. `text-pretty` keeps a single word off the last line |
 | `clocks` | slot, optional | A small live detail, usually `<FooterClocks cities={…} />` (0–4 cities; 2×2 on phones). `<time>` per city with an aria-label; not a live region; HH:MM once a minute under reduced motion |
 | `links` | `{ label, links: { label, href, external? }[] }[]` | 1–4 columns. 1–2 sit on the right; 3–4 take their own row. WMDS `TextLink` (quiet; `external` adds its icon and opens a new tab), 44px tall hit areas |
 | `facts` | ReactNode[] | The fact strip: dot-separated and centred from 768, stacked one per line on phones |
