@@ -30,7 +30,7 @@ import { InlinePill, StatementInlinePills } from "./StatementInlinePills";
 
 | Prop | Kind | Notes |
 |---|---|---|
-| `children` | ReactNode | The sentence: about 10–18 words, with 2–4 key words wrapped in `<InlinePill>`. Keep punctuation outside the pills. WMDS `type-display-2`, about 18em wide, so it sets in 2–3 lines |
+| `children` | ReactNode | The sentence: about 10–18 words, with 2–3 key words wrapped in `<InlinePill>`, one or two short words each (a long phrase splits into two half-pills across lines; at 4 or more pills it reads as a list). Keep punctuation outside the pills. WMDS `type-display-2`, about 18em wide, so it sets in 2–3 lines |
 | `eyebrow` | slot, optional | A short line above the sentence, usually a WMDS `<Badge>` |
 | `actions` | slot, optional | The CTA row under the sentence: one or two WMDS `<Button>`s |
 | `as` | `"h2"` (default) or `"h1"` | `h1` when the statement is the page's hero; `h2` anywhere else |
@@ -40,7 +40,7 @@ import { InlinePill, StatementInlinePills } from "./StatementInlinePills";
 
 ## Motion
 
-- **What:** each picture scales from 0 with a -24° tilt to 1.14 and 6°, then settles at 1 and 0°; pictures follow each other one WMDS beat apart (`--motion-beat`, 160ms), over `--duration-medium-max` (550ms) on `--ease-standard`.
+- **What:** each picture scales from 0 with a -24° tilt to 1.14 and 6°, then settles at 1 and 0°; pictures follow each other one WMDS beat apart (`--motion-beat`, 160ms; closer together past 4 pills, so the run stays under about half a second), over `--duration-medium-max` (550ms) on `--ease-standard`.
 - **How:** the Web Animations API (`element.animate`), no library, transform and opacity only. The pictures are hidden before the first paint, so they never flash in and then animate. Runs once.
 - **Hover:** a picture tilts a little (-8°) when its pill is hovered, where motion is allowed.
 - **Reduced motion:** no pop-in and no tilt; the pictures are simply there.
@@ -49,8 +49,8 @@ import { InlinePill, StatementInlinePills } from "./StatementInlinePills";
 ## Knobs
 
 - `--text-display-2-size`: the sentence uses WMDS `type-display-2`.
-- The pill's fill is the text colour (`--color-fg`) at 6%, so it shows on any background and in both themes.
-- The pill's shape is in `pillClasses` (em-based padding, fully round); the picture is 0.9em square in `mediaClasses`.
+- The pill's fill is the text colour (`--color-fg`) at 4% (8% in dark), so it shows on any background and in both themes.
+- The pill's shape is in `pillClasses` (em-based padding, fully round); the picture is 1em square in `mediaClasses`, sitting in the pill's left padding (out of the text flow, so it never parts from its word at a line break).
 
 ## Adapt it
 

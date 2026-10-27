@@ -36,23 +36,29 @@ const rootClasses = "group/statement relative w-full";
 const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
 const innerClasses = "col-span-full flex flex-col items-center text-center";
 /** WMDS display type, kept to about 18em so the sentence sets in 2–3 lines with room for the pills. */
-const sentenceClasses = "max-w-[18em] text-balance type-display-2 font-medium leading-[1.35] tracking-tight text-fg";
+/** Long words break rather than scroll the page sideways; a looser line gap on phones keeps stacked pills apart. */
+const sentenceClasses =
+  "min-w-0 max-w-[18em] text-balance type-display-2 font-normal leading-[1.4] tracking-tight text-fg [overflow-wrap:anywhere] md:leading-[1.35]";
 const actionsClasses = "mt-10 flex flex-wrap items-center justify-center gap-3";
 /**
  * The pill: an inline run (not inline-flex), so it sits on the sentence's baseline and punctuation right
- * after it never wraps away. Fill is the text colour at 6%, so it shows on any background in both themes.
- * Sized in em, so it scales with the sentence; `box-decoration-break: clone` keeps the shape if it wraps.
+ * after it never wraps away. Fill is the text colour at 4% (8% in dark, where 4% disappears). Sized in em,
+ * so it scales with the sentence. The picture sits in the left padding, out of the text flow, so it can
+ * never be left at the end of a line without its word; `box-decoration-break: clone` keeps the shape if
+ * a pill wraps.
  */
 const pillClasses =
-  "rounded-full bg-[color-mix(in_srgb,var(--color-fg)_6%,transparent)] py-0 pl-[0.12em] pr-[0.34em] " +
+  "relative rounded-full bg-[color-mix(in_srgb,var(--color-fg)_4%,transparent)] py-0 pl-[1.3em] pr-[0.24em] " +
+  "[[data-theme=dark]_&]:bg-[color-mix(in_srgb,var(--color-fg)_8%,transparent)] " +
   "[box-decoration-break:clone] [-webkit-box-decoration-break:clone]";
 /**
- * The picture: 0.9em square, dropped to sit centred on the x-height. Before the pop-in runs it's hidden
- * (so it doesn't flash, then animate); on hover it tilts a little, where motion is allowed.
+ * The picture: 1em square, a touch proud of the pill, on its first line (an inline box that wraps spans two lines, so 50% would float between them). Hidden before the
+ * pop-in runs (so it doesn't flash, then animate), never in print; on hover it tilts a little, where
+ * motion is allowed.
  */
 const mediaClasses =
-  "mr-[0.16em] inline-block size-[0.9em] align-[-0.12em] [&>img]:size-full [&>img]:object-contain [&>svg]:block [&>svg]:size-full " +
-  "group-data-[pills=pending]/statement:scale-0 group-data-[pills=pending]/statement:opacity-0 " +
+  "absolute top-[0.14em] left-[0.15em] size-[1em] [&>img]:size-full [&>img]:object-contain [&>svg]:block [&>svg]:size-full " +
+  "group-data-[pills=pending]/statement:scale-0 group-data-[pills=pending]/statement:opacity-0 print:!scale-100 print:!opacity-100 " +
   "motion-safe:transition-transform motion-safe:duration-[var(--duration-fast)] motion-safe:ease-[var(--ease-standard)] " +
   "motion-safe:group-hover/pill:-rotate-8 motion-safe:group-hover/pill:scale-105";
 
@@ -82,7 +88,7 @@ function usePillsPopIn(animate: boolean) {
 
   // Hide before the first paint, so the pictures never flash in and then animate.
   useLayoutEffect(() => {
-    if (animate && !matchMedia("(prefers-reduced-motion: reduce)").matches) setState("pending");
+    if (animate && "IntersectionObserver" in window && !matchMedia("(prefers-reduced-motion: reduce)").matches) setState("pending");
   }, [animate]);
 
   useEffect(() => {
@@ -93,7 +99,9 @@ function usePillsPopIn(animate: boolean) {
         if (!entry.isIntersecting) return;
         observer.disconnect();
         const duration = token("--duration-medium-max", 550);
-        const stagger = token("--motion-beat", 160);
+        // One beat apart, but the whole run stays under about half a second however many pills there are.
+        const count = root.querySelectorAll("[data-pill-media]").length;
+        const stagger = Math.min(token("--motion-beat", 160), 480 / Math.max(1, count - 1));
         const easing = getComputedStyle(document.documentElement).getPropertyValue("--ease-standard").trim() || "cubic-bezier(0.24, 1, 0.4, 1)";
         const media = [...root.querySelectorAll<HTMLElement>("[data-pill-media]")];
         // fill: "backwards" holds each picture hidden through its delay, after the pending state lifts.
