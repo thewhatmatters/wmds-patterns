@@ -1,8 +1,8 @@
 # Hero — Feature Center
 
-status: draft
+status: approved
 
-Randy approved the look in WMDS's Storybook on 2026-10-26; it's draft here until he approves it in this repo.
+Randy approved it in the gallery on 2026-10-27.
 **File:** `HeroFeatureCenter.tsx` (copy it). **Example:** `example.tsx` (filled in with placeholder content).
 
 A centred hero: an eyebrow pill, a 2-line headline, a subhead and a CTA row, then the product in a framed window lit from behind, then an optional row of client logos.
