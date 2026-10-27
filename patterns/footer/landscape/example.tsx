@@ -17,7 +17,6 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
   return (
     <div className="flex min-h-svh flex-col justify-end">
       <FooterLandscape
-        className="[--color-background-muted:#ebece7] [[data-theme=dark]_&]:[--color-background-muted:#222321]"
         brand={<span className="type-large font-semibold tracking-tight">WhatMatters</span>}
         pitch={
           <>

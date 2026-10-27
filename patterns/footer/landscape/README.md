@@ -43,7 +43,7 @@ import { FooterAsciiBand, FooterClocks, FooterLandscape } from "./FooterLandscap
 
 ## Knobs
 
-- `--color-background-muted`: the paper. Set it per brand in brand.css; the example tints it (#ebece7 light, #222321 dark). Muted text on it measured 8.7:1 (light) and 8.3:1 (dark).
+- `--color-background-muted`: the paper. The example uses the WMDS base colour; set it per brand in brand.css.
 - The band reads the sky colour from the video's top-left corner, so any plain sky works; raise `threshold` for a hazy one.
 
 ## Adapt it
