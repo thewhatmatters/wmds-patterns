@@ -6,7 +6,7 @@
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
  */
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
-import { cn, IconButton, Status, TextLink } from "@thewhatmatters/wmds";
+import { cn, Status, TextLink } from "@thewhatmatters/wmds";
 
 /* Every class is written out in full (never interpolated) so Tailwind sees it. `data-slot` marks where your
    content goes; it does nothing on a page (the gallery outlines slots with it). */
@@ -221,31 +221,27 @@ export interface FooterAsciiBandProps {
 const classicRamp = " .:-=+*#%@";
 /** Band height 180 / 240 / 280. */
 const bandClasses = "relative h-[180px] w-full md:h-[240px] lg:h-[280px]";
-/** The drawing: text colour at 55% (45% dark), its top 20% fading into the paper. The toggle sits outside it, at full contrast. */
+/** The drawing: text colour at 55% (45% dark), its top 20% fading into the paper. */
 const bandArtClasses =
   "absolute inset-0 text-fg opacity-55 [[data-theme=dark]_&]:opacity-45 " +
   "[mask-image:linear-gradient(to_bottom,transparent,black_20%)]";
-/** The pause toggle: a WMDS ghost IconButton in the band's corner. */
-const toggleClasses = "absolute right-2 bottom-2 z-10";
-
 /**
  * The landscape drawn live as a halftone: each video frame is drawn tiny (one pixel per cell) on a hidden
  * canvas; sky-coloured cells (the top row's median colour) stay empty; the land's tones are stretched
  * (smoothed over frames, so passing clouds don't make it pulse) and set each dot's size, with the faintest
  * haze dropped. In dark mode the tone flips, so light land reads as light dots. Draws in the text colour,
- * pauses off-screen, holds a still frame under reduced motion, and has a pause toggle (WCAG 2.2.2).
+ * pauses off-screen and holds a still frame under reduced motion. No pause control: it's part of the design,
+ * not a video to watch (Randy, 2026-10-27).
  */
 export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60, focusY = 0.5 }: FooterAsciiBandProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const reduce = useReducedMotion();
-  const [playing, setPlaying] = useState(true);
   const [drawn, setDrawn] = useState(false);
   const playingRef = useRef(true);
 
   useEffect(() => {
     playingRef.current = !reduce;
-    setPlaying(!reduce);
     const video = videoRef.current;
     if (video) (reduce ? video.pause() : video.play().catch(() => {}));
   }, [reduce]);
@@ -386,14 +382,6 @@ export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60, fo
     };
   }, [ramp, threshold, focusY, src]);
 
-  const toggle = () => {
-    const video = videoRef.current;
-    const next = !playingRef.current;
-    playingRef.current = next;
-    setPlaying(next);
-    if (video) (next ? video.play().catch(() => {}) : video.pause());
-  };
-
   return (
     <div className={bandClasses}>
       <div className={bandArtClasses}>
@@ -401,16 +389,6 @@ export function FooterAsciiBand({ src, poster, ramp = "dots", threshold = 60, fo
         <canvas ref={canvasRef} aria-hidden className="absolute inset-0 size-full" />
       </div>
       <video ref={videoRef} src={src} poster={poster} muted loop playsInline preload="auto" crossOrigin="anonymous" className="hidden" aria-hidden />
-      <IconButton
-        onClick={toggle}
-        className={toggleClasses}
-        aria-label={playing ? "Pause background motion" : "Play background motion"}
-        icon={
-          <svg viewBox="0 0 12 12" aria-hidden focusable="false">
-            {playing ? <path fill="currentColor" d="M2 1h3v10H2zM7 1h3v10H7z" /> : <path fill="currentColor" d="M3 1l8 5-8 5z" />}
-          </svg>
-        }
-      />
     </div>
   );
 }

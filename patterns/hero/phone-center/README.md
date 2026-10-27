@@ -79,4 +79,4 @@ Section padding 48 / 64 at the top (phone / tablet and up; the fading stage is t
 
 - No WMDS media component (image or video with poster, a pause control, reduced-motion handling); the pattern carries its own small video player until WMDS has one.
 - No WMDS device frame; the iPhone outline is SVG inside the pattern.
-- Checked against **@thewhatmatters/wmds 0.4.27** (npm). In 0.4.27 `type-large` is semibold, so the subhead sets `font-normal` itself.
+- Checked against **@thewhatmatters/wmds 0.4.28** (npm). In 0.4.28 `type-large` is semibold, so the subhead sets `font-normal` itself.

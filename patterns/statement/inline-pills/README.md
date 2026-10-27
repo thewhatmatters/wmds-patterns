@@ -1,9 +1,9 @@
 # Statement — Inline Pills
 
-status: draft
+status: approved
 
 After the inline icon chips in Graphical's hero sentence (Inspiration board; Randy's reference, 2026-10-27). Nothing copied but the idea.
-**File:** `StatementInlinePills.tsx` (copy it; it holds `StatementInlinePills` and `InlinePill`). **Example:** `example.tsx`, with simple glossy SVG icons drawn in WMDS chart colours (licence-free stand-ins).
+**File:** `StatementInlinePills.tsx` (copy it; the pills are WMDS `InlinePill`, the pop-in WMDS `useInlinePillsPopIn`). **Example:** `example.tsx`, with simple glossy SVG icons drawn in WMDS chart colours (licence-free stand-ins).
 
 One big centred sentence whose key words sit in soft pills, each with a small picture on its left. When the sentence scrolls into view, the pictures pop in one after another with a small tilt and overshoot. Playful, and it works with nothing but type and three icons.
 
@@ -16,8 +16,8 @@ The first **statement** pattern: a full-width section built around one sentence.
 ## Use it
 
 ```tsx
-import { Button } from "@thewhatmatters/wmds";
-import { InlinePill, StatementInlinePills } from "./StatementInlinePills";
+import { Button, InlinePill } from "@thewhatmatters/wmds";
+import { StatementInlinePills } from "./StatementInlinePills";
 
 <StatementInlinePills animate actions={<Button role="primary" render={<a href="/start" />}>Start</Button>}>
   We build <InlinePill media={<img src="/icons/web.png" alt="" />}>websites</InlinePill>, shoot{" "}
@@ -36,15 +36,15 @@ import { InlinePill, StatementInlinePills } from "./StatementInlinePills";
 | `as` | `"h2"` (default) or `"h1"` | `h1` when the statement is the page's hero; `h2` anywhere else |
 | `animate` | boolean, default `false` | Pop the pills' pictures in when the sentence is 40% in view, once. Skipped under `prefers-reduced-motion` |
 
-`InlinePill`: `media` (the picture: an `<img alt="">`, a 3D render or an SVG; it's decorative, the word carries the meaning) and `children` (the word or words). Pills are sized in em, so they scale with the sentence at every breakpoint.
+WMDS `InlinePill`: `media` (the picture: an `<img alt="">`, a 3D render or an SVG; it's decorative, the word carries the meaning) and `children` (the word or words). Pills are sized in em, so they scale with the sentence at every breakpoint.
 
 ## Motion
 
 - **What:** each picture scales from 0 with a -24° tilt to 1.14 and 6°, then settles at 1 and 0°; pictures follow each other one WMDS beat apart (`--motion-beat`, 160ms; closer together past 4 pills, so the run stays under about half a second), over `--duration-medium-max` (550ms) on `--ease-standard`.
-- **How:** the Web Animations API (`element.animate`), no library, transform and opacity only. The pictures are hidden before the first paint, so they never flash in and then animate. Runs once.
+- **How:** WMDS `useInlinePillsPopIn` (the Web Animations API, no library), transform and opacity only. The pictures are hidden before the first paint, so they never flash in and then animate. Runs once.
 - **Hover:** a picture tilts a little (-8°) when its pill is hovered, where motion is allowed.
 - **Reduced motion:** no pop-in and no tilt; the pictures are simply there.
-- **With Motion (motion.dev) in your app:** swap the hook for `whileInView` on each picture with the same keyframes and a `staggerChildren` of 0.16.
+- **With Motion (motion.dev) in your app:** swap the hook for `whileInView` on each picture with WMDS `inlinePillPopInKeyframes` and a `staggerChildren` of 0.16.
 
 ## Knobs
 
@@ -66,8 +66,6 @@ The first item is the example the gallery's Copy prompt uses.
 
 Full width; section padding 48 / 64 top and bottom (phone / tablet and up); eyebrow→sentence 24; sentence→CTAs 40.
 
-## WMDS-GAPs
+## WMDS
 
-- **Inline headline pill.** WMDS `Chip` and `Badge` are UI-sized (sm / md / lg, fixed px) and take only Lucide icons, so neither can sit inside a display-size sentence with a picture. The pattern carries `InlinePill` until WMDS has an em-sized inline pill with a media slot.
-- **Scroll-triggered pop-in.** WMDS has `BlurReveal` and `TextSequence`, but nothing that pops in parts of a sentence; the pattern's small hook does it.
-- Checked against **@thewhatmatters/wmds 0.4.27** (npm).
+- Built on **@thewhatmatters/wmds 0.4.28** (npm): `InlinePill` and `useInlinePillsPopIn` were added to WMDS for this pattern (Randy, 2026-10-27). No gap left.

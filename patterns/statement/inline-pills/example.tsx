@@ -2,8 +2,8 @@
  * Example content for Statement — Inline Pills. The pictures are simple glossy SVG icons drawn in WMDS
  * chart colours, so the example is licence-free; a client page swaps in its own icons or 3D renders.
  */
-import { Badge, Button } from "@thewhatmatters/wmds";
-import { InlinePill, StatementInlinePills, type StatementInlinePillsProps } from "./StatementInlinePills";
+import { Badge, Button, InlinePill } from "@thewhatmatters/wmds";
+import { StatementInlinePills, type StatementInlinePillsProps } from "./StatementInlinePills";
 
 export const meta = {
   type: "Statement",

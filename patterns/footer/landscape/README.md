@@ -39,7 +39,7 @@ import { FooterAsciiBand, FooterClocks, FooterLandscape } from "./FooterLandscap
 | `status` | ReactNode, optional | A WMDS `Status` dot (success) plus text at the end of the strip ("Status:" for screen readers) |
 | `moment` | slot, optional | The band at the bottom, usually `<FooterAsciiBand src poster? ramp? threshold? />`. Leave it out to end on the strip |
 
-`FooterAsciiBand`: `src` a looping landscape video (same-origin, or CORS), `poster` shown until the first frame and under reduced motion, `ramp` `"dots"` (default, a true halftone) or `"classic"` (ASCII characters), `threshold` (0–441, default 60) how far from the sky colour a pixel must be to get a dot, `focusY` (0–1, default 0.5) which part of the video sits in the band (put the ridgeline near the middle). It reads the sky as the top row's median colour, stretches the land's tones (smoothed over frames, so it doesn't pulse), drops the faintest haze, and flips the tone in dark mode. It draws in the text colour at 55% (45% in dark), 180 / 240 / 280px tall, the top 20% fading into the paper; pauses off-screen; and has a pause toggle (a WMDS ghost `IconButton`, "Pause background motion" for screen readers), since the loop runs past 5s (WCAG 2.2.2).
+`FooterAsciiBand`: `src` a looping landscape video (same-origin, or CORS), `poster` shown until the first frame and under reduced motion, `ramp` `"dots"` (default, a true halftone) or `"classic"` (ASCII characters), `threshold` (0–441, default 60) how far from the sky colour a pixel must be to get a dot, `focusY` (0–1, default 0.5) which part of the video sits in the band (put the ridgeline near the middle). It reads the sky as the top row's median colour, stretches the land's tones (smoothed over frames, so it doesn't pulse), drops the faintest haze, and flips the tone in dark mode. It draws in the text colour at 55% (45% in dark), 180 / 240 / 280px tall, the top 20% fading into the paper; pauses off-screen and holds a still frame under reduced motion. No pause control: the band is part of the design, not a video to watch (Randy, 2026-10-27).
 
 ## Knobs
 
@@ -58,7 +58,7 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## WMDS-GAPs
 
-- Checked against **@thewhatmatters/wmds 0.4.27**. No WMDS gap found: the tokens cover it.
+- Checked against **@thewhatmatters/wmds 0.4.28**. No WMDS gap found: the tokens cover it.
 - Example clip: Envato "Abstract Mountain Range Flyover Animation" (Randy's pick, 2026-10-27). Until the licensed file is downloaded, the gallery plays Envato's preview from `gallery/public/local/` (not committed, not for publishing). On the published gallery the band stays empty until the licensed file is added at `gallery/public/examples/footer-landscape/` and the example points to it.
 
 Spacing: full width; 48px top and bottom on phones, 64px (4rem) from tablet up. With a band, the band is the bottom edge.

@@ -70,6 +70,6 @@ Section padding 48 / 64 top and bottom (phone / tablet and up), headline→subhe
 ## WMDS-GAPs
 
 - `--hero-glow` is a pattern knob, not an allow-listed WMDS knob.
-- **No dark brand-surface version yet.** It needs WMDS `Band` tones (`tone="inverse"`), which aren't in the published 0.4.27. Until they ship, a dark hero is the page in dark mode. When they do, wrap the section in `<Band tone="inverse">` and give the CTA the light ink (a per-tone primary knob is also an open WMDS gap).
+- **No dark brand-surface version yet.** WMDS `Band` tones shipped in 0.4.28: for a dark hero on the brand surface, wrap the section in `<Band tone="inverse">` and give the CTA the light ink (a per-tone primary knob is also an open WMDS gap).
 - CSS can't fit a headline to a line count; long headlines need a smaller size by hand.
-- Checked against **@thewhatmatters/wmds 0.4.27** (npm). In 0.4.27 `type-large` is semibold, so the subhead sets `font-normal` itself.
+- Checked against **@thewhatmatters/wmds 0.4.28** (npm). In 0.4.28 `type-large` is semibold, so the subhead sets `font-normal` itself.
