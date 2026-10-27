@@ -1,7 +1,8 @@
 /**
- * Example content for Hero — Phone Center. The video is Mixkit's free clip "Brunette skincare model
- * smiles on white background" (Mixkit 9101, Mixkit License: free to use, no attribution), loaded from Mixkit; replace it, the copy
- * and the caption with the client's own. `ExampleMedia` is a still stand-in for when there's no media yet.
+ * Example content for Hero — Phone Center. Behind the phone: Mixkit's free clip "Brunette skincare model
+ * smiles on white background" (Mixkit 9101, Mixkit License: free to use, no attribution), loaded from Mixkit.
+ * In the phone: Motion Designer's see-through chat with Cami, an alpha video in two formats (HEVC first, for
+ * Safari). Replace both and the copy with the client's own. `ExampleMedia` is a still stand-in for when there's no media yet.
  */
 import { Button, SiteNav } from "@thewhatmatters/wmds";
 import { HeroPhoneCenter, type HeroPhoneCenterProps } from "./HeroPhoneCenter";
@@ -78,6 +79,9 @@ export const meta = {
   themes: ["light"],
 };
 
+/** Where the gallery serves the example's files (`/` locally, `/wmds-patterns/` on GitHub Pages). */
+const base = import.meta.env.BASE_URL;
+
 /** The pattern filled with the example content. */
 export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
   return (
@@ -103,7 +107,12 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
         </>
       }
       video={{ src: "https://assets.mixkit.co/videos/9101/9101-720.mp4", poster: "https://assets.mixkit.co/videos/9101/9101-thumb-720-0.jpg" }}
-      screen="Sketch in progress…"
+      app={
+        <video autoPlay muted loop playsInline aria-hidden poster={`${base}examples/phone-center/cami-chat-poster.png`}>
+          <source src={`${base}examples/phone-center/cami-chat.mov`} type='video/mp4; codecs="hvc1"' />
+          <source src={`${base}examples/phone-center/cami-chat.webm`} type="video/webm" />
+        </video>
+      }
       {...props}
     />
   );

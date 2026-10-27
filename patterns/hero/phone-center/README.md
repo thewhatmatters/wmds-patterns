@@ -4,7 +4,7 @@ status: approved
 
 Structure from lovi.care's hero (Randy's reference, 2026-10-26); nothing copied but the idea.
 Randy approved it in the gallery on 2026-10-27.
-**File:** `HeroPhoneCenter.tsx` (copy it). **Example:** `example.tsx`: Mixkit's free clip 9101 (Mixkit License) behind the phone and a caption on the screen; shown in light only (see Light and dark).
+**File:** `HeroPhoneCenter.tsx` (copy it). **Example:** `example.tsx`: Mixkit's free clip 9101 (Mixkit License) behind the phone, and in it Motion Designer's see-through chat with Cami (`gallery/public/examples/phone-center/`, an alpha video in HEVC and VP9); shown in light only (see Light and dark).
 
 A centred hero for an app or a mobile-first service: an eyebrow pill, a headline, a subhead and a CTA row, then a wide photo or video that fades into the page, with an iPhone frame over its centre. The media shows through the phone's glass screen, and a caption can sit on the screen. The whole stage fades out at its foot, like a fold.
 
