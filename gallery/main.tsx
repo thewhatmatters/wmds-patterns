@@ -42,6 +42,48 @@ const entries: Entry[] = Object.entries(modules)
 const widths = [390, 768, 1440] as const;
 
 /**
+ * Type presets for trying a pattern in other faces: they set the WMDS font knobs inside the preview only
+ * (the patterns and WMDS don't change). Each loads its Google Font and sets the display weights the face
+ * is drawn for.
+ */
+const typePresets = {
+  wmds: null,
+  serif: {
+    href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap",
+    vars: {
+      "--font-family-heading": '"Instrument Serif", ui-serif, Georgia, serif',
+      "--text-display-1-weight": "400",
+      "--text-display-2-weight": "400",
+      "--text-display-3-weight": "400",
+    },
+  },
+} as const;
+type TypePreset = keyof typeof typePresets;
+const typeNames = Object.keys(typePresets) as TypePreset[];
+
+function useTypePreset(preset: TypePreset) {
+  useEffect(() => {
+    const config = typePresets[preset];
+    if (!config) return;
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = config.href;
+    document.head.append(link);
+    const root = document.documentElement;
+    for (const [name, value] of Object.entries(config.vars)) root.style.setProperty(name, value);
+    // A pattern's own headline weight (font-medium) would ask a one-weight serif for a weight it doesn't have.
+    const style = document.createElement("style");
+    style.textContent = "h1, h2, h3 { font-weight: 400 !important; letter-spacing: -0.01em !important; }";
+    document.head.append(style);
+    return () => {
+      link.remove();
+      style.remove();
+      for (const name of Object.keys(config.vars)) root.style.removeProperty(name);
+    };
+  }, [preset]);
+}
+
+/**
  * Slots view: outline every `data-slot` element in pink, and label it "Slot: name (optional)" just above
  * its top-left corner. Labels live in one fixed overlay (never clipped by a pattern's masks or overflow)
  * and are added here, not in the patterns, so copied code stays clean.
@@ -81,13 +123,14 @@ function useSlotOutlines(on: boolean) {
 }
 
 /** Inside the iframe: just the pattern, on the page background, in the chosen theme. */
-function Frame({ entry, theme, slots, measure }: { entry: Entry; theme: Theme; slots: boolean; measure: boolean }) {
+function Frame({ entry, theme, slots, measure, type }: { entry: Entry; theme: Theme; slots: boolean; measure: boolean; type: TypePreset }) {
   useEffect(() => {
     if (theme === "dark") document.documentElement.dataset.theme = "dark";
     else document.documentElement.removeAttribute("data-theme");
   }, [theme]);
   useSlotOutlines(slots);
   useMeasure(measure);
+  useTypePreset(type);
   // Tell the gallery how tall the pattern is, so the frame fits it (no empty page below a short section).
   const content = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -170,8 +213,9 @@ function Gallery() {
   const [width, setWidth] = useState<(typeof widths)[number]>(1440);
   const [slots, setSlots] = useState<"off" | "on">(params.get("slots") === "on" ? "on" : "off");
   const [measure, setMeasure] = useState<"off" | "on">(params.get("measure") === "on" ? "on" : "off");
+  const [type, setType] = useState<TypePreset>(params.get("type") === "serif" ? "serif" : "wmds");
   // The overlays' query string, shared by the address bar and the frame.
-  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}`;
+  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}${type !== "wmds" ? `&type=${type}` : ""}`;
   const current = entries.find((entry) => entry.folder === folder) ?? entries[0];
   // Scale a frame wider than the pane down to fit; it still lays out at its real width.
   const stage = useRef<HTMLDivElement>(null);
@@ -248,6 +292,7 @@ function Gallery() {
           <Toggle label="Theme" options={themes} value={shownTheme} onChange={setTheme} />
           {themes.length === 1 ? <span className="text-xs text-muted">{themes[0]} only</span> : null}
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
+          <Toggle label="Type" options={typeNames} value={type} onChange={setType} />
           <Toggle label="Slots" options={["off", "on"] as const} value={slots} onChange={setSlots} />
           <Toggle label="Measure" options={["off", "on"] as const} value={measure} onChange={setMeasure} />
           {measure === "on" ? (
@@ -282,5 +327,5 @@ const frame = params.get("frame");
 const frameEntry = frame ? entries.find((entry) => entry.folder === frame) : undefined;
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} measure={params.get("measure") === "on"} /> : <Gallery />}</StrictMode>,
+  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} measure={params.get("measure") === "on"} type={params.get("type") === "serif" ? "serif" : "wmds"} /> : <Gallery />}</StrictMode>,
 );
