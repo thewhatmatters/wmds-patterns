@@ -6,6 +6,8 @@ import { defineConfig } from "vite";
 export default defineConfig(({ mode }) => ({
   base: mode === "pages" ? "/wmds-patterns/" : "/",
   plugins: [react(), tailwindcss()],
+  // Reachable from other machines on the network by Bonjour name (e.g. http://bos-mac-mini.local:5190).
+  server: { allowedHosts: [".local"] },
   // A local viewer: one bundle is fine. No source maps, so nothing points at local paths.
   build: { chunkSizeWarningLimit: 1500, sourcemap: false },
 }));
