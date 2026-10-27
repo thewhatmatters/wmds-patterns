@@ -71,7 +71,7 @@ The pattern follows the theme, but the media doesn't: footage shot on a white st
 
 ## Spacing
 
-Nav→eyebrow 48 / 96 (phone / desktop), headline→subhead 24, subhead→CTAs 32, CTAs→stage 40 / 64. The stage is `clamp(26rem, 52vw, 40rem)` tall and fades out over its last 28%.
+Section padding 48 / 64 at the top (phone / tablet and up; the fading stage is the bottom edge), headline→subhead 24, subhead→CTAs 32, CTAs→stage 40 / 64. The stage is `clamp(26rem, 52vw, 40rem)` tall and fades out over its last 28%.
 
 ## WMDS-GAPs
 
