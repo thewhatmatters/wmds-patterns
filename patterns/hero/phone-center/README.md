@@ -47,6 +47,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 
 - `--text-display-2-size`: the headline uses WMDS `type-display-2` (fluid 32px → 50px).
 - The phone's width is `clamp(15rem, 24vw, 20rem)` and the stage's height `clamp(26rem, 52vw, 40rem)`, in `phoneClasses` and `stageClasses`: change them together.
+- `--hero-screen-tint`: how much the frosted glass behind an `app` screen hides the media (default `45%`, `0%` for clear glass).
 - The phone frame takes its bezel from `--color-surface` and its outline from `--color-border-emphasized`, so it follows the theme and the brand kit.
 
 ## Adapt it

@@ -92,11 +92,14 @@ const screenClasses =
   "before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-surface)_88%,transparent),transparent)]";
 const screenTextClasses = "relative line-clamp-3 type-large font-normal";
 /**
- * The `app` slot: the screen rect, edge to edge, under the glass (the frame SVG sits above it). No
- * background, so a see-through recording (alpha video) lets the media behind the phone show through.
+ * The `app` slot: the screen rect, edge to edge, under the glass (the frame SVG sits above it). A
+ * see-through recording (alpha video) shows the media behind the phone through a frosted tint of the
+ * page's surface colour, so the app stays the focus: `--hero-screen-tint` sets its strength (default
+ * 45%; 0% for clear glass).
  */
 const appClasses =
   "absolute inset-x-[3.59%] top-[1.66%] bottom-[1.66%] overflow-hidden rounded-[15.2%/6.74%] " +
+  "bg-[color-mix(in_srgb,var(--color-surface)_var(--hero-screen-tint,45%),transparent)] backdrop-blur-[3px] " +
   "[&>img]:size-full [&>img]:object-cover [&>video]:size-full [&>video]:object-cover";
 /** The Pause / Play control for `video`: a 44px icon button at the stage's right edge, clear of the phone and above the fade. */
 const videoControlClasses = "absolute right-0 bottom-[32%] z-20";
