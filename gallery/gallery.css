@@ -4,3 +4,26 @@
 /* Tailwind must see the patterns' classes and the gallery's own. */
 @source "../patterns";
 @source "./";
+
+/* Slots view (gallery only): pink dashed outline and a label, top-left inside each slot. */
+.slot-outline {
+  outline: 2px dashed #be185d;
+  outline-offset: -2px;
+}
+[data-slot-layer] {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  pointer-events: none;
+}
+[data-slot-label] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 3px 6px;
+  border-radius: 3px;
+  background: #be185d;
+  color: #fff;
+  font: 11px/1 ui-monospace, "Geist Mono", monospace;
+  white-space: nowrap;
+}

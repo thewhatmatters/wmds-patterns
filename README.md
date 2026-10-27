@@ -24,7 +24,7 @@ npm install
 npm run gallery     # http://127.0.0.1:5190
 ```
 
-Patterns are grouped by type, each with its name, purpose, folder and status (draft or approved), so you can say "use hero/feature-center with no product visual". Toggle light/dark and 390 / 768 / 1440.
+Patterns are grouped by type, each with its name, purpose, folder and status (draft or approved), so you can say "use hero/feature-center with no product visual". Toggle light/dark, 390 / 768 / 1440, and **Slots**: on, it outlines every slot in pink with its name (`Slot: nav (optional)`), so you can see what an agent fills. A pattern marks its slots with `data-slot="name"` (and `data-slot-optional`); the gallery draws the outlines, so copied code stays clean. A pattern whose example suits one theme sets `themes` in its `meta` and shows in that theme only.
 
 Each pattern has two buttons:
 - **Copy code** copies the pattern's `.tsx` file as it is in the repo, under a three-line header: the pattern, `npm i @thewhatmatters/wmds@<pinned>`, and the styles import. It works pasted anywhere (v0, Lovable, a developer).
@@ -45,7 +45,8 @@ Patterns are built and reviewed here, not in WMDS's Storybook.
 **The flow**
 1. **Build:** one branch per new pattern or change, named `<type>/<variant>` (e.g. `hero/split-image`). Make `patterns/<type>/<variant>/` with:
    - the pattern file;
-   - `example.tsx`, exporting `meta = { type, name, purpose }` and a default component;
+   - `example.tsx`, exporting `meta = { type, name, purpose, themes? }` and a default component;
+   - `data-slot` (and `data-slot-optional`) on each slot's element, for the gallery's Slots view;
    - `README.md`, with `status: draft`, a "Slots and props" table and an "Adapt it" list, whose first item is the example Copy prompt uses;
    - the three screenshots.
 

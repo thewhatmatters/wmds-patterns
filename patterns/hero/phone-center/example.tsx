@@ -3,7 +3,7 @@
  * smiles on white background" (Mixkit 9101, Mixkit License: free to use, no attribution), loaded from Mixkit; replace it, the copy
  * and the caption with the client's own. `ExampleMedia` is a still stand-in for when there's no media yet.
  */
-import { Button } from "@thewhatmatters/wmds";
+import { Button, SiteNav } from "@thewhatmatters/wmds";
 import { HeroPhoneCenter, type HeroPhoneCenterProps } from "./HeroPhoneCenter";
 
 /** Stand-in media: soft light in the brand's tones. A real page passes an <img> or a looping <video>. */
@@ -32,6 +32,44 @@ export function ExampleMedia() {
   );
 }
 
+/** An example site nav, to show the hero under one. A real page keeps its own nav. */
+export const exampleNav = (
+  <SiteNav
+    placement="inline"
+    state="expanded"
+    start={<SiteNav.Brand href="#home">WhatMatters</SiteNav.Brand>}
+    middle={
+      <SiteNav.Links>
+        <SiteNav.Link href="#services">Services</SiteNav.Link>
+        <SiteNav.Link href="#work">Work</SiteNav.Link>
+        <SiteNav.Link href="#pricing">Pricing</SiteNav.Link>
+        <SiteNav.Link href="#process">Process</SiteNav.Link>
+      </SiteNav.Links>
+    }
+    end={
+      <div className="flex items-center gap-2">
+        <span className="max-md:hidden">
+          <Button role="ghost" size="sm" render={<a href="#contact" />}>
+            Contact
+          </Button>
+        </span>
+        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
+          Get a free sketch
+        </Button>
+      </div>
+    }
+    mobile={
+      <>
+        <SiteNav.MobileLink href="#services">Services</SiteNav.MobileLink>
+        <SiteNav.MobileLink href="#work">Work</SiteNav.MobileLink>
+        <SiteNav.MobileLink href="#pricing">Pricing</SiteNav.MobileLink>
+        <SiteNav.MobileLink href="#process">Process</SiteNav.MobileLink>
+        <SiteNav.MobileLink href="#contact">Contact</SiteNav.MobileLink>
+      </>
+    }
+  />
+);
+
 export const meta = {
   type: "Hero",
   name: "Hero — Phone Center",
@@ -45,6 +83,7 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
   return (
     <HeroPhoneCenter
       edgeBlur
+      nav={exampleNav}
       eyebrow="New · Free homepage sketch in 48 hours"
       eyebrowIcon={
         <svg viewBox="0 0 16 16" aria-hidden focusable="false">

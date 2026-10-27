@@ -40,12 +40,52 @@ const entries: Entry[] = Object.entries(modules)
 
 const widths = [390, 768, 1440] as const;
 
+/**
+ * Slots view: outline every `data-slot` element in pink, and label it "Slot: name (optional)" just above
+ * its top-left corner. Labels live in one fixed overlay (never clipped by a pattern's masks or overflow)
+ * and are added here, not in the patterns, so copied code stays clean.
+ */
+function useSlotOutlines(on: boolean) {
+  useEffect(() => {
+    if (!on) return;
+    const layer = document.createElement("div");
+    layer.dataset.slotLayer = "";
+    document.body.append(layer);
+    const place = () => {
+      const slots = [...document.querySelectorAll<HTMLElement>("[data-slot]")];
+      layer.replaceChildren(
+        ...slots.map((slot) => {
+          slot.classList.add("slot-outline");
+          const box = slot.getBoundingClientRect();
+          const label = document.createElement("span");
+          label.dataset.slotLabel = "";
+          label.textContent = `Slot: ${slot.dataset.slot}${slot.hasAttribute("data-slot-optional") ? " (optional)" : ""}`;
+          // Above the slot's top-left corner; inside it when there's no room above (a slot at the very top).
+          const top = box.top >= 20 ? box.top - 18 : box.top + 4;
+          label.style.transform = `translate(${Math.max(4, box.left)}px, ${Math.max(2, top)}px)`;
+          return label;
+        }),
+      );
+    };
+    place();
+    const timer = setInterval(place, 300); // follows scrolling, resizing and slots that mount later
+    addEventListener("scroll", place, { passive: true });
+    return () => {
+      clearInterval(timer);
+      removeEventListener("scroll", place);
+      layer.remove();
+      for (const slot of document.querySelectorAll(".slot-outline")) slot.classList.remove("slot-outline");
+    };
+  }, [on]);
+}
+
 /** Inside the iframe: just the pattern, on the page background, in the chosen theme. */
-function Frame({ entry, theme }: { entry: Entry; theme: Theme }) {
+function Frame({ entry, theme, slots }: { entry: Entry; theme: Theme; slots: boolean }) {
   useEffect(() => {
     if (theme === "dark") document.documentElement.dataset.theme = "dark";
     else document.documentElement.removeAttribute("data-theme");
   }, [theme]);
+  useSlotOutlines(slots);
   return (
     <div className="min-h-svh bg-body text-fg">
       <entry.Example />
@@ -114,6 +154,7 @@ function Gallery() {
   const [folder, setFolder] = useState(params.get("pattern") ?? entries[0]?.folder ?? "");
   const [theme, setTheme] = useState<Theme>(params.get("theme") === "dark" ? "dark" : "light");
   const [width, setWidth] = useState<(typeof widths)[number]>(1440);
+  const [slots, setSlots] = useState<"off" | "on">(params.get("slots") === "on" ? "on" : "off");
   const current = entries.find((entry) => entry.folder === folder) ?? entries[0];
   // Scale a frame wider than the pane down to fit; it still lays out at its real width.
   const stage = useRef<HTMLDivElement>(null);
@@ -130,8 +171,8 @@ function Gallery() {
   const shownTheme: Theme = themes.includes(theme) ? theme : themes[0];
 
   useEffect(() => {
-    history.replaceState(null, "", `?pattern=${folder}&theme=${theme}`);
-  }, [folder, theme]);
+    history.replaceState(null, "", `?pattern=${folder}&theme=${theme}${slots === "on" ? "&slots=on" : ""}`);
+  }, [folder, theme, slots]);
 
   const types = [...new Set(entries.map((entry) => entry.meta.type))];
 
@@ -181,13 +222,14 @@ function Gallery() {
           <Toggle label="Theme" options={themes} value={shownTheme} onChange={setTheme} />
           {themes.length === 1 ? <span className="text-xs text-muted">{themes[0]} only</span> : null}
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
+          <Toggle label="Slots" options={["off", "on"] as const} value={slots} onChange={setSlots} />
         </div>
         <div ref={stage} className="flex-1 overflow-auto bg-[color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] p-4">
           {current ? (
             <iframe
-              key={`${current.folder}-${shownTheme}`}
+              key={`${current.folder}-${shownTheme}-${slots}`}
               title={current.meta.name}
-              src={`?frame=${current.folder}&theme=${shownTheme}`}
+              src={`?frame=${current.folder}&theme=${shownTheme}${slots === "on" ? "&slots=on" : ""}`}
               style={{ width, height: 1000 / scale, zoom: scale }}
               className="mx-auto block border border-border bg-body"
             />
@@ -205,5 +247,5 @@ const frame = params.get("frame");
 const frameEntry = frame ? entries.find((entry) => entry.folder === frame) : undefined;
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} /> : <Gallery />}</StrictMode>,
+  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} /> : <Gallery />}</StrictMode>,
 );

@@ -35,7 +35,8 @@ export interface HeroFeatureCenterProps {
   className?: string;
 }
 
-/* Every class is written out in full (never interpolated) so Tailwind sees it. */
+/* Every class is written out in full (never interpolated) so Tailwind sees it. `data-slot` marks where your
+   content goes; it does nothing on a page (the gallery outlines slots with it). */
 
 /** Full-width wrapper: the glow's overflow is clipped here, never on a narrower element. */
 const rootClasses = "relative w-full overflow-x-clip";
@@ -86,7 +87,7 @@ export function HeroFeatureCenter({
 
   return (
     <div className={cn(rootClasses, className)} data-pattern="hero-feature-center">
-      {nav}
+      {nav != null ? <div data-slot="nav" data-slot-optional="">{nav}</div> : null}
       <section aria-labelledby={headingId} className={sectionClasses}>
         <div className={copyClasses}>
           {eyebrow != null ? (
@@ -98,7 +99,7 @@ export function HeroFeatureCenter({
             {headline}
           </h1>
           {subhead != null ? <p className={subheadClasses}>{subhead}</p> : null}
-          <div className={actionsClasses}>
+          <div className={actionsClasses} data-slot="actions" data-slot-optional="">
             {actions ?? (
               <>
                 {primaryAction != null ? (
@@ -120,14 +121,14 @@ export function HeroFeatureCenter({
           <div className={cn(visualWrapClasses, glowColorClasses)} aria-hidden data-hero-visual="">
             <div className={glowClasses} />
             <div className={haloClasses} />
-            <div className={frameClasses}>
+            <div className={frameClasses} data-slot="visual" data-slot-optional="">
               {visual}
             </div>
           </div>
         ) : null}
 
         {logos != null ? (
-          <div className={logosWrapClasses} data-hero-logos="">
+          <div className={logosWrapClasses} data-hero-logos="" data-slot="logos" data-slot-optional="">
             {logos}
           </div>
         ) : null}

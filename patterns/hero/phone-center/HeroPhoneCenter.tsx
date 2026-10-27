@@ -48,7 +48,8 @@ export interface HeroPhoneCenterProps {
   className?: string;
 }
 
-/* Every class is written out in full (never interpolated) so Tailwind sees it. */
+/* Every class is written out in full (never interpolated) so Tailwind sees it. `data-slot` marks where your
+   content goes; it does nothing on a page (the gallery outlines slots with it). */
 
 /** Full-width wrapper, so nothing scrolls sideways. */
 const rootClasses = "relative w-full overflow-x-clip";
@@ -161,7 +162,7 @@ function HeroVideo({ src, poster }: { src: string; poster?: string }) {
   }, [src]);
 
   return (
-    <div className={mediaClasses} data-hero-media="">
+    <div className={mediaClasses} data-hero-media="" data-slot="video" data-slot-optional="">
       <video ref={ref} src={src} poster={poster} muted loop playsInline preload="metadata" aria-hidden />
     </div>
   );
@@ -192,7 +193,7 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, 
   return (
     <div className={cn(rootClasses, className)} data-pattern="hero-phone-center">
       {edgeBlur ? <EdgeBlur /> : null}
-      {nav}
+      {nav != null ? <div data-slot="nav" data-slot-optional="">{nav}</div> : null}
       <section aria-labelledby={headingId} className={sectionClasses}>
         <div className={copyClasses}>
           {eyebrow != null ? (
@@ -207,26 +208,30 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, 
             {headline}
           </h1>
           {subhead != null ? <p className={subheadClasses}>{subhead}</p> : null}
-          {actions != null ? <div className={actionsClasses}>{actions}</div> : null}
+          {actions != null ? (
+            <div className={actionsClasses} data-slot="actions" data-slot-optional="">
+              {actions}
+            </div>
+          ) : null}
         </div>
 
         <div className={stageClasses} data-hero-stage="">
           {video != null ? (
             <HeroVideo src={video.src} poster={video.poster} />
           ) : media != null ? (
-            <div className={mediaClasses} data-hero-media="">
+            <div className={mediaClasses} data-hero-media="" data-slot="media">
               {media}
             </div>
           ) : null}
           <div className={phoneClasses}>
             {app != null ? (
-              <div className={appClasses} data-hero-app="">
+              <div className={appClasses} data-hero-app="" data-slot="app" data-slot-optional="">
                 {app}
               </div>
             ) : null}
             <PhoneFrame id={frameId} empty={video == null && media == null && app == null} />
             {screen != null ? (
-              <div className={screenClasses} data-hero-screen="">
+              <div className={screenClasses} data-hero-screen="" data-slot="screen" data-slot-optional="">
                 <div className={screenTextClasses}>{screen}</div>
               </div>
             ) : null}
