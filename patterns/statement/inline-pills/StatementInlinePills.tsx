@@ -48,7 +48,7 @@ const actionsClasses = "mt-10 flex flex-wrap items-center justify-center gap-3";
  * a pill wraps.
  */
 const pillClasses =
-  "relative rounded-full bg-[color-mix(in_srgb,var(--color-fg)_4%,transparent)] py-0 pl-[1.3em] pr-[0.24em] " +
+  "relative rounded-full bg-[color-mix(in_srgb,var(--color-fg)_4%,transparent)] py-0 pl-[1.3em] pr-[0.32em] " +
   "[[data-theme=dark]_&]:bg-[color-mix(in_srgb,var(--color-fg)_8%,transparent)] " +
   "[box-decoration-break:clone] [-webkit-box-decoration-break:clone]";
 /**
