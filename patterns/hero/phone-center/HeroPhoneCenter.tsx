@@ -91,9 +91,12 @@ const screenClasses =
   "px-[10%] pt-[22%] text-center text-fg " +
   "before:absolute before:inset-x-0 before:top-0 before:h-1/2 before:bg-[linear-gradient(to_bottom,color-mix(in_srgb,var(--color-surface)_88%,transparent),transparent)]";
 const screenTextClasses = "relative line-clamp-3 type-large font-normal";
-/** The `app` slot: the screen rect, edge to edge, under the glass (the frame SVG sits above it). */
+/**
+ * The `app` slot: the screen rect, edge to edge, under the glass (the frame SVG sits above it). No
+ * background, so a see-through recording (alpha video) lets the media behind the phone show through.
+ */
 const appClasses =
-  "absolute inset-x-[3.59%] top-[1.66%] bottom-[1.66%] overflow-hidden rounded-[15.2%/6.74%] bg-surface " +
+  "absolute inset-x-[3.59%] top-[1.66%] bottom-[1.66%] overflow-hidden rounded-[15.2%/6.74%] " +
   "[&>img]:size-full [&>img]:object-cover [&>video]:size-full [&>video]:object-cover";
 /** The Pause / Play control for `video`: a 44px icon button at the stage's right edge, clear of the phone and above the fade. */
 const videoControlClasses = "absolute right-0 bottom-[32%] z-20";
@@ -193,12 +196,13 @@ function HeroVideo({ src, poster }: { src: string; poster?: string }) {
 
 /**
  * The top-edge blur: four fixed layers, each blurring a little more than the last and masked to a lower
- * band, so the blur ramps up toward the very top; a light fade to the page colour finishes it.
+ * band, so the blur ramps up toward the very top; a light fade to the page colour finishes it. 48px
+ * deep, the hero's own top space, so nothing is blurred until it scrolls.
  */
 function EdgeBlur() {
   const layer = "absolute inset-0";
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-24" aria-hidden data-hero-edge-blur="">
+    <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-12" aria-hidden data-hero-edge-blur="">
       <div className={cn(layer, "backdrop-blur-[1px] [mask-image:linear-gradient(to_top,transparent,black_40%)]")} />
       <div className={cn(layer, "backdrop-blur-[2px] [mask-image:linear-gradient(to_top,transparent_25%,black_60%)]")} />
       <div className={cn(layer, "backdrop-blur-[4px] [mask-image:linear-gradient(to_top,transparent_50%,black_80%)]")} />

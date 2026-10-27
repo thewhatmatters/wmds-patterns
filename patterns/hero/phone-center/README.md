@@ -54,6 +54,8 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 The first item is the example the gallery's Copy prompt uses.
 
 - **App screen instead of a caption:** put a screenshot or a screen recording in `app` (it fills the screen edge to edge); keep `media` behind it or leave it empty.
+- **See-through app recording (like Lovi):** export the recording with an alpha channel so the media shows through the app's background: HEVC with alpha (`.mov`, Safari) and VP9 with alpha (`.webm`, Chrome, Firefox). List the HEVC source first, since Safari plays VP9 without its alpha:
+  `<video autoPlay muted loop playsInline aria-hidden poster="…-poster.png"><source src="….mov" type='video/mp4; codecs="hvc1"' /><source src="….webm" type="video/webm" /></video>`
 - **Different copy:** change the props; keep the headline to about three lines.
 - **Video:** pass `video={{ src, poster }}`; the pattern adds the Pause / Play button and holds it still under reduced motion.
 - **No media:** leave `media` and `video` empty; the phone stands on the page alone, its screen filled.
