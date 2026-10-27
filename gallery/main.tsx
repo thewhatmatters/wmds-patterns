@@ -8,6 +8,7 @@ import { createRoot } from "react-dom/client";
 import { dependencies } from "../package.json";
 import { patternCode, patternPrompt, patternStatus } from "./copy";
 import "./gallery.css";
+import { fontQuery, fontRoles, loadFontList, readFontChoice, useFontChoice, type FontChoice, type FontEntry } from "./fonts";
 import { useMeasure } from "./measure";
 
 /** `themes` limits a pattern to the themes its example suits; both when left out. */
@@ -40,48 +41,6 @@ const entries: Entry[] = Object.entries(modules)
   .sort((a, b) => a.folder.localeCompare(b.folder));
 
 const widths = [390, 768, 1440] as const;
-
-/**
- * Type presets for trying a pattern in other faces: they set the WMDS font knobs inside the preview only
- * (the patterns and WMDS don't change). Each loads its Google Font and sets the display weights the face
- * is drawn for.
- */
-const typePresets = {
-  wmds: null,
-  serif: {
-    href: "https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap",
-    vars: {
-      "--font-family-heading": '"Instrument Serif", ui-serif, Georgia, serif',
-      "--text-display-1-weight": "400",
-      "--text-display-2-weight": "400",
-      "--text-display-3-weight": "400",
-    },
-  },
-} as const;
-type TypePreset = keyof typeof typePresets;
-const typeNames = Object.keys(typePresets) as TypePreset[];
-
-function useTypePreset(preset: TypePreset) {
-  useEffect(() => {
-    const config = typePresets[preset];
-    if (!config) return;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = config.href;
-    document.head.append(link);
-    const root = document.documentElement;
-    for (const [name, value] of Object.entries(config.vars)) root.style.setProperty(name, value);
-    // A pattern's own headline weight (font-medium) would ask a one-weight serif for a weight it doesn't have.
-    const style = document.createElement("style");
-    style.textContent = "h1, h2, h3 { font-weight: 400 !important; letter-spacing: -0.01em !important; }";
-    document.head.append(style);
-    return () => {
-      link.remove();
-      style.remove();
-      for (const name of Object.keys(config.vars)) root.style.removeProperty(name);
-    };
-  }, [preset]);
-}
 
 /**
  * Slots view: outline every `data-slot` element in pink, and label it "Slot: name (optional)" just above
@@ -123,14 +82,14 @@ function useSlotOutlines(on: boolean) {
 }
 
 /** Inside the iframe: just the pattern, on the page background, in the chosen theme. */
-function Frame({ entry, theme, slots, measure, type }: { entry: Entry; theme: Theme; slots: boolean; measure: boolean; type: TypePreset }) {
+function Frame({ entry, theme, slots, measure, fonts }: { entry: Entry; theme: Theme; slots: boolean; measure: boolean; fonts: FontChoice }) {
   useEffect(() => {
     if (theme === "dark") document.documentElement.dataset.theme = "dark";
     else document.documentElement.removeAttribute("data-theme");
   }, [theme]);
   useSlotOutlines(slots);
   useMeasure(measure);
-  useTypePreset(type);
+  useFontChoice(fonts);
   // Tell the gallery how tall the pattern is, so the frame fits it (no empty page below a short section).
   const content = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -206,6 +165,63 @@ function CopyButton({ label, text }: { label: string; text: string }) {
   );
 }
 
+/**
+ * Headings, body and mono font pickers: type to search every Google Font (native datalist), Enter or pick to
+ * apply. Empty means the WMDS default. Categories follow each name, so "serif" or "mono" narrows the list.
+ */
+function FontPanel({ value, onChange }: { value: FontChoice; onChange: (next: FontChoice) => void }) {
+  const [fonts, setFonts] = useState<FontEntry[]>([]);
+  const [drafts, setDrafts] = useState<FontChoice>(value);
+  useEffect(() => {
+    loadFontList().then(setFonts);
+  }, []);
+  const names = new Set(fonts.map(([family]) => family));
+  const apply = (role: keyof FontChoice, family: string) => {
+    const next = { ...value };
+    if (family && names.has(family)) next[role] = family;
+    else if (!family) delete next[role];
+    else return;
+    onChange(next);
+  };
+  return (
+    <div id="font-panel" role="group" aria-label="Fonts" className="flex flex-wrap items-end gap-3 border-b border-border px-3 py-2">
+      <datalist id="google-fonts">
+        {fonts.map(([family, category]) => (
+          <option key={family} value={family} label={category} />
+        ))}
+      </datalist>
+      {fontRoles.map(({ role, label }) => (
+        <label key={role} className="flex flex-col gap-1 text-xs text-muted">
+          {label}
+          <input
+            list="google-fonts"
+            value={drafts[role] ?? ""}
+            placeholder="WMDS default"
+            onChange={(event) => {
+              const family = event.target.value;
+              setDrafts((d) => ({ ...d, [role]: family }));
+              if (names.has(family) || family === "") apply(role, family);
+            }}
+            onKeyDown={(event) => event.key === "Enter" && apply(role, event.currentTarget.value)}
+            className="min-h-8 w-56 rounded-md border border-border bg-surface px-2 text-sm text-fg"
+          />
+        </label>
+      ))}
+      <button
+        type="button"
+        onClick={() => {
+          setDrafts({});
+          onChange({});
+        }}
+        className="min-h-8 rounded-md border border-border px-3 text-sm"
+      >
+        Reset
+      </button>
+      <p className="text-xs text-muted">{fonts.length ? `${fonts.length} Google Fonts. Only the ones you pick load.` : "Loading the font list…"}</p>
+    </div>
+  );
+}
+
 function Gallery() {
   const params = new URLSearchParams(location.search);
   const [folder, setFolder] = useState(params.get("pattern") ?? entries[0]?.folder ?? "");
@@ -213,9 +229,10 @@ function Gallery() {
   const [width, setWidth] = useState<(typeof widths)[number]>(1440);
   const [slots, setSlots] = useState<"off" | "on">(params.get("slots") === "on" ? "on" : "off");
   const [measure, setMeasure] = useState<"off" | "on">(params.get("measure") === "on" ? "on" : "off");
-  const [type, setType] = useState<TypePreset>(params.get("type") === "serif" ? "serif" : "wmds");
+  const [fonts, setFonts] = useState<FontChoice>(() => readFontChoice(params));
+  const [fontsOpen, setFontsOpen] = useState(Object.keys(readFontChoice(params)).length > 0);
   // The overlays' query string, shared by the address bar and the frame.
-  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}${type !== "wmds" ? `&type=${type}` : ""}`;
+  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}${fontQuery(fonts)}`;
   const current = entries.find((entry) => entry.folder === folder) ?? entries[0];
   // Scale a frame wider than the pane down to fit; it still lays out at its real width.
   const stage = useRef<HTMLDivElement>(null);
@@ -292,7 +309,15 @@ function Gallery() {
           <Toggle label="Theme" options={themes} value={shownTheme} onChange={setTheme} />
           {themes.length === 1 ? <span className="text-xs text-muted">{themes[0]} only</span> : null}
           <Toggle label="Width" options={widths} value={width} onChange={setWidth} />
-          <Toggle label="Type" options={typeNames} value={type} onChange={setType} />
+          <button
+            type="button"
+            aria-expanded={fontsOpen}
+            aria-controls="font-panel"
+            onClick={() => setFontsOpen((open) => !open)}
+            className="min-h-8 rounded-md border border-border px-3 text-sm aria-expanded:bg-fg aria-expanded:text-body"
+          >
+            Fonts{Object.keys(fonts).length ? ` · ${Object.keys(fonts).length}` : ""}
+          </button>
           <Toggle label="Slots" options={["off", "on"] as const} value={slots} onChange={setSlots} />
           <Toggle label="Measure" options={["off", "on"] as const} value={measure} onChange={setMeasure} />
           {measure === "on" ? (
@@ -303,6 +328,7 @@ function Gallery() {
             </p>
           ) : null}
         </div>
+        {fontsOpen ? <FontPanel value={fonts} onChange={setFonts} /> : null}
         <div ref={stage} className="flex flex-1 overflow-auto bg-[color-mix(in_srgb,var(--color-text-primary)_4%,transparent)] p-4">
           {current ? (
             <iframe
@@ -327,5 +353,5 @@ const frame = params.get("frame");
 const frameEntry = frame ? entries.find((entry) => entry.folder === frame) : undefined;
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} measure={params.get("measure") === "on"} type={params.get("type") === "serif" ? "serif" : "wmds"} /> : <Gallery />}</StrictMode>,
+  <StrictMode>{frameEntry ? <Frame entry={frameEntry} theme={params.get("theme") === "dark" ? "dark" : "light"} slots={params.get("slots") === "on"} measure={params.get("measure") === "on"} fonts={readFontChoice(params)} /> : <Gallery />}</StrictMode>,
 );
