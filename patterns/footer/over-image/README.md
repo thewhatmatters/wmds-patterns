@@ -1,6 +1,6 @@
 # Footer — Over Image
 
-status: draft
+status: approved
 
 After Unify's footer (Inspiration board; Randy's reference, 2026-10-27). Nothing copied but the idea.
 **File:** `FooterOverImage.tsx` (copy it). **Example:** `example.tsx`, with Envato's "Blurred Restaurant Interior With Bartender in Background" (guyswhoshoot, Randy's pick) behind it.
