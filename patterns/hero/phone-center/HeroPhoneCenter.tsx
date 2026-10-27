@@ -5,7 +5,7 @@
  * glass screen; an optional caption sits on the screen. Built only from @thewhatmatters/wmds parts.
  * Your Tailwind must scan this file (it does if it sits in your app's source folders).
  */
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { Badge, Button, cn } from "@thewhatmatters/wmds";
 
 export interface HeroPhoneCenterProps {
@@ -13,6 +13,8 @@ export interface HeroPhoneCenterProps {
   nav?: ReactNode;
   /** A short line above the headline, shown as a pill. */
   eyebrow?: ReactNode;
+  /** Slot, optional: a small icon at the start of the eyebrow pill (a Lucide icon or a 16px SVG). */
+  eyebrowIcon?: ReactElement;
   /** The page's only H1. Static: animate it in your page if you want. */
   headline: ReactNode;
   subhead?: ReactNode;
@@ -215,7 +217,7 @@ function EdgeBlur() {
   );
 }
 
-export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
+export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
   const headingId = useId();
   const frameId = useId().replace(/:/g, "");
 
@@ -228,7 +230,7 @@ export function HeroPhoneCenter({ nav, eyebrow, headline, subhead, actions, medi
           {eyebrow != null ? (
             // Keep it to about 30 characters; a longer line is cut with an ellipsis rather than spill.
             <div className="mb-6 flex max-w-full justify-center">
-              <Badge variant="neutral">
+              <Badge variant="neutral" icon={eyebrowIcon}>
                 <span className="block max-w-[min(30ch,80vw)] truncate">{eyebrow}</span>
               </Badge>
             </div>
