@@ -71,8 +71,13 @@ const metaClasses = "hidden font-mono text-xs uppercase tracking-[0.08em] text-m
 /** On phones the row hides its meta, so the open panel repeats it. */
 const phoneMetaClasses = "font-mono text-xs uppercase tracking-[0.08em] text-muted sm:hidden";
 const panelClasses = "flex flex-col items-start gap-4 pb-6 pl-8";
+/**
+ * Phones: the picture stacks under the open service's copy, full content width (it steps out of the panel's
+ * 32px indent) at 4:3, so stat pictures fit (P1: their figures are content). No overflow clip: 4:3 is a minimum, and on a
+ * narrow phone the frame grows to fit a taller picture rather than crop it.
+ */
 const mobileFrameClasses = cn(
-  "mt-2 flex aspect-[3/2] w-full items-stretch overflow-hidden rounded-lg border border-border p-4 md:hidden",
+  "mt-2 -ml-8 flex aspect-[4/3] w-[calc(100%+2rem)] items-stretch rounded-lg border border-border p-4 md:hidden",
   backgroundPatternDotGridClasses,
 );
 
