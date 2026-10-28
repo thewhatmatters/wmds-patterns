@@ -67,10 +67,46 @@ const linkClasses = "inline-block py-1";
 /** Tiles touch, edge to edge: 2 per row on phones and tablets, 4 on desktop, where the row hangs from the card (two tiles = the card's width). */
 const tilesClasses = "col-span-full mt-12 grid grid-cols-2 lg:mt-[calc(var(--grid-row-gap)*-1)] lg:grid-cols-4";
 const tileClasses =
-  "group flex min-h-14 items-center justify-between px-4 type-body font-medium text-[color-mix(in_srgb,black_88%,transparent)]" +
+  "group flex min-h-14 items-center justify-between px-4 type-body font-medium" +
   "outline-offset-[-3px] focus-visible:outline-2 focus-visible:outline-current";
 const wordmarkClasses = "col-span-full mt-16 overflow-visible text-fg md:mt-24";
 const bottomClasses = "col-span-full mt-10 flex flex-col gap-4 text-muted type-supporting md:mt-16 md:flex-row md:items-center md:justify-between";
+
+/** Light and dark ink for text on a coloured tile (WMDS has no "on" ink for its chart colours). */
+const inks = { light: "#ffffff", dark: "#111111" };
+
+function luminance(rgb: string) {
+  const [r, g, b] = (rgb.match(/[\d.]+/g) ?? ["0", "0", "0"]).slice(0, 3).map((v) => {
+    const c = Number(v) / 255;
+    return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/**
+ * Picks each tile's ink, white or near-black, by whichever contrasts more with the tile's colour as it
+ * renders (colours are tokens, so they change with the theme and the brand). Re-checks when the theme flips.
+ */
+function useTileInks(count: number) {
+  const ref = useRef<HTMLUListElement>(null);
+  useLayoutEffect(() => {
+    const list = ref.current;
+    if (!list) return;
+    const pick = () => {
+      for (const tile of list.querySelectorAll<HTMLElement>("[data-tile]")) {
+        const bg = luminance(getComputedStyle(tile).backgroundColor);
+        const onWhite = 1.05 / (bg + 0.05);
+        const onDark = (bg + 0.05) / (luminance("rgb(17,17,17)") + 0.05);
+        tile.style.color = onWhite >= onDark ? inks.light : inks.dark;
+      }
+    };
+    pick();
+    const observer = new MutationObserver(pick);
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme", "class", "style"] });
+    return () => observer.disconnect();
+  }, [count]);
+  return ref;
+}
 
 /** The brand name as SVG text sized to its own measured width, so it fills the row at any width. */
 function FittedName({ name }: { name: string }) {
@@ -116,6 +152,7 @@ export function FooterWordmark({
   className,
 }: FooterWordmarkProps) {
   const id = useId();
+  const tilesRef = useTileInks(tiles.length);
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const email = new FormData(event.currentTarget).get("email");
@@ -164,10 +201,10 @@ export function FooterWordmark({
         </nav>
 
         {tiles.length > 0 ? (
-          <ul className={tilesClasses} data-slot="tiles" data-slot-optional="">
+          <ul ref={tilesRef} className={tilesClasses} data-slot="tiles" data-slot-optional="">
             {tiles.map((tile) => (
               <li key={tile.label} className="contents">
-                <a href={tile.href} className={tileClasses} style={{ backgroundColor: tile.color }}>
+                <a href={tile.href} className={tileClasses} style={{ backgroundColor: tile.color }} data-tile="">
                   {tile.label}
                   <svg viewBox="0 0 16 16" className="size-4 transition-transform motion-safe:group-hover:translate-x-1" aria-hidden focusable="false">
                     <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />

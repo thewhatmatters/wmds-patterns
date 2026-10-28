@@ -53,7 +53,7 @@ The first item is the example the gallery's Copy prompt uses.
 - **Serif, like the reference:** open the gallery's Fonts panel and try a serif for Headings (e.g. Newsreader or Instrument Serif); in your app, set `--font-family-heading` in brand.css.
 - **No newsletter:** drop the card and let the link columns take the full width.
 - **Logotype:** pass the brand's SVG in `wordmark`.
-- **Tiles in brand colours:** pass the brand's tokens in `color`; keep tile text dark enough to pass AA on each colour.
+- **Tiles in brand colours:** pass the brand's tokens in `color`; the tile picks white or dark text by contrast; check that one of them clears 4.5:1 on each colour (a mid-tone can fail both).
 
 ## Spacing
 
@@ -62,5 +62,5 @@ Full width. Section padding 48 / 64 at the top; card padding 24 / 40; tiles 56px
 ## WMDS
 
 - Built on **@thewhatmatters/wmds 0.4.28**: `Input`, `Button`, `TextLink`.
-- **Gap: coloured category tile.** No WMDS component is a solid-colour link tile with an arrow (`LinkTile` is a card); the pattern draws them as plain links with a focus ring. Tile text is near-black ink on every colour, since WMDS has no "on-colour" ink token for chart colours.
+- **Gap: coloured category tile.** No WMDS component is a solid-colour link tile with an arrow (`LinkTile` is a card); the pattern draws them as plain links with a focus ring. Each tile's text is white or near-black, whichever contrasts more with the tile's colour as it renders (checked again when the theme changes); every example tile clears AA (4.5:1) in light and dark. WMDS has no "on-colour" ink token for chart colours, which would replace this.
 - **Gap: fitted wordmark.** CSS can't fit text to a width; the pattern measures SVG text. A WMDS `Wordmark` (fit-to-width brand name) would replace it.
