@@ -162,6 +162,13 @@ describe.each(folders)("patterns/%s", (folder) => {
         expect(/size="(lg|sm)"/.test(tag), `${folder}/${file}: CTA without size="lg"`).toBe(true);
       }
     }
+    // P5: layout changes only at WMDS breakpoints (md, lg, xl): no `sm:` and no one-off min-[…]/max-[…] widths.
+    // One allowed exception (PD, 2026-10-28): `max-[359px]:hidden` on the example nav CTA, which the open menu repeats.
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      const source = readFileSync(join(dir, file), "utf8").replaceAll("max-[359px]:hidden", "");
+      expect(source, `${folder}/${file}: sm: breakpoint`).not.toMatch(/(?<![\w-])sm:/);
+      expect(source, `${folder}/${file}: one-off breakpoint`).not.toMatch(/(?<![\w-])(min|max)-\[\d+px\]:/);
+    }
     // K6: a 36px IconButton (size="sm") gets an invisible 44px hit area on phones (`before:-inset-1`).
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
