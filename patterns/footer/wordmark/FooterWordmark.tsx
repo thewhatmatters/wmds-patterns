@@ -234,7 +234,7 @@ export function FooterWordmark({
             <ul className="flex flex-wrap gap-x-6 gap-y-1">
               {legal.map((link) => (
                 <li key={link.label}>
-                  <TextLink href={link.href} variant="quiet" className="inline-block py-3 md:py-0">
+                  <TextLink href={link.href} variant="quiet" className="inline-block py-3 md:-my-1 md:py-1">
                     {link.label}
                   </TextLink>
                 </li>

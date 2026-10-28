@@ -36,10 +36,10 @@ export function FooterLandscapeExample(props: Partial<FooterLandscapeProps>) {
         />
       }
       links={[
-        { label: "Studio", links: [{ label: "Work", href: "#work" }, { label: "Pricing", href: "#pricing" }, { label: "Instagram", href: "#ig", external: true }] },
+        { label: "Studio", links: [{ label: "Work", href: "#work" }, { label: "Pricing", href: "#pricing" }, { label: "Instagram", href: "#ig" }] },
         { label: "Legal", links: [{ label: "Privacy", href: "#privacy" }, { label: "Terms", href: "#terms" }] },
       ]}
-      facts={["© 2026 WhatMatters", "whatmatters.studio", <TextLink href="mailto:hello@whatmatters.studio"><span className="normal-case">hello@whatmatters.studio</span></TextLink>, "Built in Austin"]}
+      facts={["© 2026 WhatMatters", "whatmatters.studio", <TextLink href="mailto:hello@whatmatters.studio" className="inline-block -my-1 py-1"><span className="normal-case">hello@whatmatters.studio</span></TextLink>, "Built in Austin"]}
       status="All systems operational"
       moment={<FooterAsciiBand src={`${base}local/footer-landscape.mp4`} focusY={1} />}
       {...props}
