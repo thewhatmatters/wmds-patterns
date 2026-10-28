@@ -60,10 +60,10 @@ const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-1
 /**
  * A narrow H1, like the phone it sits over: WMDS type-display-2 (fluid 32px → 50px), kept to about 11em
  * so a short headline sets in 2–3 lines, set tight (-0.035em, line height 1.05) like a display line.
- * `hyphens-auto` needs the page's `lang`.
+ * No hyphenation in headings (Headings H5): a long word breaks only if it would overflow.
  */
 const headlineClasses =
-  "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.035em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
+  "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.035em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere]";
 /** One short line (about 40 characters). Regular weight (type-large is semibold in some WMDS versions). Headline→subhead 24. */
 const subheadClasses = "mt-6 max-w-[36rem] text-pretty font-normal text-muted type-large";
 /** Subhead→CTAs 32. On phones the buttons stack full width (up to 20rem); from sm they sit in a row. */
@@ -198,8 +198,9 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, 
         <div className={copyClasses}>
           {eyebrow != null ? (
             // Keep it to about 30 characters; a longer line is cut with an ellipsis rather than spill.
-            <div className="mb-6 flex max-w-full justify-center">
-              <Badge variant="neutral" size="md" icon={eyebrowIcon}>
+            // Tight to the headline (12px) and outlined, never filled (Eyebrow rules E5, E10).
+            <div className="mb-3 flex max-w-full justify-center">
+              <Badge variant="neutral" emphasis="outline" size="md" icon={eyebrowIcon}>
                 <span className="block max-w-[min(30ch,80vw)] truncate">{eyebrow}</span>
               </Badge>
             </div>

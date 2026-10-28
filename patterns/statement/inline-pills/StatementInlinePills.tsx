@@ -12,7 +12,7 @@ import { cn, useInlinePillsPopIn } from "@thewhatmatters/wmds";
 export { InlinePill } from "@thewhatmatters/wmds";
 
 export interface StatementInlinePillsProps {
-  /** Slot, optional: a short eyebrow above the sentence, e.g. a WMDS `<Badge>`. */
+  /** Slot, optional: a 1–3 word eyebrow above the sentence, in sentence case (the capitals come from `type-eyebrow`). Plain text. */
   eyebrow?: ReactNode;
   /** Slot: the sentence, with its key words wrapped in WMDS `<InlinePill media={…}>word</InlinePill>`. */
   children: ReactNode;
@@ -40,9 +40,10 @@ export function StatementInlinePills({ eyebrow, children, actions, as: Heading =
       <div className={gridClasses}>
         <div className={innerClasses}>
           {eyebrow != null ? (
-            <div className="mb-6" data-slot="eyebrow" data-slot-optional="">
+            // A plain eyebrow, tight to the sentence (Eyebrow rules E5, E10).
+            <p className="mb-3 type-eyebrow text-muted" data-slot="eyebrow" data-slot-optional="">
               {eyebrow}
-            </div>
+            </p>
           ) : null}
           <Heading {...popIn} className={sentenceClasses} data-slot="sentence">
             {children}

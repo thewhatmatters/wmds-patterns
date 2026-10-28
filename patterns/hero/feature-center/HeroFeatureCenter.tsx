@@ -45,7 +45,7 @@ const sectionClasses = "grid-page relative !py-0";
 /** Centred copy across the page grid; the headline needs the width for 2 lines. Section padding 48 / 64 (the logos row closes with the same). */
 const copyClasses = "relative col-span-full flex flex-col items-center pt-12 text-center md:pt-16";
 /** WMDS type-display-1 as it is (fluid 40px → 80px): about 58 characters take 2 lines at desktop. */
-const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
+const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere]";
 /** Headline→subhead 24, regular weight (type-large is semibold in some WMDS versions), about 42rem measure. */
 const subheadClasses = "mt-6 max-w-[42rem] text-pretty font-normal text-muted type-large";
 /** Subhead→CTAs 32. */
@@ -91,8 +91,9 @@ export function HeroFeatureCenter({
       <section aria-labelledby={headingId} className={sectionClasses}>
         <div className={copyClasses}>
           {eyebrow != null ? (
-            <div className="mb-6">
-              <Badge variant="neutral">{eyebrow}</Badge>
+            // Eyebrow rules: tight to the headline (12px), an outlined pill (never filled), 1–3 words.
+            <div className="mb-3">
+              <Badge variant="neutral" emphasis="outline">{eyebrow}</Badge>
             </div>
           ) : null}
           <h1 id={headingId} className={headlineClasses}>

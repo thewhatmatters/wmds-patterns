@@ -75,6 +75,26 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
   });
 
+  it("follows the Headings and Eyebrow rules that code can check", async () => {
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      const source = readFileSync(join(dir, file), "utf8");
+      // H5: no hyphenation in headings.
+      expect(source, `${folder}/${file}: hyphens-auto`).not.toMatch(/\bhyphens-auto\b/);
+      // E3: capitals track 0.08–0.12em (type-eyebrow carries its own).
+      for (const [classList] of source.matchAll(/"[^"]*\buppercase\b[^"]*"/g)) {
+        if (!/(^|\s)(type|font|text|tracking)-/.test(classList) || /type-eyebrow/.test(classList)) continue;
+        const tracking = Number(classList.match(/tracking-\[([\d.]+)em\]/)?.[1]);
+        expect(tracking >= 0.08 && tracking <= 0.12, `${folder}/${file}: ${classList}`).toBe(true);
+      }
+    }
+    const Example = (await examples[`../patterns/${folder}/example.tsx`]()).default;
+    const html = renderToString(<Example />);
+    // H1: heading levels never skip.
+    const levels = [...html.matchAll(/<h([1-6])[\s>]/g)].map(([, level]) => Number(level));
+    levels.forEach((level, i) => expect(level - (levels[i - 1] ?? level - 1), `${folder}: h${levels[i - 1]} → h${level}`).toBeLessThanOrEqual(1));
+    // E6: an eyebrow is never a heading element.
+    expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
+  });
 });
 
 it("finds at least one pattern", () => {

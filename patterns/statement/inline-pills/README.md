@@ -31,7 +31,7 @@ import { StatementInlinePills } from "./StatementInlinePills";
 | Prop | Kind | Notes |
 |---|---|---|
 | `children` | ReactNode | The sentence: about 10–18 words, with 2–3 key words wrapped in `<InlinePill>`, one or two short words each (a long phrase splits into two half-pills across lines; at 4 or more pills it reads as a list). Keep punctuation outside the pills. WMDS `type-display-2`, about 18em wide, so it sets in 2–3 lines |
-| `eyebrow` | slot, optional | A short line above the sentence, usually a WMDS `<Badge>` |
+| `eyebrow` | slot, optional | 1–3 words above the sentence in sentence case, set as a plain `type-eyebrow` label (capitals from CSS) |
 | `actions` | slot, optional | The CTA row under the sentence: one or two WMDS `<Button>`s |
 | `as` | `"h2"` (default) or `"h1"` | `h1` when the statement is the page's hero; `h2` anywhere else |
 | `animate` | boolean, default `false` | Pop the pills' pictures in when the sentence is 40% in view, once. Skipped under `prefers-reduced-motion` |
@@ -64,7 +64,7 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## Spacing
 
-Full width; section padding 48 / 64 top and bottom (phone / tablet and up); eyebrow→sentence 24; sentence→CTAs 40.
+Full width; section padding 48 / 64 top and bottom (phone / tablet and up); eyebrow→sentence 12; sentence→CTAs 40.
 
 ## WMDS
 

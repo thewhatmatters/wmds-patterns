@@ -24,7 +24,7 @@ function Line({ w }: { w: string }) {
   return <span aria-hidden className={`block h-2 rounded-full bg-[color-mix(in_srgb,var(--color-text-primary)_10%,transparent)] ${w}`} />;
 }
 
-const label = "font-mono text-xs uppercase tracking-wider text-muted";
+const label = "font-mono text-xs uppercase tracking-[0.08em] text-muted";
 
 /** A big figure set straight on the surface (WMDS Stat draws its own bordered box, which would nest). */
 function Figure({ name, value, change, note }: { name: string; value: string; change?: string; note?: string }) {

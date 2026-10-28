@@ -41,8 +41,8 @@ export interface ServicesSplitIndexProps {
 
 /** Full width; content on the WMDS page grid; section padding 48 / 64 top and bottom. */
 const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
-/** Heading over the frame's columns; intro and CTA start on the list's first column, so the header lines up with the split below. */
-const headingClasses = "col-span-full mt-6 text-balance type-display-3 text-fg md:col-span-4 lg:col-span-6";
+/** -mt-3 pulls the heading 12px under the caption across the 24px row gap (Eyebrow E5). Heading over the frame's columns; intro and CTA start on the list's first column, so the header lines up with the split below. */
+const headingClasses = "col-span-full -mt-3 text-balance type-display-3 text-fg md:col-span-4 lg:col-span-6";
 const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-span-4 md:col-start-5 md:mt-6 lg:col-span-5 lg:col-start-7";
 /** Two ruled cells on the page grid (subgrid): the frame's half and the list's half share the top rule and a centre rule. */
 /** `minmax(0,1fr)` below md, so a long title can't widen the single column and scroll the page sideways. */
@@ -67,9 +67,9 @@ const layerHiddenClasses = "pointer-events-none opacity-0 delay-150 motion-reduc
 const listCellClasses = "pt-2 md:col-span-4 md:pt-6 lg:col-span-6";
 const numberClasses = "font-mono text-xs tabular-nums text-muted";
 const titleClasses = "type-heading-3 text-fg";
-const metaClasses = "hidden font-mono text-xs uppercase tracking-wider text-muted sm:inline";
+const metaClasses = "hidden font-mono text-xs uppercase tracking-[0.08em] text-muted sm:inline";
 /** On phones the row hides its meta, so the open panel repeats it. */
-const phoneMetaClasses = "font-mono text-xs uppercase tracking-wider text-muted sm:hidden";
+const phoneMetaClasses = "font-mono text-xs uppercase tracking-[0.08em] text-muted sm:hidden";
 const panelClasses = "flex flex-col items-start gap-4 pb-6 pl-8";
 const mobileFrameClasses = cn(
   "mt-2 flex aspect-[3/2] w-full items-stretch overflow-hidden rounded-lg border border-border p-4 md:hidden",

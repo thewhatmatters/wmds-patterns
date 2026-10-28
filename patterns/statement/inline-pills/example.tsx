@@ -2,7 +2,7 @@
  * Example content for Statement — Inline Pills. The pictures are simple glossy SVG icons drawn in WMDS
  * chart colours, so the example is licence-free; a client page swaps in its own icons or 3D renders.
  */
-import { Badge, Button, InlinePill } from "@thewhatmatters/wmds";
+import { Button, InlinePill } from "@thewhatmatters/wmds";
 import { StatementInlinePills, type StatementInlinePillsProps } from "./StatementInlinePills";
 
 export const meta = {
@@ -65,7 +65,7 @@ export function StatementInlinePillsExample(props: Partial<StatementInlinePillsP
   return (
     <StatementInlinePills
       animate
-      eyebrow={<Badge>What we do</Badge>}
+      eyebrow="What we do"
       actions={
         <>
           <Button role="primary" render={<a href="#sketch" />}>

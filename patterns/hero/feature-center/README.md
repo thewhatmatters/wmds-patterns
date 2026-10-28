@@ -19,7 +19,7 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 
 // Under the page's existing nav: leave `nav` empty.
 <HeroFeatureCenter
-  eyebrow="New · Free homepage sketch in 48 hours"
+  eyebrow="Free sketch in 48 hours"
   headline="Websites, video and social that bring Austin in the door."
   subhead="We design, build and run the things your customers check before they visit."
   actions={
@@ -38,7 +38,7 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 | Prop | Kind | Notes |
 |---|---|---|
 | `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>` |
-| `eyebrow` | ReactNode | A short line shown as a pill (Badge) |
+| `eyebrow` | ReactNode | 1–3 words (about 28 characters), shown as an outlined pill (Badge `emphasis="outline"`), 12px above the headline. The headline must carry the point without it |
 | `headline` | ReactNode | The page's only H1. Static |
 | `subhead` | ReactNode | Regular weight, about 42rem wide |
 | `actions` | slot, optional | The CTA row: any buttons or links. When set, `primaryAction` / `secondaryAction` are ignored |

@@ -20,7 +20,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 
 // Under the page's existing nav: leave `nav` empty.
 <HeroPhoneCenter
-  eyebrow="Winner · Beauty Innovation Award"
+  eyebrow="Beauty award winner"
   headline="Science-backed skin care you can trust"
   subhead="Focused on you and your skin."
   actions={<Button role="primary" render={<a href="/app" />}>Get the app</Button>}
@@ -34,7 +34,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
 | Prop | Kind | Notes |
 |---|---|---|
 | `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>` |
-| `eyebrow` | ReactNode | A short line shown as a pill (WMDS Badge, size `md`, the larger of its two). About 30 characters; longer is cut with an ellipsis |
+| `eyebrow` | ReactNode | 1–3 words (about 28 characters), shown as an outlined pill (WMDS Badge `md`, `emphasis="outline"`), 12px above the headline. Shorten rather than let the ellipsis cut it |
 | `eyebrowIcon` | slot, optional | A small icon at the start of the eyebrow pill: a Lucide icon or a 16px `currentColor` SVG (WMDS Badge `icon`) |
 | `headline` | ReactNode | The page's only H1, narrow like the phone: WMDS `type-display-2` (32px → 50px) set tight (-0.035em, line height 1.05), about 11em wide, 2–3 lines. Static. `hyphens-auto` needs the page's `lang` |
 | `subhead` | ReactNode | One short line, about 40 characters (like Lovi's). Regular weight |
