@@ -13,6 +13,8 @@ export interface HeroPhoneCenterProps {
   nav?: ReactNode;
   /** A short line above the headline, shown as a pill. */
   eyebrow?: ReactNode;
+  /** Where the eyebrow links. With it, an outlined pill link with a trailing arrow; without it, a plain `type-eyebrow` label (Eyebrow E10). */
+  eyebrowHref?: string;
   /** Slot, optional: a small icon at the start of the eyebrow pill (a Lucide icon or a 16px SVG). */
   eyebrowIcon?: ReactElement;
   /** The page's only H1. Static: animate it in your page if you want. */
@@ -56,16 +58,17 @@ const rootClasses = "relative w-full overflow-x-clip";
 /** The section lays its content on the WMDS page grid. */
 const sectionClasses = "grid-page relative !py-0";
 /** Centred copy. Section padding 48 / 64 at the top; the fading stage is the bottom edge. */
-const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-12 text-center md:pt-16";
+const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-[calc(var(--grid-baseline)*8)] md:pt-[calc(var(--leading-base)*4)] text-center";
 /**
  * A narrow H1, like the phone it sits over: WMDS type-display-2 (fluid 32px → 50px), kept to about 11em
  * so a short headline sets in 2–3 lines, set tight (-0.035em, line height 1.05) like a display line.
- * `hyphens-auto` needs the page's `lang`.
+ * No hyphenation in headings (Headings H5): a long word breaks only if it would overflow.
  */
 const headlineClasses =
-  "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.035em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere] hyphens-auto";
+  "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.03em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere]";
 /** One short line (about 40 characters). Regular weight (type-large is semibold in some WMDS versions). Headline→subhead 24. */
-const subheadClasses = "mt-6 max-w-[36rem] text-pretty font-normal text-muted type-large";
+/** A one-line tagline: `type-lead`, muted, which the Lead rule allows only while it stays on one line at 390 (L8). */
+const subheadClasses = "mt-6 max-w-[36rem] text-pretty text-muted type-lead";
 /** Subhead→CTAs 32. On phones the buttons stack full width (up to 20rem); from sm they sit in a row. */
 const actionsClasses =
   "mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center";
@@ -186,7 +189,7 @@ function EdgeBlur() {
   );
 }
 
-export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
+export function HeroPhoneCenter({ nav, eyebrow, eyebrowHref, eyebrowIcon, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
   const headingId = useId();
   const frameId = useId().replace(/:/g, "");
 
@@ -198,10 +201,20 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, 
         <div className={copyClasses}>
           {eyebrow != null ? (
             // Keep it to about 30 characters; a longer line is cut with an ellipsis rather than spill.
-            <div className="mb-6 flex max-w-full justify-center">
-              <Badge variant="neutral" size="md" icon={eyebrowIcon}>
-                <span className="block max-w-[min(30ch,80vw)] truncate">{eyebrow}</span>
-              </Badge>
+            // Tight to the headline (12px) and outlined, never filled (Eyebrow rules E5, E10).
+            <div className="mb-3 flex max-w-full justify-center" data-slot="eyebrow" data-slot-optional="">
+              {eyebrowHref ? (
+                <Badge variant="neutral" emphasis="outline" size="md" icon={eyebrowIcon} render={<a href={eyebrowHref} />}>
+                  <span className="inline-flex max-w-[min(30ch,80vw)] items-center gap-1.5">
+                    <span className="truncate">{eyebrow}</span>
+                    <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden focusable="false">
+                  <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+                  </span>
+                </Badge>
+              ) : (
+                <p className="type-eyebrow text-muted">{eyebrow}</p>
+              )}
             </div>
           ) : null}
           <h1 id={headingId} className={headlineClasses}>

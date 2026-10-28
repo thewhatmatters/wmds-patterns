@@ -53,16 +53,19 @@ export interface FooterWordmarkProps {
 }
 
 /** Section padding 48 / 64 at the top; the legal line closes 24 / 40 above the page edge. */
-const gridClasses = "grid-page !pt-12 !pb-6 md:!pt-16 md:!pb-10";
+/** The closing section: WMDS Band `lg` spacing on top, 64 on phones and 96 from md (Spacing S8); the legal row closes 24 / 40. */
+const gridClasses = "grid-page !pb-6 md:!pb-10 !pt-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)]";
 /** The card: dark-theme scope, so its text, field and button take the WMDS dark tokens. Left half on desktop. */
 const cardClasses =
   "col-span-full flex min-h-72 flex-col justify-between gap-10 bg-[var(--color-background-body)] p-6 text-fg md:p-10 lg:col-span-6 lg:w-[calc(100%+var(--grid-column-gap)/2)]";
-const pitchClasses = "max-w-[18em] text-balance type-display-3 font-normal text-fg";
+/** A heading step, not display: the wordmark below is the footer's one display moment (Display D9). */
+const pitchClasses = "max-w-[18em] text-balance type-heading-1 font-normal text-fg";
 const formClasses = "flex flex-col gap-3 sm:flex-row sm:items-stretch";
 /** Link columns: the right half, starting on its first column; two columns of large links. */
 const columnsClasses = "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:px-6 lg:pt-10";
-const labelClasses = "mb-4 text-muted type-supporting";
-const linkItemClasses = "type-heading-1 font-normal text-fg";
+/** Column labels: the library's one label style, caps `type-eyebrow` (Eyebrow E9), as in Footer — Landscape. */
+const labelClasses = "mb-4 text-muted type-eyebrow";
+const linkItemClasses = "type-heading-1 font-normal text-fg text-pretty";
 const linkClasses = "inline-block py-1";
 /** Tiles touch, edge to edge: 2 per row on phones and tablets, 4 on desktop, where the row hangs from the card (two tiles = the card's width). */
 const tilesClasses = "col-span-full mt-12 grid grid-cols-2 lg:mt-[calc(var(--grid-row-gap)*-1)] lg:grid-cols-4";
@@ -232,7 +235,7 @@ export function FooterWordmark({
             <ul className="flex flex-wrap gap-x-6 gap-y-1">
               {legal.map((link) => (
                 <li key={link.label}>
-                  <TextLink href={link.href} variant="quiet" className="inline-block py-3 md:py-0">
+                  <TextLink href={link.href} variant="quiet" className="inline-block py-3 md:-my-1 md:py-1">
                     {link.label}
                   </TextLink>
                 </li>

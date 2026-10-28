@@ -2,7 +2,7 @@
  * Example content for Statement — Inline Pills. The pictures are simple glossy SVG icons drawn in WMDS
  * chart colours, so the example is licence-free; a client page swaps in its own icons or 3D renders.
  */
-import { Badge, Button, InlinePill } from "@thewhatmatters/wmds";
+import { Button, InlinePill } from "@thewhatmatters/wmds";
 import { StatementInlinePills, type StatementInlinePillsProps } from "./StatementInlinePills";
 
 export const meta = {
@@ -65,21 +65,21 @@ export function StatementInlinePillsExample(props: Partial<StatementInlinePillsP
   return (
     <StatementInlinePills
       animate
-      eyebrow={<Badge>What we do</Badge>}
+      eyebrow="What we do"
       actions={
         <>
-          <Button role="primary" render={<a href="#sketch" />}>
+          <Button role="primary" size="lg" render={<a href="#sketch" />}>
             Get my free sketch
           </Button>
-          <Button role="secondary" render={<a href="#work" />}>
+          <Button role="outline" size="lg" render={<a href="#work" />}>
             See our work
           </Button>
         </>
       }
       {...props}
     >
-      We build <InlinePill media={<WebIcon />}>websites</InlinePill>, shoot <InlinePill media={<VideoIcon />}>video</InlinePill>, and
-      run <InlinePill media={<SocialIcon />}>social</InlinePill> for Austin businesses.
+      We build <InlinePill media={<WebIcon />}>websites</InlinePill>, shoot <InlinePill media={<VideoIcon />}>video</InlinePill> and
+      run <InlinePill media={<SocialIcon />}>social</InlinePill>.
     </StatementInlinePills>
   );
 }

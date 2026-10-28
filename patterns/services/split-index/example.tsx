@@ -24,7 +24,7 @@ function Line({ w }: { w: string }) {
   return <span aria-hidden className={`block h-2 rounded-full bg-[color-mix(in_srgb,var(--color-text-primary)_10%,transparent)] ${w}`} />;
 }
 
-const label = "font-mono text-xs uppercase tracking-wider text-muted";
+const label = "font-mono text-xs uppercase tracking-[0.08em] text-muted";
 
 /** A big figure set straight on the surface (WMDS Stat draws its own bordered box, which would nest). */
 function Figure({ name, value, change, note }: { name: string; value: string; change?: string; note?: string }) {
@@ -162,21 +162,21 @@ const services: ServicesSplitIndexService[] = [
     title: "Websites",
     meta: "From 6 weeks",
     description: "A fast site you can edit yourself, built around the one thing you want visitors to do.",
-    link: <TextLink href="#websites">How we build sites</TextLink>,
+    link: <TextLink href="#websites" className="inline-block -my-3 py-3">How we build sites</TextLink>,
     visual: <SiteVisual />,
   },
   {
     title: "Brand identity",
     meta: "From 4 weeks",
     description: "A name check, a logo, a colour and type system, and the files your printer and your team need.",
-    link: <TextLink href="#brand">See brand work</TextLink>,
+    link: <TextLink href="#brand" className="inline-block -my-3 py-3">See brand work</TextLink>,
     visual: <BrandVisual />,
   },
   {
     title: "Social and video",
     meta: "Monthly",
     description: "Short videos and posts shot in your space, planned a month ahead and reported on every month.",
-    link: <TextLink href="#social">How a month runs</TextLink>,
+    link: <TextLink href="#social" className="inline-block -my-3 py-3">How a month runs</TextLink>,
     visual: <SocialVisual />,
   },
   {
@@ -205,7 +205,7 @@ export default function Example() {
       heading="Everything a small business needs to be found, and chosen."
       intro="Six services, one team. Most clients start with one and add the rest when they're ready."
       actions={
-        <Button role="secondary" render={<a href="#contact" />}>
+        <Button role="outline" size="lg" render={<a href="#contact" />}>
           Talk to us
         </Button>
       }

@@ -97,8 +97,8 @@ export const exampleNav = (
             Contact
           </Button>
         </span>
-        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
-          Get a free sketch
+        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap max-[359px]:hidden">
+          Get my free sketch
         </Button>
       </div>
     }
@@ -126,21 +126,22 @@ export function HeroFeatureCenterExample(props: Partial<HeroFeatureCenterProps>)
   return (
     <HeroFeatureCenter
       nav={exampleNav}
-      eyebrow="New · Free homepage sketch in 48 hours"
-      headline="Websites, video and social that bring Austin in the door."
+      eyebrow="Free sketch in 48 hours"
+      eyebrowHref="#sketch"
+      headline="Websites that bring Austin in the door."
       subhead={
         <>
-          We design, build and run what your customers check before they visit.
+          We build what customers check first.
           <br />
-          Live in about two weeks, from $750.
+          Live in two weeks, from $750.
         </>
       }
       actions={
         <>
-          <Button role="primary" render={<a href="#sketch" />}>
+          <Button role="primary" size="lg" render={<a href="#sketch" />}>
             Get my free sketch
           </Button>
-          <Button role="secondary" render={<a href="#work" />}>
+          <Button role="outline" size="lg" render={<a href="#work" />}>
             See our work
           </Button>
         </>

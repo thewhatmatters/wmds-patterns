@@ -37,10 +37,13 @@ export interface FooterLandscapeProps {
 /** Root: the WMDS muted background (`--color-background-muted`; brands set it in brand.css). */
 const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-muted)] text-fg";
 /** Section padding: 48px on phones, 64px (4rem) from md, top and bottom (the band, when present, is the bottom). */
-const gridClasses = "grid-page relative !pt-12 !pb-0 md:!pt-16";
+/** The closing section: WMDS Band `lg` spacing on top, 64 on phones and 96 from md (Spacing S8). */
+const gridClasses = "grid-page relative !pb-0 !pt-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)]";
 const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
 /** Up to two short lines, broken at the sentence (the copy sets the break); `text-pretty` keeps a lone word off the last line. */
-const pitchClasses = "max-w-[52ch] text-pretty text-muted type-body";
+/** Running text people read: `type-large` at regular weight, not 14px `type-body` (Body rule B7). */
+/** From lg the pitch fills the brand block: 6 columns from column 1 (Grid G8). */
+const pitchClasses = "max-w-[52ch] text-pretty font-normal text-muted type-large lg:max-w-none";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
 const linksClasses = {
   one: "col-span-full mt-12 md:col-span-2 md:col-start-7 md:mt-0 lg:col-start-11",
@@ -51,7 +54,7 @@ const linksClasses = {
 const longColumnClasses = "col-span-2 lg:col-span-3";
 const linkLabelClasses = "mb-6 text-muted type-eyebrow";
 /** A 44px tap row; the link itself is a WMDS quiet TextLink at the item's size. */
-const linkItemClasses = "type-large font-normal text-fg";
+const linkItemClasses = "type-large font-normal text-fg text-pretty";
 const linkClasses = "inline-block py-2.5";
 /** Fact strip: centred and dot-separated from md; stacked one per line on phones. */
 const factsClasses =
@@ -75,7 +78,7 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
             </p>
           ) : null}
           {clocks != null ? (
-            <div className="mt-6.5" data-slot="clocks" data-slot-optional="">
+            <div className="mt-6" data-slot="clocks" data-slot-optional="">
               {clocks}
             </div>
           ) : null}

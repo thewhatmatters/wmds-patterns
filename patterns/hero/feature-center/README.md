@@ -19,13 +19,13 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 
 // Under the page's existing nav: leave `nav` empty.
 <HeroFeatureCenter
-  eyebrow="New · Free homepage sketch in 48 hours"
+  eyebrow="Free sketch in 48 hours"
   headline="Websites, video and social that bring Austin in the door."
   subhead="We design, build and run the things your customers check before they visit."
   actions={
     <>
-      <Button role="primary" render={<a href="/sketch" />}>Get my free sketch</Button>
-      <Button role="secondary" render={<a href="/work" />}>See our work</Button>
+      <Button role="primary" size="lg" render={<a href="/sketch" />}>Get my free sketch</Button>
+      <Button role="outline" size="lg" render={<a href="/work" />}>See our work</Button>
     </>
   }
   visual={<img src="/product.png" alt="" />}
@@ -38,11 +38,12 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 | Prop | Kind | Notes |
 |---|---|---|
 | `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>` |
-| `eyebrow` | ReactNode | A short line shown as a pill (Badge) |
+| `eyebrow` | ReactNode, optional | 1–3 words (about 28 characters) in sentence case, 12px above the headline. Plain WMDS `type-eyebrow` label unless `eyebrowHref` is set |
+| `eyebrowHref` | string, optional | Where the eyebrow links (an offer, an announcement). With it, the eyebrow is an outlined pill link (WMDS Badge `md`, 24px tall) with a trailing arrow; a pill never appears without a link (Eyebrow E10) |
 | `headline` | ReactNode | The page's only H1. Static |
 | `subhead` | ReactNode | Regular weight, about 42rem wide |
 | `actions` | slot, optional | The CTA row: any buttons or links. When set, `primaryAction` / `secondaryAction` are ignored |
-| `primaryAction` / `secondaryAction` | `{ label, href }` | Shorthand for a primary and a secondary button |
+| `primaryAction` / `secondaryAction` | `{ label, href }` | Shorthand for a primary and an outline (secondary-level) button (Buttons U1, U4) |
 | `visual` | slot, optional | What goes in the framed window: product shot, site, video. Decorative (`aria-hidden`) unless you change that |
 | `logos` | slot, optional | Proof under the visual. `<HeroFeatureCenterLogos logos={[{ name, logo }]} />` (6 is typical; 3 per row on phones, 6 at desktop; a short row centres), or a marquee, a quote, a stats row |
 
@@ -72,4 +73,8 @@ Section padding 48 / 64 top and bottom (phone / tablet and up), headline→subhe
 - `--hero-glow` is a pattern knob, not an allow-listed WMDS knob.
 - **No dark brand-surface version yet.** WMDS `Band` tones shipped in 0.4.28: for a dark hero on the brand surface, wrap the section in `<Band tone="inverse">` and give the CTA the light ink (a per-tone primary knob is also an open WMDS gap).
 - CSS can't fit a headline to a line count; long headlines need a smaller size by hand.
-- Checked against **@thewhatmatters/wmds 0.4.28** (npm). In 0.4.28 `type-large` is semibold, so the subhead sets `font-normal` itself.
+- Checked against **@thewhatmatters/wmds 0.4.30** (npm).
+
+**Alignment (Headings H8):** left-aligned on phones and tablets, where the centred headline would run past 2 lines; centred from desktop (`lg`), where it sets in 2. The subhead and CTA row follow it.
+
+**Display copy (Rule 3, D7):** shorten, don't shrink. If your headline runs past 3 lines (2 on tablets) on phones, cut the words; keep the type step.

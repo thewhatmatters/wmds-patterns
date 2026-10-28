@@ -54,8 +54,8 @@ export const exampleNav = (
             Contact
           </Button>
         </span>
-        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
-          Get a free sketch
+        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap max-[359px]:hidden">
+          Get my free sketch
         </Button>
       </div>
     }
@@ -88,7 +88,8 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
     <HeroPhoneCenter
       edgeBlur
       nav={exampleNav}
-      eyebrow="New · Free homepage sketch in 48 hours"
+      eyebrow="Free sketch in 48 hours"
+      eyebrowHref="#sketch"
       eyebrowIcon={
         <svg viewBox="0 0 16 16" aria-hidden focusable="false">
           <path fill="currentColor" d="M8 1l1.6 4.4L14 7l-4.4 1.6L8 13l-1.6-4.4L2 7l4.4-1.6z" />
@@ -98,10 +99,10 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
       subhead="A homepage you can tap through, free."
       actions={
         <>
-          <Button role="primary" render={<a href="#sketch" />}>
+          <Button role="primary" size="lg" render={<a href="#sketch" />}>
             Get my free sketch
           </Button>
-          <Button role="secondary" render={<a href="#work" />}>
+          <Button role="outline" size="lg" render={<a href="#work" />}>
             See our work
           </Button>
         </>

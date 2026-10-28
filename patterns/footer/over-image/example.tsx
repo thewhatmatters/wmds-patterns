@@ -8,6 +8,9 @@ import { FooterOverImage, type FooterOverImageProps } from "./FooterOverImage";
 
 const base = import.meta.env.BASE_URL;
 
+/** A 44px hit area around a 36px icon button on phones; the look doesn't change. */
+const socialHitArea = "relative before:absolute before:-inset-1 md:before:hidden";
+
 export const meta = {
   type: "Footer",
   name: "Footer — Over Image",
@@ -42,8 +45,8 @@ export function FooterOverImageExample(props: Partial<FooterOverImageProps>) {
       headline="Let's get Austin in the door"
       subhead="Websites, video and social that make the first visit easy."
       actions={
-        <Button role="primary" render={<a href="#sketch" />}>
-          Get a free sketch
+        <Button role="primary" size="lg" render={<a href="#sketch" />}>
+          Get my free sketch
         </Button>
       }
       columns={[
@@ -54,10 +57,11 @@ export function FooterOverImageExample(props: Partial<FooterOverImageProps>) {
       ]}
       follow={
         <>
-          <p className="mb-3 text-muted type-supporting">Follow us</p>
-          <div className="-ml-2.5 flex gap-1">
-            <IconButton aria-label="WhatMatters on Instagram" size="sm" icon={<Glyph d={instagram} />} render={<a href="#instagram" />} />
-            <IconButton aria-label="WhatMatters on LinkedIn" size="sm" icon={<Glyph d={linkedin} />} render={<a href="#linkedin" />} />
+          <p className="mb-3 text-muted type-eyebrow">Follow us</p>
+          {/* 36px icons; on phones each has an invisible 44px hit area, 8px apart so they don't overlap (Links K6). */}
+          <div className="-ml-2.5 flex gap-2 md:gap-1">
+            <IconButton aria-label="WhatMatters on Instagram" size="sm" icon={<Glyph d={instagram} />} render={<a href="#instagram" />} className={socialHitArea} />
+            <IconButton aria-label="WhatMatters on LinkedIn" size="sm" icon={<Glyph d={linkedin} />} render={<a href="#linkedin" />} className={socialHitArea} />
           </div>
         </>
       }

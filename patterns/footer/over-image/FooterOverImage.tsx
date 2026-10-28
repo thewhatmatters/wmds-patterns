@@ -12,7 +12,7 @@ import { Card, cn, TextLink } from "@thewhatmatters/wmds";
 export interface FooterOverImageLink {
   label: string;
   href: string;
-  /** Opens in a new tab with WMDS TextLink's external icon. */
+  /** Marks another site with WMDS TextLink's external icon (same tab from WMDS 0.4.30, Links K9). */
   external?: boolean;
 }
 
@@ -55,9 +55,11 @@ const mediaClasses = "absolute inset-0 -z-10 size-full object-cover";
 /** Dark behind the call to action (AA on bright footage), clear by three quarters down so the picture shows around the card. */
 const scrimClasses =
   "pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[color-mix(in_srgb,var(--color-background-body)_82%,transparent)] via-[color-mix(in_srgb,var(--color-background-body)_55%,transparent)] via-35% to-transparent to-75%";
-const gridClasses = "grid-page !pt-12 !pb-6 md:!pt-16 md:!pb-10";
+/** The closing section: WMDS Band `lg` spacing on top, 64 on phones and 96 from md (Spacing S8); the legal row closes 24 / 40. */
+const gridClasses = "grid-page !pb-6 md:!pb-10 !pt-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)]";
 const ctaClasses = "col-span-full flex flex-col items-center text-center text-fg";
-const headlineClasses = "max-w-[16em] text-balance type-display-2 font-medium tracking-tight";
+/** A long word breaks instead of running off a phone (Display rule D5). */
+const headlineClasses = "min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] type-display-2 font-medium tracking-tight";
 const subheadClasses = "mt-4 max-w-[34rem] text-pretty font-normal text-muted type-large";
 const actionsClasses = "mt-8 flex flex-wrap items-center justify-center gap-3";
 /** The card: contained to 10 of 12 columns on desktop, full width with the page margin on phones. */
@@ -65,10 +67,26 @@ const cardWrapClasses = "col-span-full lg:col-start-2 lg:col-end-12";
 const cardGapClasses = "mt-16 md:mt-24";
 const columnsClasses = "grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-5";
 const moreClasses = "mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:grid-cols-5";
-const labelClasses = "mb-3 text-muted type-supporting";
+/** Column labels: the library's one label style, caps `type-eyebrow` (Eyebrow E9), as in Footer — Landscape. */
+const labelClasses = "mb-3 text-muted type-eyebrow";
 /** A 44px tap row on phones; tighter where there's a pointer. */
-const linkItemClasses = "type-body text-fg [overflow-wrap:anywhere]";
+const linkItemClasses = "type-body text-fg [overflow-wrap:anywhere] text-pretty";
 const linkClasses = "inline-block py-3 md:py-1";
+/** An email address breaks only before its "@" ("hello" / "@whatmatters.studio"), never mid-word. */
+const emailLinkClasses = linkClasses + " [overflow-wrap:normal]";
+
+/** Puts a line-break opportunity before the "@" of an email label; other labels pass through. */
+function linkLabel(label: string) {
+  const at = label.indexOf("@");
+  if (at <= 0) return label;
+  return (
+    <>
+      {label.slice(0, at)}
+      <wbr />
+      {label.slice(at)}
+    </>
+  );
+}
 const bottomClasses = "mt-16 flex flex-col gap-8 md:mt-24 md:flex-row md:items-end md:justify-between";
 const logoClasses = "h-12 w-auto md:h-20 [&>svg]:h-full [&>svg]:w-auto [&>img]:h-full [&>img]:w-auto";
 const legalClasses = "flex flex-col gap-1 text-muted type-caption md:items-end";
@@ -82,8 +100,8 @@ function Column({ column, id }: { column: FooterOverImageColumn; id: string }) {
       <ul aria-labelledby={id}>
         {column.links.map((link) => (
           <li key={link.label} className={linkItemClasses}>
-            <TextLink href={link.href} variant="quiet" external={link.external} className={linkClasses}>
-              {link.label}
+            <TextLink href={link.href} variant="quiet" external={link.external} className={link.label.includes("@") ? emailLinkClasses : linkClasses}>
+              {linkLabel(link.label)}
             </TextLink>
           </li>
         ))}
@@ -179,7 +197,7 @@ export function FooterOverImage({ media, video, headline, subhead, actions, colu
                   <ul className="flex flex-wrap gap-x-3 gap-y-1">
                     {legal.map((link) => (
                       <li key={link.label}>
-                        <TextLink href={link.href} variant="quiet" className="inline-block py-3 md:py-0">
+                        <TextLink href={link.href} variant="quiet" className="inline-block py-3 md:-my-1 md:py-1">
                           {link.label}
                         </TextLink>
                       </li>
