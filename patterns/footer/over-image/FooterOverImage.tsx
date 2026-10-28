@@ -57,7 +57,8 @@ const scrimClasses =
   "pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[color-mix(in_srgb,var(--color-background-body)_82%,transparent)] via-[color-mix(in_srgb,var(--color-background-body)_55%,transparent)] via-35% to-transparent to-75%";
 const gridClasses = "grid-page !pt-12 !pb-6 md:!pt-16 md:!pb-10";
 const ctaClasses = "col-span-full flex flex-col items-center text-center text-fg";
-const headlineClasses = "max-w-[16em] text-balance type-display-2 font-medium tracking-tight";
+/** A long word breaks instead of running off a phone (Display rule D5). */
+const headlineClasses = "min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] type-display-2 font-medium tracking-tight";
 const subheadClasses = "mt-4 max-w-[34rem] text-pretty font-normal text-muted type-large";
 const actionsClasses = "mt-8 flex flex-wrap items-center justify-center gap-3";
 /** The card: contained to 10 of 12 columns on desktop, full width with the page margin on phones. */

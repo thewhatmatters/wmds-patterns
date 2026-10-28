@@ -92,6 +92,11 @@ describe.each(folders)("patterns/%s", (folder) => {
     // H1: heading levels never skip.
     const levels = [...html.matchAll(/<h([1-6])[\s>]/g)].map(([, level]) => Number(level));
     levels.forEach((level, i) => expect(level - (levels[i - 1] ?? level - 1), `${folder}: h${levels[i - 1]} → h${level}`).toBeLessThanOrEqual(1));
+    // D3: display type is fluid — no one-off pixel or rem font sizes.
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      const source = readFileSync(join(dir, file), "utf8");
+      expect(source, `${folder}/${file}: one-off font size`).not.toMatch(/\btext-\[\d+(\.\d+)?(px|rem)\]/);
+    }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
     // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.
