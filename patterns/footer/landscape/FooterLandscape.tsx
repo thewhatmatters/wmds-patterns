@@ -76,7 +76,7 @@ export function FooterLandscape({ brand, pitch, clocks, links = [], facts = [], 
             </p>
           ) : null}
           {clocks != null ? (
-            <div className="mt-6.5" data-slot="clocks" data-slot-optional="">
+            <div className="mt-6" data-slot="clocks" data-slot-optional="">
               {clocks}
             </div>
           ) : null}

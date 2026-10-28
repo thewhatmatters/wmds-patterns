@@ -110,6 +110,8 @@ describe.each(folders)("patterns/%s", (folder) => {
           if (order.indexOf(bp) > lowest) expect(starts.has(bp), `${folder}/${file}: ${bp}col-span without ${bp}col-start in ${classList}`).toBe(true);
         }
       }
+      // S1: spacing comes from the scale or a token, never a one-off pixel value.
+      expect(source, `${folder}/${file}: one-off spacing`).not.toMatch(/(?<![\w-])-?(?:p|m|gap|space)[xytrblse]?(?:-[xy])?-\[-?\d+(\.\d+)?px\]/);
       // B2: running text is ragged right, never justified.
       expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
     }
