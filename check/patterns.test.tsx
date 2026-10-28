@@ -156,6 +156,12 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       expect(readFileSync(join(dir, file), "utf8"), `${folder}/${file}: role="secondary"`).not.toMatch(/role="secondary"/);
     }
+    // U5: a CTA (primary or outline Button) is size="lg", 48px on every pointer; size="sm" only in the example nav.
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      for (const [tag] of readFileSync(join(dir, file), "utf8").matchAll(/<Button role="(?:primary|outline)".*$/gm)) {
+        expect(/size="(lg|sm)"/.test(tag), `${folder}/${file}: CTA without size="lg"`).toBe(true);
+      }
+    }
     // K6: a 36px IconButton (size="sm") gets an invisible 44px hit area on phones (`before:-inset-1`).
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");

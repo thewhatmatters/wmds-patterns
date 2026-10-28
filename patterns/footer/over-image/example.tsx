@@ -45,7 +45,7 @@ export function FooterOverImageExample(props: Partial<FooterOverImageProps>) {
       headline="Let's get Austin in the door"
       subhead="Websites, video and social that make the first visit easy."
       actions={
-        <Button role="primary" render={<a href="#sketch" />}>
+        <Button role="primary" size="lg" render={<a href="#sketch" />}>
           Get my free sketch
         </Button>
       }

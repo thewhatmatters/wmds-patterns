@@ -24,8 +24,8 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
   subhead="We design, build and run the things your customers check before they visit."
   actions={
     <>
-      <Button role="primary" render={<a href="/sketch" />}>Get my free sketch</Button>
-      <Button role="outline" render={<a href="/work" />}>See our work</Button>
+      <Button role="primary" size="lg" render={<a href="/sketch" />}>Get my free sketch</Button>
+      <Button role="outline" size="lg" render={<a href="/work" />}>See our work</Button>
     </>
   }
   visual={<img src="/product.png" alt="" />}

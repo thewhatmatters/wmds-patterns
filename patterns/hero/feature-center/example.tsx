@@ -138,10 +138,10 @@ export function HeroFeatureCenterExample(props: Partial<HeroFeatureCenterProps>)
       }
       actions={
         <>
-          <Button role="primary" render={<a href="#sketch" />}>
+          <Button role="primary" size="lg" render={<a href="#sketch" />}>
             Get my free sketch
           </Button>
-          <Button role="outline" render={<a href="#work" />}>
+          <Button role="outline" size="lg" render={<a href="#work" />}>
             See our work
           </Button>
         </>

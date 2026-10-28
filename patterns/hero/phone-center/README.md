@@ -23,7 +23,7 @@ import { HeroPhoneCenter } from "./HeroPhoneCenter";
   eyebrow="Beauty award winner"
   headline="Science-backed skin care you can trust"
   subhead="Focused on you and your skin."
-  actions={<Button role="primary" render={<a href="/app" />}>Get the app</Button>}
+  actions={<Button role="primary" size="lg" render={<a href="/app" />}>Get the app</Button>}
   video={{ src: "/hero.mp4", poster: "/hero.jpg" }}   // or media={<img src="/hero.jpg" alt="" />}
   screen="Face scan in progress…"
 />

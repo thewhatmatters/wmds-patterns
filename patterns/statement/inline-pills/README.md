@@ -19,7 +19,7 @@ The first **statement** pattern: a full-width section built around one sentence.
 import { Button, InlinePill } from "@thewhatmatters/wmds";
 import { StatementInlinePills } from "./StatementInlinePills";
 
-<StatementInlinePills animate actions={<Button role="primary" render={<a href="/start" />}>Start</Button>}>
+<StatementInlinePills animate actions={<Button role="primary" size="lg" render={<a href="/start" />}>Start</Button>}>
   We build <InlinePill media={<img src="/icons/web.png" alt="" />}>websites</InlinePill>, shoot{" "}
   <InlinePill media={<img src="/icons/video.png" alt="" />}>video</InlinePill>, and run{" "}
   <InlinePill media={<img src="/icons/social.png" alt="" />}>social</InlinePill> for Austin businesses.
