@@ -54,7 +54,7 @@ export function FooterOverImageExample(props: Partial<FooterOverImageProps>) {
       ]}
       follow={
         <>
-          <p className="mb-3 text-muted type-supporting">Follow us</p>
+          <p className="mb-3 text-muted type-eyebrow">Follow us</p>
           <div className="-ml-2.5 flex gap-1">
             <IconButton aria-label="WhatMatters on Instagram" size="sm" icon={<Glyph d={instagram} />} render={<a href="#instagram" />} />
             <IconButton aria-label="WhatMatters on LinkedIn" size="sm" icon={<Glyph d={linkedin} />} render={<a href="#linkedin" />} />

@@ -127,6 +127,7 @@ export function HeroFeatureCenterExample(props: Partial<HeroFeatureCenterProps>)
     <HeroFeatureCenter
       nav={exampleNav}
       eyebrow="Free sketch in 48 hours"
+      eyebrowHref="#sketch"
       headline="Websites, video and social that bring Austin in the door."
       subhead={
         <>

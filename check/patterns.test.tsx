@@ -94,6 +94,18 @@ describe.each(folders)("patterns/%s", (folder) => {
     levels.forEach((level, i) => expect(level - (levels[i - 1] ?? level - 1), `${folder}: h${levels[i - 1]} → h${level}`).toBeLessThanOrEqual(1));
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
+    // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.
+    for (const match of html.matchAll(/data-slot="eyebrow"[^>]*>\s*<([a-z]+)/g)) {
+      if (match[1] === "p") continue;
+      const slot = html.slice(match.index, match.index + 1500);
+      expect(slot, `${folder}: eyebrow pill without a link`).toMatch(/<a [^>]*href="[^"]+"/);
+    }
+    // H8: a heading is centred on phones (a bare `text-center`, not `md:text-center`) only in patterns
+    // measured to stay within 2 lines at 390 (2026-10-28). Others left-align below md.
+    const centredOnPhones = ["hero/phone-center", "footer/over-image"];
+    if (/<h[12][\s>]/.test(html) && !centredOnPhones.includes(folder)) {
+      expect(html, `${folder}: heading centred on phones`).not.toMatch(/class="[^"]*(?<![:\w-])text-center\b/);
+    }
   });
 });
 

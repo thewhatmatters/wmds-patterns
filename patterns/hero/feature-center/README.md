@@ -38,7 +38,8 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 | Prop | Kind | Notes |
 |---|---|---|
 | `nav` | slot, optional | Leave it empty when the page already has a nav (the usual case). For a standalone page pass a `<SiteNav>` |
-| `eyebrow` | ReactNode | 1–3 words (about 28 characters), shown as an outlined pill (Badge `emphasis="outline"`), 12px above the headline. The headline must carry the point without it |
+| `eyebrow` | ReactNode, optional | 1–3 words (about 28 characters) in sentence case, 12px above the headline. Plain WMDS `type-eyebrow` label unless `eyebrowHref` is set |
+| `eyebrowHref` | string, optional | Where the eyebrow links (an offer, an announcement). With it, the eyebrow is an outlined pill link (WMDS Badge `md`, 24px tall) with a trailing arrow; a pill never appears without a link (Eyebrow E10) |
 | `headline` | ReactNode | The page's only H1. Static |
 | `subhead` | ReactNode | Regular weight, about 42rem wide |
 | `actions` | slot, optional | The CTA row: any buttons or links. When set, `primaryAction` / `secondaryAction` are ignored |
@@ -73,3 +74,5 @@ Section padding 48 / 64 top and bottom (phone / tablet and up), headline→subhe
 - **No dark brand-surface version yet.** WMDS `Band` tones shipped in 0.4.28: for a dark hero on the brand surface, wrap the section in `<Band tone="inverse">` and give the CTA the light ink (a per-tone primary knob is also an open WMDS gap).
 - CSS can't fit a headline to a line count; long headlines need a smaller size by hand.
 - Checked against **@thewhatmatters/wmds 0.4.28** (npm). In 0.4.28 `type-large` is semibold, so the subhead sets `font-normal` itself.
+
+**Alignment (Headings H8):** left-aligned on phones and tablets, where the centred headline would run past 2 lines; centred from desktop (`lg`), where it sets in 2. The subhead and CTA row follow it.

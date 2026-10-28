@@ -13,6 +13,8 @@ export interface HeroPhoneCenterProps {
   nav?: ReactNode;
   /** A short line above the headline, shown as a pill. */
   eyebrow?: ReactNode;
+  /** Where the eyebrow links. With it, an outlined pill link with a trailing arrow; without it, a plain `type-eyebrow` label (Eyebrow E10). */
+  eyebrowHref?: string;
   /** Slot, optional: a small icon at the start of the eyebrow pill (a Lucide icon or a 16px SVG). */
   eyebrowIcon?: ReactElement;
   /** The page's only H1. Static: animate it in your page if you want. */
@@ -186,7 +188,7 @@ function EdgeBlur() {
   );
 }
 
-export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
+export function HeroPhoneCenter({ nav, eyebrow, eyebrowHref, eyebrowIcon, headline, subhead, actions, media, video, screen, app, edgeBlur = false, className }: HeroPhoneCenterProps) {
   const headingId = useId();
   const frameId = useId().replace(/:/g, "");
 
@@ -199,10 +201,19 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowIcon, headline, subhead, 
           {eyebrow != null ? (
             // Keep it to about 30 characters; a longer line is cut with an ellipsis rather than spill.
             // Tight to the headline (12px) and outlined, never filled (Eyebrow rules E5, E10).
-            <div className="mb-3 flex max-w-full justify-center">
-              <Badge variant="neutral" emphasis="outline" size="md" icon={eyebrowIcon}>
-                <span className="block max-w-[min(30ch,80vw)] truncate">{eyebrow}</span>
-              </Badge>
+            <div className="mb-3 flex max-w-full justify-center" data-slot="eyebrow" data-slot-optional="">
+              {eyebrowHref ? (
+                <Badge variant="neutral" emphasis="outline" size="md" icon={eyebrowIcon} render={<a href={eyebrowHref} />}>
+                  <span className="inline-flex max-w-[min(30ch,80vw)] items-center gap-1.5">
+                    <span className="truncate">{eyebrow}</span>
+                    <svg viewBox="0 0 16 16" className="size-3.5" aria-hidden focusable="false">
+                  <path d="M3 8h9M8.5 4.5 12 8l-3.5 3.5" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+                  </span>
+                </Badge>
+              ) : (
+                <p className="type-eyebrow text-muted">{eyebrow}</p>
+              )}
             </div>
           ) : null}
           <h1 id={headingId} className={headlineClasses}>

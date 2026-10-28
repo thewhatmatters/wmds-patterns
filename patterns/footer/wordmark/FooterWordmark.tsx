@@ -61,7 +61,8 @@ const pitchClasses = "max-w-[18em] text-balance type-display-3 font-normal text-
 const formClasses = "flex flex-col gap-3 sm:flex-row sm:items-stretch";
 /** Link columns: the right half, starting on its first column; two columns of large links. */
 const columnsClasses = "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:px-6 lg:pt-10";
-const labelClasses = "mb-4 text-muted type-supporting";
+/** Column labels: the library's one label style, caps `type-eyebrow` (Eyebrow E9), as in Footer — Landscape. */
+const labelClasses = "mb-4 text-muted type-eyebrow";
 const linkItemClasses = "type-heading-1 font-normal text-fg";
 const linkClasses = "inline-block py-1";
 /** Tiles touch, edge to edge: 2 per row on phones and tablets, 4 on desktop, where the row hangs from the card (two tiles = the card's width). */
