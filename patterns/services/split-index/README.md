@@ -1,6 +1,6 @@
 # Services — Split Index
 
-status: draft
+status: approved
 
 After Heron AI's services section, "Built to work the way you do" (Inspiration board #9; also on details.so, https://www.details.so/inspo/heronaiapp-90cbbe). Nothing copied but the structure: a ruled split with the services listed on one side and the open one's picture on the other.
 **File:** `ServicesSplitIndex.tsx` (copy it). **Example:** `example.tsx`, whose pictures are small WMDS compositions of each service's output (licence-free; swap in real work).
@@ -69,3 +69,7 @@ Built on **@thewhatmatters/wmds 0.4.28** (npm): `SectionCaption`, `Accordion`, `
 
 - **WMDS-GAP: no selected-row emphasis.** Heron marks the open service with an inverted ink band across the row; WMDS `Accordion` has no selected or inverse state for an item, and a pattern can't restyle it (its `className` is layout-only). Left out rather than patched. Proposed: `Accordion.Item` `emphasis="inverse"` when open (the `data-tone="inverse"` remap Band already uses).
 - **WMDS-GAP: no large index size for Accordion.** Rows are fixed at `h-11`; the pattern sets the title in `type-heading-3` inside the label slot, which fits but leaves no room for a bigger index (IndexList has `size="lg"`, but no single-open preview with a linked picture). Proposed: `Accordion` `size="lg"` for editorial lists.
+
+## Grid
+
+On the WMDS page grid at every width: the heading spans the frame's columns (1–4 on tablet, 1–6 on desktop); the intro and CTA start on the list's first column (5 on tablet, 7 on desktop), so the header lines up with the split; the split itself is a `grid-cols-subgrid` of the page columns. Randy (2026-10-28) approved it after the intro moved off column 9, where it floated right of everything (and overflowed the 8-column tablet grid).
