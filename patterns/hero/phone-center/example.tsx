@@ -54,7 +54,7 @@ export const exampleNav = (
             Contact
           </Button>
         </span>
-        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
+        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap max-[359px]:hidden">
           Get my free sketch
         </Button>
       </div>

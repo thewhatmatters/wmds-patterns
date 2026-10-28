@@ -96,6 +96,20 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       expect(source, `${folder}/${file}: one-off font size`).not.toMatch(/\btext-\[\d+(\.\d+)?(px|rem)\]/);
+      // G7: the page keeps one column count; a pattern never sets --grid-cols on a section.
+      expect(source, `${folder}/${file}: --grid-cols override`).not.toMatch(/--grid-cols/);
+      // G4: a responsive col-span doesn't silently reset a col-start set at a smaller breakpoint.
+      for (const [classList] of source.matchAll(/"[^"\n]*col-(?:span|start)-[^"\n]*"/g)) {
+        const tokens = classList.slice(1, -1).split(/\s+/);
+        const at = (kind: string) => new Set(tokens.filter((t) => new RegExp(`^(\\w+:)?col-${kind}-`).test(t)).map((t) => t.match(/^(\w+:)/)?.[1] ?? ""));
+        const order = ["", "sm:", "md:", "lg:", "xl:", "2xl:"];
+        const starts = at("start");
+        if (starts.size === 0) continue;
+        const lowest = Math.min(...[...starts].map((bp) => order.indexOf(bp)));
+        for (const bp of at("span")) {
+          if (order.indexOf(bp) > lowest) expect(starts.has(bp), `${folder}/${file}: ${bp}col-span without ${bp}col-start in ${classList}`).toBe(true);
+        }
+      }
       // B2: running text is ragged right, never justified.
       expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
     }
