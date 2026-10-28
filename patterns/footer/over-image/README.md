@@ -39,7 +39,7 @@ import { FooterOverImage } from "./FooterOverImage";
 | `video` | `{ src, poster? }`, optional | A decorative loop: muted, no controls, hidden from screen readers, paused off-screen, held on its poster under reduced motion |
 | `media` | slot, optional | A decorative `<img alt="">` instead of `video`; cropped to fill (`object-cover`) |
 | `columns` | `{ label, links: { label, href, external? }[] }[]` | The card's first row: 3–5 short columns of WMDS `TextLink`s (quiet), with muted labels |
-| `follow` | slot, optional | A last first-row column, e.g. a "Follow us" label and WMDS `IconButton`s rendered as links |
+| `follow` | slot, optional | A last first-row column, e.g. a "Follow us" label and WMDS `IconButton`s rendered as links. Small (36px) icons get an invisible 44px hit area on phones (`relative before:absolute before:-inset-1 md:before:hidden`), 8px apart so the areas don't overlap (Links K6) |
 | `more` | columns, optional | A second row; a column with `wide: true` spans two grid columns for longer link text (post titles) |
 | `logo` | slot | The big brand mark, bottom left: an SVG or `<img>` with the brand's name as its accessible name, 48px tall on phones, 80px from tablet up |
 | `copyright` | ReactNode | Bottom right |

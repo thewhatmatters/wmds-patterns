@@ -12,7 +12,7 @@ import { Card, cn, TextLink } from "@thewhatmatters/wmds";
 export interface FooterOverImageLink {
   label: string;
   href: string;
-  /** Opens in a new tab with WMDS TextLink's external icon. */
+  /** Marks another site with WMDS TextLink's external icon (same tab from WMDS 0.4.30, Links K9). */
   external?: boolean;
 }
 

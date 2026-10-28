@@ -99,7 +99,7 @@ export function HeroFeatureCenter({
       <section aria-labelledby={headingId} className={sectionClasses}>
         <div className={copyClasses}>
           {eyebrow != null ? (
-            // Eyebrow rules: tight to the headline (12px), 1–3 words; a pill only when it links (E5, E10).
+            // Eyebrow rules: tight to the headline (12px), 1–3 words; a pill only when it links (E5, E10). A linked WMDS Badge already has a 44px-tall tap layer (K6).
             <div className="mb-3" data-slot="eyebrow" data-slot-optional="">
               {eyebrowHref ? (
                 <Badge variant="neutral" emphasis="outline" size="md" render={<a href={eyebrowHref} />}>
