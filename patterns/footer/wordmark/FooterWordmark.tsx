@@ -5,7 +5,7 @@
  * Everything sits on the WMDS page grid: the card takes the left half, the link columns the right half,
  * the tiles share the page columns (subgrid), and the wordmark spans the full content width.
  */
-import { useId, useLayoutEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { useId, useLayoutEffect, useRef, useState, type CSSProperties, type FormEvent, type ReactNode } from "react";
 import { Button, cn, Input, TextLink } from "@thewhatmatters/wmds";
 
 export interface FooterWordmarkLink {
@@ -66,8 +66,13 @@ const linkItemClasses = "type-heading-1 font-normal text-fg";
 const linkClasses = "inline-block py-1";
 /** Tiles touch, edge to edge: 2 per row on phones and tablets, 4 on desktop, where the row hangs from the card (two tiles = the card's width). */
 const tilesClasses = "col-span-full mt-12 grid grid-cols-2 lg:mt-[calc(var(--grid-row-gap)*-1)] lg:grid-cols-4";
+/**
+ * Tile colour: the given token darkened 25% in light mode, so white text clears AA on every chart colour
+ * (Randy, 2026-10-28: all white labels); in dark mode the token as is (lighter), with dark text.
+ */
 const tileClasses =
-  "group flex min-h-14 items-center justify-between px-4 type-body font-medium" +
+  "group flex min-h-14 items-center justify-between px-4 type-body font-medium " +
+  "bg-[color-mix(in_srgb,var(--tile)_75%,black)] [[data-theme=dark]_&]:bg-[var(--tile)] " +
   "outline-offset-[-3px] focus-visible:outline-2 focus-visible:outline-current";
 const wordmarkClasses = "col-span-full mt-16 overflow-visible text-fg md:mt-24";
 const bottomClasses = "col-span-full mt-10 flex flex-col gap-4 text-muted type-supporting md:mt-16 md:flex-row md:items-center md:justify-between";
@@ -75,9 +80,11 @@ const bottomClasses = "col-span-full mt-10 flex flex-col gap-4 text-muted type-s
 /** Light and dark ink for text on a coloured tile (WMDS has no "on" ink for its chart colours). */
 const inks = { light: "#ffffff", dark: "#111111" };
 
-function luminance(rgb: string) {
-  const [r, g, b] = (rgb.match(/[\d.]+/g) ?? ["0", "0", "0"]).slice(0, 3).map((v) => {
-    const c = Number(v) / 255;
+/** Relative luminance of a computed colour: `rgb(…)` in 0–255, or `color(srgb …)` (from color-mix) in 0–1. */
+function luminance(color: string) {
+  const scale = color.startsWith("color(") ? 1 : 255;
+  const [r, g, b] = (color.match(/[\d.]+/g) ?? ["0", "0", "0"]).slice(0, 3).map((v) => {
+    const c = Number(v) / scale;
     return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -204,7 +211,7 @@ export function FooterWordmark({
           <ul ref={tilesRef} className={tilesClasses} data-slot="tiles" data-slot-optional="">
             {tiles.map((tile) => (
               <li key={tile.label} className="contents">
-                <a href={tile.href} className={tileClasses} style={{ backgroundColor: tile.color }} data-tile="">
+                <a href={tile.href} className={tileClasses} style={{ "--tile": tile.color } as CSSProperties} data-tile="">
                   {tile.label}
                   <svg viewBox="0 0 16 16" className="size-4 transition-transform motion-safe:group-hover:translate-x-1" aria-hidden focusable="false">
                     <path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="currentColor" strokeWidth="1.5" />
