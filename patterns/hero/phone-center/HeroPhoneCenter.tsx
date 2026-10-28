@@ -67,7 +67,8 @@ const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-1
 const headlineClasses =
   "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.03em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere]";
 /** One short line (about 40 characters). Regular weight (type-large is semibold in some WMDS versions). Headline→subhead 24. */
-const subheadClasses = "mt-6 max-w-[36rem] text-pretty font-normal text-muted type-large";
+/** A one-line tagline: `type-lead`, muted, which the Lead rule allows only while it stays on one line at 390 (L8). */
+const subheadClasses = "mt-6 max-w-[36rem] text-pretty text-muted type-lead";
 /** Subhead→CTAs 32. On phones the buttons stack full width (up to 20rem); from sm they sit in a row. */
 const actionsClasses =
   "mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center";

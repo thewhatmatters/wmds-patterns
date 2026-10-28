@@ -114,6 +114,12 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const [, cls, text] of html.matchAll(/<p[^>]*class="([^"]*)"[^>]*>([^<]{80,})/g)) {
       expect(/\btype-(body|supporting)\b/.test(cls), `${folder}: running text on ${cls}: "${text.slice(0, 40)}…"`).toBe(false);
     }
+    // L8: a lead (type-lead) sits in ink; muted only as a one-line tagline, in patterns measured to stay on
+    // one line at 390 (2026-10-28).
+    const mutedTaglines = ["hero/phone-center"];
+    if (!mutedTaglines.includes(folder)) {
+      expect(html, `${folder}: muted lead`).not.toMatch(/class="[^"]*\btype-lead\b[^"]*\btext-muted\b|class="[^"]*\btext-muted\b[^"]*\btype-lead\b/);
+    }
     // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.
     for (const match of html.matchAll(/data-slot="eyebrow"[^>]*>\s*<([a-z]+)/g)) {
       if (match[1] === "p") continue;
