@@ -96,6 +96,9 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       expect(source, `${folder}/${file}: one-off font size`).not.toMatch(/\btext-\[\d+(\.\d+)?(px|rem)\]/);
+      // W5 / W4: the page keeps the default --grid-max, and nothing has a fixed width wider than a phone.
+      expect(source, `${folder}/${file}: --grid-max override`).not.toMatch(/--grid-max/);
+      expect(source, `${folder}/${file}: fixed width`).not.toMatch(/(?<![\w-])(?:min-)?w-\[(?:3[2-9]\d|[4-9]\d\d|\d{4,})px\]/);
       // G7: the page keeps one column count; a pattern never sets --grid-cols on a section.
       expect(source, `${folder}/${file}: --grid-cols override`).not.toMatch(/--grid-cols/);
       // G4: a responsive col-span doesn't silently reset a col-start set at a smaller breakpoint.
