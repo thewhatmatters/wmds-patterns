@@ -99,6 +99,14 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
+    // D9: one display block per pattern at most (a page holds two display moments: the hero and one closing moment).
+    const pattern = files.find((name) => name.endsWith(".tsx") && name !== "example.tsx");
+    if (pattern) {
+      const source = readFileSync(join(dir, pattern), "utf8");
+      expect((source.match(/"[^"\n]*\btype-display-(?:hero|xl|[123])\b[^"\n]*"/g) ?? []).length, `${folder}: display steps`).toBeLessThanOrEqual(1);
+      // D2: no pattern tracks display type tighter than -0.03em (the steps carry their own).
+      for (const [, em] of source.matchAll(/tracking-\[(-[\d.]+)em\]/g)) expect(Number(em), `${folder}: tracking ${em}em`).toBeGreaterThanOrEqual(-0.03);
+    }
     // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.
     for (const match of html.matchAll(/data-slot="eyebrow"[^>]*>\s*<([a-z]+)/g)) {
       if (match[1] === "p") continue;

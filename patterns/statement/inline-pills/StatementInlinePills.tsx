@@ -29,9 +29,12 @@ export interface StatementInlinePillsProps {
 const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
 /** Left-aligned on phones, where the centred sentence would run past 2 lines; centred from md (Headings H8). */
 const innerClasses = "col-span-full flex flex-col items-start text-left md:items-center md:text-center";
-/** Long words break rather than scroll the page sideways; a looser line gap on phones keeps stacked pills apart. */
+/**
+ * Display-2 at its own leading (1.1). Only while the sentence holds pills does it open to 1.4 / 1.35, so
+ * stacked pills don't touch (a documented exception to Display D1). Long words break, never scroll sideways.
+ */
 const sentenceClasses =
-  "min-w-0 max-w-[18em] text-balance type-display-2 font-normal leading-[1.4] tracking-tight text-fg [overflow-wrap:anywhere] md:leading-[1.35]";
+  "min-w-0 max-w-[18em] text-balance type-display-2 font-normal text-fg [overflow-wrap:anywhere] has-[[data-inline-pill]]:leading-[1.4] md:has-[[data-inline-pill]]:leading-[1.35]";
 const actionsClasses = "mt-10 flex flex-wrap items-center justify-start gap-3 md:justify-center";
 
 export function StatementInlinePills({ eyebrow, children, actions, as: Heading = "h2", animate = false, className }: StatementInlinePillsProps) {

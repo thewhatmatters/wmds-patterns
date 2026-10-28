@@ -78,8 +78,8 @@ export function StatementInlinePillsExample(props: Partial<StatementInlinePillsP
       }
       {...props}
     >
-      We build <InlinePill media={<WebIcon />}>websites</InlinePill>, shoot <InlinePill media={<VideoIcon />}>video</InlinePill>, and
-      run <InlinePill media={<SocialIcon />}>social</InlinePill> for Austin businesses.
+      We build <InlinePill media={<WebIcon />}>websites</InlinePill>, shoot <InlinePill media={<VideoIcon />}>video</InlinePill> and
+      run <InlinePill media={<SocialIcon />}>social</InlinePill>.
     </StatementInlinePills>
   );
 }

@@ -70,3 +70,5 @@ Full width. Section padding 48 / 64 at the top (phone / tablet and up); headline
 
 - Built on **@thewhatmatters/wmds 0.4.28**: `Card`, `TextLink`, `IconButton`, `Button`. No gap.
 - Example video: Envato "Blurred Restaurant Interior With Bartender in Background" (Randy's pick, 2026-10-27; https://app.envato.com/stock-video/24519876-74bd-432c-a8ad-01d142e906b0). Until the licensed file is downloaded, the gallery plays Envato's watermarked preview from `gallery/public/local/` (not committed, not for publishing). On the published gallery the picture stays empty until the licensed file is added at `gallery/public/examples/footer-over-image/` and the example points to it.
+
+**Display copy (Rule 3, D7):** shorten, don't shrink. If your headline runs past 2 lines on phones, cut the words; keep the type step.

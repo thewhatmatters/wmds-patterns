@@ -76,3 +76,5 @@ Section padding 48 / 64 top and bottom (phone / tablet and up), headline→subhe
 - Checked against **@thewhatmatters/wmds 0.4.28** (npm). In 0.4.28 `type-large` is semibold, so the subhead sets `font-normal` itself.
 
 **Alignment (Headings H8):** left-aligned on phones and tablets, where the centred headline would run past 2 lines; centred from desktop (`lg`), where it sets in 2. The subhead and CTA row follow it.
+
+**Display copy (Rule 3, D7):** shorten, don't shrink. If your headline runs past 3 lines (2 on tablets) on phones, cut the words; keep the type step.

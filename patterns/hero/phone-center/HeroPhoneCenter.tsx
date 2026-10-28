@@ -65,7 +65,7 @@ const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-1
  * No hyphenation in headings (Headings H5): a long word breaks only if it would overflow.
  */
 const headlineClasses =
-  "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.035em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere]";
+  "type-display-2 [--text-display-2-leading:1.05] tracking-[-0.03em] min-w-0 max-w-[min(11em,100%)] text-balance [overflow-wrap:anywhere]";
 /** One short line (about 40 characters). Regular weight (type-large is semibold in some WMDS versions). Headline→subhead 24. */
 const subheadClasses = "mt-6 max-w-[36rem] text-pretty font-normal text-muted type-large";
 /** Subhead→CTAs 32. On phones the buttons stack full width (up to 20rem); from sm they sit in a row. */

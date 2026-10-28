@@ -71,3 +71,5 @@ Full width; section padding 48 / 64 top and bottom (phone / tablet and up); eyeb
 - Built on **@thewhatmatters/wmds 0.4.28** (npm): `InlinePill` and `useInlinePillsPopIn` were added to WMDS for this pattern (Randy, 2026-10-27). No gap left.
 
 **Alignment (Headings H8):** left-aligned on phones, where the centred sentence would run past 2 lines; centred from tablet up (2 lines). The CTA row follows it.
+
+**Display copy (Rule 3, D7):** shorten, don't shrink. If your headline runs past 3 lines on phones, cut the words; keep the type step.
