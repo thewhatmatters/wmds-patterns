@@ -92,7 +92,8 @@ describe.each(folders)("patterns/%s", (folder) => {
         expect(tracking >= 0.08 && tracking <= 0.12, `${folder}/${file}: ${classList}`).toBe(true);
       }
     }
-    const Example = (await examples[`../patterns/${folder}/example.tsx`]()).default;
+    const mod = await examples[`../patterns/${folder}/example.tsx`]();
+    const Example = mod.default;
     const html = renderToString(<Example />);
     // H1: heading levels never skip.
     const levels = [...html.matchAll(/<h([1-6])[\s>]/g)].map(([, level]) => Number(level));
@@ -138,6 +139,18 @@ describe.each(folders)("patterns/%s", (folder) => {
       const label = stripTags(inner);
       expect(label, `${folder}: vague button label`).not.toMatch(/^(submit|ok|click here|go)$/i);
       expect(label, `${folder}: exclamation in a button`).not.toMatch(/!/);
+    }
+    if (mod.meta.type === "Hero") {
+      // Hero R2: one primary action at most (plus a secondary), not counting the site header.
+      const heroOnly = html.replace(/<header[\s\S]*?<\/header>/g, "");
+      expect((heroOnly.match(/data-role="primary"/g) ?? []).length, `${folder}: primaries`).toBeLessThanOrEqual(1);
+      for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+        const source = readFileSync(join(dir, file), "utf8");
+        // Hero R3: no auto-rotating slides or text.
+        expect(source, `${folder}/${file}: auto-rotation`).not.toMatch(/setInterval|aria-roledescription="carousel"|<Carousel\b/);
+        // Hero R9: content height plus Band padding; full-screen heights only for over-media heroes.
+        if (!/over-media|overMedia/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
+      }
     }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);

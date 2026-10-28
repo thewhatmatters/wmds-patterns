@@ -12,6 +12,10 @@ A centred hero for an app or a mobile-first service: an eyebrow pill, a headline
 |---|---|---|
 | ![](light.png) | ![](dark.png) | ![](mobile.png) |
 
+## Layout
+
+**Centred** (Hero rule R7) over a media stage: the copy sits on the page above the photo or video, not on it, so no scrim is needed. Use it for an app or mobile-first service whose real thing is the phone screen; the headline must hold **2 lines or fewer**. For a services business with a picture of the work, prefer a **split** hero.
+
 ## Use it
 
 ```tsx
