@@ -45,20 +45,31 @@ const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
 const headingClasses = "col-span-full mt-6 text-balance type-display-3 text-fg md:col-span-4 lg:col-span-6";
 const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-span-4 md:col-start-5 md:mt-6 lg:col-span-5 lg:col-start-7";
 /** Two ruled cells on the page grid (subgrid): the frame's half and the list's half share the top rule and a centre rule. */
-const cellsClasses = "col-span-full mt-10 grid border-t border-border md:mt-16 md:grid-cols-subgrid";
+/** `minmax(0,1fr)` below md, so a long title can't widen the single column and scroll the page sideways. */
+const cellsClasses = "col-span-full mt-10 grid grid-cols-[minmax(0,1fr)] border-t border-border md:mt-16 md:grid-cols-subgrid";
 const frameCellClasses = "hidden border-r border-border md:col-span-4 md:block md:pr-8 md:pt-8 lg:col-span-6";
 /**
  * The frame stays in view while the list scrolls past it. 3:2, so with 5–6 services the list and the frame
  * end at about the same height. Every service's picture is stacked inside; the shown one fades in.
  */
-const frameClasses = cn("sticky top-8 grid aspect-[3/2] overflow-hidden rounded-lg border border-border", backgroundPatternDotGridClasses);
-/** One picture layer: fills the frame with a small inset; 150ms ease-out crossfade, none under reduced motion. */
+const frameClasses = cn("sticky top-8 grid overflow-hidden rounded-lg border border-border", backgroundPatternDotGridClasses);
+/** Square on tablet (the frame is only ~320px wide there); 3:2 on desktop with 5–6 services, 16:9 with 3–4 so a short list still meets it. */
+const frameAspect = { many: "aspect-square lg:aspect-[3/2]", few: "aspect-square lg:aspect-[16/9]" };
+/**
+ * One picture layer: fills the frame with a small inset. The incoming picture fades in on top over 150ms
+ * (ease-out) while the outgoing one stays opaque underneath, then drops, so the dot grid never shows through
+ * mid-fade. No fade under reduced motion.
+ */
 const layerClasses =
   "col-start-1 row-start-1 flex size-full items-stretch justify-stretch p-4 transition-opacity duration-150 ease-out motion-reduce:transition-none lg:p-6";
+const layerShownClasses = "z-10 opacity-100";
+const layerHiddenClasses = "pointer-events-none opacity-0 delay-150 motion-reduce:delay-0";
 const listCellClasses = "pt-2 md:col-span-4 md:pt-6 lg:col-span-6";
 const numberClasses = "font-mono text-xs tabular-nums text-muted";
 const titleClasses = "type-heading-3 text-fg";
 const metaClasses = "hidden font-mono text-xs uppercase tracking-wider text-muted sm:inline";
+/** On phones the row hides its meta, so the open panel repeats it. */
+const phoneMetaClasses = "font-mono text-xs uppercase tracking-wider text-muted sm:hidden";
 const panelClasses = "flex flex-col items-start gap-4 pb-6 pl-8";
 const mobileFrameClasses = cn(
   "mt-2 flex aspect-[3/2] w-full items-stretch overflow-hidden rounded-lg border border-border p-4 md:hidden",
@@ -105,11 +116,11 @@ export function ServicesSplitIndex({
 
         <div className={cellsClasses}>
           <div className={frameCellClasses}>
-            <div className={frameClasses} data-slot="visual">
+            <div className={cn(frameClasses, services.length > 4 ? frameAspect.many : frameAspect.few)} data-slot="visual">
               {services.map((service, index) => (
                 <div
                   key={index}
-                  className={cn(layerClasses, index === shown ? "opacity-100" : "pointer-events-none opacity-0")}
+                  className={cn(layerClasses, index === shown ? layerShownClasses : layerHiddenClasses)}
                   aria-hidden={index === shown ? undefined : true}
                   inert={index === shown ? undefined : true}
                 >
@@ -134,6 +145,7 @@ export function ServicesSplitIndex({
                   trailing={service.meta != null ? <span className={metaClasses}>{service.meta}</span> : undefined}
                 >
                   <div className={panelClasses}>
+                    {service.meta != null ? <p className={phoneMetaClasses}>{service.meta}</p> : null}
                     <p className="max-w-[36em] text-pretty text-muted">{service.description}</p>
                     {service.link}
                     <div className={mobileFrameClasses}>{service.visual}</div>
