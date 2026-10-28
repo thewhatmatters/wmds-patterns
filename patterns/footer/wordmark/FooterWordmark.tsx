@@ -60,7 +60,7 @@ const cardClasses =
   "col-span-full flex min-h-72 flex-col justify-between gap-10 bg-[var(--color-background-body)] p-6 text-fg md:p-10 lg:col-span-6 lg:w-[calc(100%+var(--grid-column-gap)/2)]";
 /** A heading step, not display: the wordmark below is the footer's one display moment (Display D9). */
 const pitchClasses = "max-w-[18em] text-balance type-heading-1 font-normal text-fg";
-const formClasses = "flex flex-col gap-3 sm:flex-row sm:items-stretch";
+const formClasses = "flex flex-col gap-3 md:flex-row md:items-stretch";
 /** Link columns: the right half, starting on its first column; two columns of large links. */
 const columnsClasses = "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:px-6 lg:pt-10";
 /** Column labels: the library's one label style, caps `type-eyebrow` (Eyebrow E9), as in Footer — Landscape. */

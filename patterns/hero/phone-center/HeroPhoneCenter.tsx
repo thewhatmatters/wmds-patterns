@@ -71,7 +71,7 @@ const headlineClasses =
 const subheadClasses = "mt-6 max-w-[36rem] text-pretty text-muted type-lead";
 /** Subhead→CTAs 32. On phones the buttons stack full width (up to 20rem); from sm they sit in a row. */
 const actionsClasses =
-  "mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 sm:w-auto sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center";
+  "mt-8 flex w-full max-w-xs flex-col items-stretch gap-3 md:w-auto md:max-w-none md:flex-row md:flex-wrap md:items-center md:justify-center";
 
 /**
  * The stage: the media spans most of the page width and fades out on every side (a mask, so it melts

@@ -184,7 +184,7 @@ export function FooterClocks({ cities }: { cities: FooterClock[] }) {
     [cities, reduce],
   );
   return (
-    <ul className="grid grid-cols-2 gap-6 sm:flex sm:flex-wrap sm:justify-between">
+    <ul className="grid grid-cols-2 gap-6 md:flex md:flex-wrap md:justify-between">
       {cities.map((c, i) => (
         <li key={c.city} className="flex flex-col">
           <span className="sr-only" suppressHydrationWarning>

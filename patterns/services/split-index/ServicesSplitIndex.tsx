@@ -67,9 +67,9 @@ const layerHiddenClasses = "pointer-events-none opacity-0 delay-150 motion-reduc
 const listCellClasses = "pt-2 md:col-span-4 md:pt-6 lg:col-span-6";
 const numberClasses = "font-mono text-xs tabular-nums text-muted";
 const titleClasses = "type-heading-3 text-fg";
-const metaClasses = "hidden font-mono text-xs uppercase tracking-[0.08em] text-muted sm:inline";
+const metaClasses = "hidden font-mono text-xs uppercase tracking-[0.08em] text-muted md:inline";
 /** On phones the row hides its meta, so the open panel repeats it. */
-const phoneMetaClasses = "font-mono text-xs uppercase tracking-[0.08em] text-muted sm:hidden";
+const phoneMetaClasses = "font-mono text-xs uppercase tracking-[0.08em] text-muted md:hidden";
 const panelClasses = "flex flex-col items-start gap-4 pb-6 pl-8";
 const mobileFrameClasses = cn(
   "mt-2 flex aspect-[3/2] w-full items-stretch overflow-hidden rounded-lg border border-border p-4 md:hidden",
