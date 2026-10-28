@@ -100,11 +100,20 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
     }
     // K1 / K8 / K9: links go somewhere, say where, and a new tab says so.
-    for (const [anchor, inner] of html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)) {
+    for (const [, anchor, inner] of html.matchAll(/<a\b((?:"[^"]*"|'[^']*'|[^>"'])*)>([\s\S]*?)<\/a>/g)) {
       expect(anchor, `${folder}: link without href`).toMatch(/\shref="[^"]+"/);
-      const text = inner.replace(/<[^>]+>/g, "").trim();
+      const text = inner.replace(/<(?:"[^"]*"|'[^']*'|[^>"'])*>/g, "").trim();
       expect(text, `${folder}: generic link text`).not.toMatch(/^(learn more|read more|click here|more)$/i);
       if (/target="_blank"/.test(anchor)) expect(text, `${folder}: new tab not announced`).toMatch(/opens in a new tab/i);
+    }
+    // U2 / U9: every button has a type, and labels aren't vague or shouted.
+    // Attribute values may hold ">" (Tailwind's `[&>svg]`), so tags are matched quote-aware.
+    const stripTags = (markup: string) => markup.replace(/<(?:"[^"]*"|'[^']*'|[^>"'])*>/g, "").trim();
+    for (const [, tag, inner] of html.matchAll(/<button\b((?:"[^"]*"|'[^']*'|[^>"'])*)>([\s\S]*?)<\/button>/g)) {
+      expect(tag, `${folder}: button without type`).toMatch(/\stype="(button|submit|reset)"/);
+      const label = stripTags(inner);
+      expect(label, `${folder}: vague button label`).not.toMatch(/^(submit|ok|click here|go)$/i);
+      expect(label, `${folder}: exclamation in a button`).not.toMatch(/!/);
     }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);

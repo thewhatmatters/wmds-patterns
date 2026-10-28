@@ -21,7 +21,7 @@ import { FooterOverImage } from "./FooterOverImage";
   video={{ src: "/footer.mp4", poster: "/footer.jpg" }}   // or media={<img src="/footer.jpg" alt="" />}
   headline="Let's get Austin in the door"
   subhead="Websites, video and social that make the first visit easy."
-  actions={<Button role="primary" render={<a href="/start" />}>Get a free sketch</Button>}
+  actions={<Button role="primary" render={<a href="/start" />}>Get my free sketch</Button>}
   columns={[{ label: "Services", links: [{ label: "Websites", href: "/web" }] }]}
   logo={<img src="/mark.svg" alt="WhatMatters" />}
   copyright="WhatMatters © 2026"

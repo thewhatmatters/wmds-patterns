@@ -98,7 +98,7 @@ export const exampleNav = (
           </Button>
         </span>
         <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
-          Get a free sketch
+          Get my free sketch
         </Button>
       </div>
     }
