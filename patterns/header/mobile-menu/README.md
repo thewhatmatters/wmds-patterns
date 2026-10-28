@@ -29,7 +29,7 @@ import { HeaderMobileMenu } from "./HeaderMobileMenu";
 |---|---|---|
 | `brand` | slot | WMDS `SiteNav.Brand`: the wordmark link (never underlines) |
 | `links` | `{ label, href, current? }[]` | The main links, key word first. **4 or fewer** so they also show on tablets; 5–7 at most |
-| `action` | slot | The bar's main button, WMDS `Button size="sm"`. Keep the label short (about 12 characters) so it fits beside Menu at 390; when the bar is too tight it gives way and `menuAction` carries it |
+| `action` | slot | The bar's main button, WMDS `Button size="sm"`. It stays in the bar on phones (N9): "Get my free sketch" (18 characters) fits beside Menu from 390, because the wordmark and the Menu word sit on the content edges. On a narrower phone (320–389) it gives way, by measurement, and `menuAction` carries it |
 | `menuAction` | slot | The same action as a WMDS `Button size="lg"`, full width at the bottom of the open menu |
 | `secondary` | slot, optional | A quieter link beside the action on desktop (Sign in, Contact); hidden on phones |
 | `placement` | `"fixed"` \| `"inline"` | `fixed` (default): page chrome, in flow at the top, then the floating compact bar on scroll |

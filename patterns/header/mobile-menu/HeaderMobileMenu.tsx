@@ -19,7 +19,7 @@ export interface HeaderMobileMenuProps {
   brand: ReactNode;
   /** The main links, key word first; 4 or fewer so they also show on tablets (5–7 at most on desktop). */
   links: HeaderMobileMenuLink[];
-  /** Slot: the bar's main button, a WMDS `<Button size="sm">`. Hides under 360px; `menuAction` carries it there. */
+  /** Slot: the bar's main button, a WMDS `<Button size="sm">`. It stays in the bar on phones from 390 (N9) and gives way, by measurement, only when the bar can't fit it; `menuAction` carries it then. */
   action: ReactNode;
   /** Slot: the same action as a full-width WMDS `<Button>` at the bottom of the open menu. */
   menuAction: ReactNode;
