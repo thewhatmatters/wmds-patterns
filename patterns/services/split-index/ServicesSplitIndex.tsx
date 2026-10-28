@@ -40,17 +40,18 @@ export interface ServicesSplitIndexProps {
 
 /** Full width; content on the WMDS page grid; section padding 48 / 64 top and bottom. */
 const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
-const headingClasses = "col-span-full mt-6 text-balance type-display-3 text-fg md:col-span-7";
-const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-span-4 md:col-start-9 md:mt-6";
-/** Two ruled cells: the frame's cell and the list's cell share the top rule and a centre rule. */
-const cellsClasses = "col-span-full mt-10 grid border-t border-border md:mt-16 md:grid-cols-2";
-const frameCellClasses = "hidden border-r border-border md:block md:pr-8 md:pt-8";
+/** Heading over the frame's columns; intro and CTA start on the list's first column, so the header lines up with the split below. */
+const headingClasses = "col-span-full mt-6 text-balance type-display-3 text-fg md:col-span-4 lg:col-span-6";
+const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-span-4 md:col-start-5 md:mt-6 lg:col-span-5 lg:col-start-7";
+/** Two ruled cells on the page grid (subgrid): the frame's half and the list's half share the top rule and a centre rule. */
+const cellsClasses = "col-span-full mt-10 grid border-t border-border md:mt-16 md:grid-cols-subgrid";
+const frameCellClasses = "hidden border-r border-border md:col-span-4 md:block md:pr-8 md:pt-8 lg:col-span-6";
 /** The frame stays in view while the list scrolls past it. */
 const frameClasses = cn(
   "sticky top-8 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-border p-8",
   backgroundPatternDotGridClasses,
 );
-const listCellClasses = "pt-2 md:pl-8 md:pt-6";
+const listCellClasses = "pt-2 md:col-span-4 md:pt-6 lg:col-span-6";
 const numberClasses = "font-mono text-xs tabular-nums text-muted";
 const titleClasses = "type-heading-3 text-fg";
 const metaClasses = "hidden font-mono text-xs uppercase tracking-wider text-muted sm:inline";
