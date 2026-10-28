@@ -60,6 +60,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html.match(/<h[12][\s>]/g)).toHaveLength(1);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(renderToString(<Example as="h1" />).match(/<h1[\s>]/g)).toHaveLength(1);
+    } else if (mod.meta.type === "Services") {
+      // A services section sits further down the page: one h2 that names it, no h1 and no nav.
+      expect(html).toMatch(/<section[^>]*aria-labelledby=/);
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
     } else {
       // A hero holds the page's one h1, and renders no site nav when `nav` is left out.
       expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
