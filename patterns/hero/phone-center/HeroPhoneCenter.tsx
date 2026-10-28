@@ -57,8 +57,8 @@ export interface HeroPhoneCenterProps {
 const rootClasses = "relative w-full overflow-x-clip";
 /** The section lays its content on the WMDS page grid. */
 const sectionClasses = "grid-page relative !py-0";
-/** Centred copy. Section padding 48 / 64 at the top; the fading stage is the bottom edge. */
-const copyClasses = "relative z-10 col-span-full flex flex-col items-center pt-[calc(var(--grid-baseline)*8)] md:pt-[calc(var(--leading-base)*4)] text-center";
+/** Left-aligned below md, where the headline runs 3 lines at 320 (centred 3-line text reads badly; Hero R7, Headings H8); centred from md. */
+const copyClasses = "relative z-10 col-span-full flex flex-col items-start pt-[calc(var(--grid-baseline)*8)] md:pt-[calc(var(--leading-base)*4)] text-left md:items-center md:text-center";
 /**
  * A narrow H1, like the phone it sits over: WMDS type-display-2 (fluid 32px → 50px), kept to about 11em
  * so a short headline sets in 2–3 lines, set tight (-0.035em, line height 1.05) like a display line.
@@ -202,7 +202,7 @@ export function HeroPhoneCenter({ nav, eyebrow, eyebrowHref, eyebrowIcon, headli
           {eyebrow != null ? (
             // Keep it to about 30 characters; a longer line is cut with an ellipsis rather than spill.
             // Tight to the headline (12px) and outlined, never filled (Eyebrow rules E5, E10).
-            <div className="mb-3 flex max-w-full justify-center" data-slot="eyebrow" data-slot-optional="">
+            <div className="mb-3 flex max-w-full justify-start md:justify-center" data-slot="eyebrow" data-slot-optional="">
               {eyebrowHref ? (
                 <Badge variant="neutral" emphasis="outline" size="md" icon={eyebrowIcon} render={<a href={eyebrowHref} />}>
                   <span className="inline-flex max-w-[min(30ch,80vw)] items-center gap-1.5">
