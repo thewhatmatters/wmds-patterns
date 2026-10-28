@@ -205,7 +205,7 @@ export default function Example() {
       heading="Everything a small business needs to be found, and chosen."
       intro="Six services, one team. Most clients start with one and add the rest when they're ready."
       actions={
-        <Button role="secondary" render={<a href="#contact" />}>
+        <Button role="outline" render={<a href="#contact" />}>
           Talk to us
         </Button>
       }

@@ -25,7 +25,7 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
   actions={
     <>
       <Button role="primary" render={<a href="/sketch" />}>Get my free sketch</Button>
-      <Button role="secondary" render={<a href="/work" />}>See our work</Button>
+      <Button role="outline" render={<a href="/work" />}>See our work</Button>
     </>
   }
   visual={<img src="/product.png" alt="" />}
@@ -43,7 +43,7 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 | `headline` | ReactNode | The page's only H1. Static |
 | `subhead` | ReactNode | Regular weight, about 42rem wide |
 | `actions` | slot, optional | The CTA row: any buttons or links. When set, `primaryAction` / `secondaryAction` are ignored |
-| `primaryAction` / `secondaryAction` | `{ label, href }` | Shorthand for a primary and a secondary button |
+| `primaryAction` / `secondaryAction` | `{ label, href }` | Shorthand for a primary and an outline (secondary-level) button (Buttons U1, U4) |
 | `visual` | slot, optional | What goes in the framed window: product shot, site, video. Decorative (`aria-hidden`) unless you change that |
 | `logos` | slot, optional | Proof under the visual. `<HeroFeatureCenterLogos logos={[{ name, logo }]} />` (6 is typical; 3 per row on phones, 6 at desktop; a short row centres), or a marquee, a quote, a stats row |
 

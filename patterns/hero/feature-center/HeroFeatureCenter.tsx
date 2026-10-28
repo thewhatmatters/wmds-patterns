@@ -128,7 +128,7 @@ export function HeroFeatureCenter({
                   </Button>
                 ) : null}
                 {secondaryAction != null ? (
-                  <Button role="secondary" render={<a href={secondaryAction.href} />}>
+                  <Button role="outline" render={<a href={secondaryAction.href} />}>
                     {secondaryAction.label}
                   </Button>
                 ) : null}

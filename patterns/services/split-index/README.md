@@ -34,7 +34,7 @@ import { ServicesSplitIndex } from "./ServicesSplitIndex";
 | `heading` | ReactNode | The section's `h2`, one or two lines (WMDS `type-display-3`) |
 | `intro` | ReactNode | Optional: a sentence or two beside the heading, muted |
 | `caption` | slot, optional | The small mono caption over the section (WMDS `SectionCaption`). Default "Services" |
-| `actions` | slot, optional | One CTA under the intro, usually a WMDS `<Button role="secondary">` |
+| `actions` | slot, optional | One CTA under the intro, usually a WMDS `<Button role="outline">` |
 | `services` | array | 3–6 services: `title`, `description`, `visual` (slot), optional `meta` (short, e.g. "Monthly"; hidden under 640px) and `link` (a WMDS `<TextLink>`) |
 | `defaultIndex` | number, default `0` | The service open at first |
 

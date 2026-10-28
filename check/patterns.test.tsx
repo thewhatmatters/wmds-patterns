@@ -152,6 +152,10 @@ describe.each(folders)("patterns/%s", (folder) => {
     if (!mutedTaglines.includes(folder)) {
       expect(html, `${folder}: muted lead`).not.toMatch(/class="[^"]*\btype-lead\b[^"]*\btext-muted\b|class="[^"]*\btext-muted\b[^"]*\btype-lead\b/);
     }
+    // U1/U4: the secondary level is role="outline" (a 3:1 edge). WMDS's filled `secondary` pill sits near 1:1 on the page.
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      expect(readFileSync(join(dir, file), "utf8"), `${folder}/${file}: role="secondary"`).not.toMatch(/role="secondary"/);
+    }
     // K6: a 36px IconButton (size="sm") gets an invisible 44px hit area on phones (`before:-inset-1`).
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");

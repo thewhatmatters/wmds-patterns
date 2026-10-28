@@ -102,7 +102,7 @@ export function HeroPhoneCenterExample(props: Partial<HeroPhoneCenterProps>) {
           <Button role="primary" render={<a href="#sketch" />}>
             Get my free sketch
           </Button>
-          <Button role="secondary" render={<a href="#work" />}>
+          <Button role="outline" render={<a href="#work" />}>
             See our work
           </Button>
         </>
