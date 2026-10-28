@@ -109,6 +109,11 @@ describe.each(folders)("patterns/%s", (folder) => {
       // D2: no pattern tracks display type tighter than -0.03em (the steps carry their own).
       for (const [, em] of source.matchAll(/tracking-\[(-[\d.]+)em\]/g)) expect(Number(em), `${folder}: tracking ${em}em`).toBeGreaterThanOrEqual(-0.03);
     }
+    // B7: running text people read (a paragraph of 80+ characters) isn't set in 14px type-body or type-supporting;
+    // those are for app UI and small print.
+    for (const [, cls, text] of html.matchAll(/<p[^>]*class="([^"]*)"[^>]*>([^<]{80,})/g)) {
+      expect(/\btype-(body|supporting)\b/.test(cls), `${folder}: running text on ${cls}: "${text.slice(0, 40)}…"`).toBe(false);
+    }
     // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.
     for (const match of html.matchAll(/data-slot="eyebrow"[^>]*>\s*<([a-z]+)/g)) {
       if (match[1] === "p") continue;

@@ -131,9 +131,9 @@ export function HeroFeatureCenterExample(props: Partial<HeroFeatureCenterProps>)
       headline="Websites that bring Austin in the door."
       subhead={
         <>
-          We design, build and run what your customers check before they visit.
+          We build what customers check first.
           <br />
-          Live in about two weeks, from $750.
+          Live in two weeks, from $750.
         </>
       }
       actions={

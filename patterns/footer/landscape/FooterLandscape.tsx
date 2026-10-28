@@ -40,7 +40,8 @@ const rootClasses = "relative w-full overflow-x-clip bg-[var(--color-background-
 const gridClasses = "grid-page relative !pt-12 !pb-0 md:!pt-16";
 const brandBlockClasses = "col-span-full flex flex-col gap-1.5 md:col-span-5 lg:col-span-6";
 /** Up to two short lines, broken at the sentence (the copy sets the break); `text-pretty` keeps a lone word off the last line. */
-const pitchClasses = "max-w-[52ch] text-pretty text-muted type-body";
+/** Running text people read: `type-large` at regular weight, not 14px `type-body` (Body rule B7). */
+const pitchClasses = "max-w-[52ch] text-pretty font-normal text-muted type-large";
 /** Links: right-aligned block (2 columns of the grid each); 3–4 columns take their own row. */
 const linksClasses = {
   one: "col-span-full mt-12 md:col-span-2 md:col-start-7 md:mt-0 lg:col-start-11",

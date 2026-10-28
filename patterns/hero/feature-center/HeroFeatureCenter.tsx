@@ -53,7 +53,8 @@ const copyClasses = "relative col-span-full flex flex-col items-start pt-12 text
 /** WMDS type-display-1 as it is (fluid 40px → 80px): about 58 characters take 2 lines at desktop. */
 const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere]";
 /** Headline→subhead 24, regular weight (type-large is semibold in some WMDS versions), about 42rem measure. */
-const subheadClasses = "mt-6 max-w-[42rem] text-pretty font-normal text-muted type-large";
+/** The subhead summarises the page, so it's a lead in ink, not muted (Lead L8, Body B9); about 2 lines at 390. */
+const subheadClasses = "mt-6 max-w-[42rem] text-pretty font-normal text-fg type-large";
 /** Subhead→CTAs 32. */
 const actionsClasses = "mt-8 flex flex-wrap items-center justify-start gap-3 lg:justify-center";
 /** The visual spans columns 2–11 at lg. CTAs→visual 64 (plus the grid's row gap). */

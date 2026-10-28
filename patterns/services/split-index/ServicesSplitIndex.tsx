@@ -102,7 +102,7 @@ export function ServicesSplitIndex({
         {intro != null || actions != null ? (
           <div className={introClasses}>
             {intro != null ? (
-              <p className="text-pretty text-muted" data-slot="intro" data-slot-optional="">
+              <p className="text-pretty font-normal text-muted type-large" data-slot="intro" data-slot-optional="">
                 {intro}
               </p>
             ) : null}
