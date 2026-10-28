@@ -96,6 +96,8 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       expect(source, `${folder}/${file}: one-off font size`).not.toMatch(/\btext-\[\d+(\.\d+)?(px|rem)\]/);
+      // B2: running text is ragged right, never justified.
+      expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
     }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
