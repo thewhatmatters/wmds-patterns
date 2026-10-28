@@ -65,7 +65,7 @@ const formClasses = "flex flex-col gap-3 sm:flex-row sm:items-stretch";
 const columnsClasses = "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:px-6 lg:pt-10";
 /** Column labels: the library's one label style, caps `type-eyebrow` (Eyebrow E9), as in Footer — Landscape. */
 const labelClasses = "mb-4 text-muted type-eyebrow";
-const linkItemClasses = "type-heading-1 font-normal text-fg";
+const linkItemClasses = "type-heading-1 font-normal text-fg text-pretty";
 const linkClasses = "inline-block py-1";
 /** Tiles touch, edge to edge: 2 per row on phones and tablets, 4 on desktop, where the row hangs from the card (two tiles = the card's width). */
 const tilesClasses = "col-span-full mt-12 grid grid-cols-2 lg:mt-[calc(var(--grid-row-gap)*-1)] lg:grid-cols-4";

@@ -54,7 +54,7 @@ const linksClasses = {
 const longColumnClasses = "col-span-2 lg:col-span-3";
 const linkLabelClasses = "mb-6 text-muted type-eyebrow";
 /** A 44px tap row; the link itself is a WMDS quiet TextLink at the item's size. */
-const linkItemClasses = "type-large font-normal text-fg";
+const linkItemClasses = "type-large font-normal text-fg text-pretty";
 const linkClasses = "inline-block py-2.5";
 /** Fact strip: centred and dot-separated from md; stacked one per line on phones. */
 const factsClasses =
