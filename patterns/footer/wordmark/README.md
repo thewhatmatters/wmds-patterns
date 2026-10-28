@@ -1,6 +1,6 @@
 # Footer — Wordmark
 
-status: draft
+status: approved
 
 After Lexington's footer (lexingtonthemes.com, "Enlightr" viewport; Randy's reference, 2026-10-28). Nothing copied but the structure.
 **File:** `FooterWordmark.tsx` (copy it). **Example:** `example.tsx`.
