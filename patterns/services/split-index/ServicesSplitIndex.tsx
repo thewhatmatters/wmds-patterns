@@ -4,7 +4,8 @@
  * picture in a dot-grid frame on the left that stays in view while the list scrolls. On phones the frame drops
  * away and each service's picture sits inside its own open row.
  *
- * Nothing animates beyond WMDS Accordion's own open and close. One service is open at a time.
+ * Motion: WMDS Accordion's own open and close, plus a 150ms ease-out crossfade when the framed picture changes
+ * (none under prefers-reduced-motion). One service is open at a time.
  */
 import { useId, useState, type ReactNode } from "react";
 import { Accordion, SectionCaption, backgroundPatternDotGridClasses, cn } from "@thewhatmatters/wmds";
@@ -14,7 +15,7 @@ export interface ServicesSplitIndexService {
   title: ReactNode;
   /** What you get, in one or two sentences. */
   description: ReactNode;
-  /** Slot: the service's picture: real work, a WMDS composition of its output, a photo or a loop. */
+  /** Slot: the service's picture, filling the frame: real work, a photo, or a WMDS composition of its output. */
   visual: ReactNode;
   /** Slot, optional: short meta at the row's end, e.g. "From 6 weeks". */
   meta?: ReactNode;
@@ -31,7 +32,7 @@ export interface ServicesSplitIndexProps {
   intro?: ReactNode;
   /** Slot, optional: one CTA under the intro (a WMDS `<Button>`). */
   actions?: ReactNode;
-  /** The services, 3–6 of them. */
+  /** The services, 3–6 of them; 5–6 balance the frame (fewer leave the list shorter than the frame). */
   services: ServicesSplitIndexService[];
   /** The service open at first. Default 0. */
   defaultIndex?: number;
@@ -46,18 +47,21 @@ const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-
 /** Two ruled cells on the page grid (subgrid): the frame's half and the list's half share the top rule and a centre rule. */
 const cellsClasses = "col-span-full mt-10 grid border-t border-border md:mt-16 md:grid-cols-subgrid";
 const frameCellClasses = "hidden border-r border-border md:col-span-4 md:block md:pr-8 md:pt-8 lg:col-span-6";
-/** The frame stays in view while the list scrolls past it. */
-const frameClasses = cn(
-  "sticky top-8 flex aspect-[4/3] items-center justify-center overflow-hidden rounded-lg border border-border p-8",
-  backgroundPatternDotGridClasses,
-);
+/**
+ * The frame stays in view while the list scrolls past it. 3:2, so with 5–6 services the list and the frame
+ * end at about the same height. Every service's picture is stacked inside; the shown one fades in.
+ */
+const frameClasses = cn("sticky top-8 grid aspect-[3/2] overflow-hidden rounded-lg border border-border", backgroundPatternDotGridClasses);
+/** One picture layer: fills the frame with a small inset; 150ms ease-out crossfade, none under reduced motion. */
+const layerClasses =
+  "col-start-1 row-start-1 flex size-full items-stretch justify-stretch p-4 transition-opacity duration-150 ease-out motion-reduce:transition-none lg:p-6";
 const listCellClasses = "pt-2 md:col-span-4 md:pt-6 lg:col-span-6";
 const numberClasses = "font-mono text-xs tabular-nums text-muted";
 const titleClasses = "type-heading-3 text-fg";
 const metaClasses = "hidden font-mono text-xs uppercase tracking-wider text-muted sm:inline";
 const panelClasses = "flex flex-col items-start gap-4 pb-6 pl-8";
 const mobileFrameClasses = cn(
-  "mt-2 flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-lg border border-border p-6 md:hidden",
+  "mt-2 flex aspect-[3/2] w-full items-stretch overflow-hidden rounded-lg border border-border p-4 md:hidden",
   backgroundPatternDotGridClasses,
 );
 
@@ -102,7 +106,16 @@ export function ServicesSplitIndex({
         <div className={cellsClasses}>
           <div className={frameCellClasses}>
             <div className={frameClasses} data-slot="visual">
-              {services[shown]?.visual}
+              {services.map((service, index) => (
+                <div
+                  key={index}
+                  className={cn(layerClasses, index === shown ? "opacity-100" : "pointer-events-none opacity-0")}
+                  aria-hidden={index === shown ? undefined : true}
+                  inert={index === shown ? undefined : true}
+                >
+                  {service.visual}
+                </div>
+              ))}
             </div>
           </div>
 

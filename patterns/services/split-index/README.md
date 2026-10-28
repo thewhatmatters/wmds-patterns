@@ -41,9 +41,10 @@ import { ServicesSplitIndex } from "./ServicesSplitIndex";
 ## Behaviour
 
 - **Rows** are WMDS `Accordion` (plain, flush): buttons with `aria-expanded`, keyboard and focus from WMDS. Opening a row closes the others; closing the open row leaves the frame on its picture.
-- **The frame** is `position: sticky` (top 32px), 4:3, on the WMDS dot-grid background. It shows only the open service's `visual`, so a picture that carries meaning needs its own `alt` or `aria-label`.
+- **The frame** is `position: sticky` (top 32px), 3:2, on the WMDS dot-grid background. With 5–6 services the list and the frame end at about the same height (in the example, within 4px at 1440); with 3–4 the list is shorter and the frame sits still. Every service's `visual` is stacked inside; only the shown one is visible, and the hidden ones are `inert` and `aria-hidden`, so a picture that carries meaning needs its own `alt` or `aria-label`.
+- **Pictures fill the frame** (a 16–24px inset). Set each on one plain surface; don't put bordered cards inside the frame, or it reads as a widget in a widget.
 - **Phones (< 768px):** the frame is hidden and the open row shows its picture under the description.
-- **Motion:** only the Accordion's own open and close. To cross-fade the picture, wrap the frame's child in `AnimatePresence` in your page.
+- **Motion:** the Accordion's own open and close, plus a **150ms ease-out crossfade** when the shown picture changes (CSS opacity, so the outgoing and incoming pictures overlap). Under `prefers-reduced-motion` the picture swaps with no fade. This is the one place the pattern animates beyond WMDS, by Randy's call (2026-10-28).
 
 ## Knobs
 
@@ -57,7 +58,7 @@ The first item is the example the gallery's Copy prompt uses.
 - **Real work as pictures:** pass an `<img>` or `<video>` per service (fill the frame: `className="size-full object-cover"` and drop the frame's padding in your copy).
 - **No CTA:** leave `actions` empty.
 - **Picture on the right:** swap the two cells' order and move the centre rule (`border-r` → `border-l` on the frame cell, `md:pl-8` → `md:pr-8` on the list).
-- **More services:** up to six; past that, use a plain list or split into two sections.
+- **More services:** five or six balance the frame best; past six, use a plain list or split into two sections.
 
 ## Spacing
 
@@ -65,7 +66,10 @@ Full width; section padding 48 / 64 top and bottom (phone / tablet and up); capt
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.28** (npm): `SectionCaption`, `Accordion`, `backgroundPatternDotGridClasses`; the example adds `Card`, `Stat`, `Status`, `Badge`, `ChartRankedBars`, `TextLink`, `Button`.
+Built on **@thewhatmatters/wmds 0.4.28** (npm): `SectionCaption`, `Accordion`, `backgroundPatternDotGridClasses`; the example adds `Status`, `Badge`, `ChartRankedBars`, `TextLink`, `Button`.
+
+- **WMDS bug: `ChartRankedBars` without `max` draws every bar at 100%.** The example passes `max`; fix in WMDS.
+- **WMDS-GAP: no plain big figure.** `Stat` always draws its own bordered box, which nests inside the frame; the example sets figures with `type-display-2` and a `Badge`. Proposed: `Stat` `surface="none"`.
 
 - **WMDS-GAP: no selected-row emphasis.** Heron marks the open service with an inverted ink band across the row; WMDS `Accordion` has no selected or inverse state for an item, and a pattern can't restyle it (its `className` is layout-only). Left out rather than patched. Proposed: `Accordion.Item` `emphasis="inverse"` when open (the `data-tone="inverse"` remap Band already uses).
 - **WMDS-GAP: no large index size for Accordion.** Rows are fixed at `h-11`; the pattern sets the title in `type-heading-3` inside the label slot, which fits but leaves no room for a bigger index (IndexList has `size="lg"`, but no single-open preview with a linked picture). Proposed: `Accordion` `size="lg"` for editorial lists.

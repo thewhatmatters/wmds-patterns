@@ -1,9 +1,11 @@
 /**
- * Example content for Services — Split Index. Each service's picture is a small WMDS composition of what the
- * service delivers (a live site's speed, a type specimen, a reach chart, a care checklist), so the example is
- * licence-free and needs no photography; a client page swaps in its own work.
+ * Example content for Services — Split Index. Each service's picture is a WMDS composition of what the service
+ * delivers, set full-frame on one plain surface (no cards inside the frame): a live site, a type and colour
+ * specimen, a reach chart, review stars, an inbox report, a care checklist. Licence-free and needs no
+ * photography; a client page swaps in its own work.
  */
-import { Badge, Button, Card, ChartRankedBars, Stat, Status, TextLink } from "@thewhatmatters/wmds";
+import type { ReactNode } from "react";
+import { Badge, Button, ChartRankedBars, Status, TextLink } from "@thewhatmatters/wmds";
 import { ServicesSplitIndex, type ServicesSplitIndexService } from "./ServicesSplitIndex";
 
 export const meta = {
@@ -12,52 +14,88 @@ export const meta = {
   purpose: "Ruled services list beside a framed picture that follows the open service.",
 };
 
-const cardClasses = "w-full max-w-sm";
+/** One plain surface that fills the frame: no border, so it never reads as a card inside the frame's card. */
+function Surface({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <div className={`flex size-full flex-col rounded-md bg-surface p-6 shadow-sm lg:p-8 ${className}`}>{children}</div>;
+}
+
+/** A faint text line, for page copy in the site picture. */
+function Line({ w }: { w: string }) {
+  return <span aria-hidden className={`block h-2 rounded-full bg-[color-mix(in_srgb,var(--color-text-primary)_10%,transparent)] ${w}`} />;
+}
+
+const label = "font-mono text-xs uppercase tracking-wider text-muted";
+
+/** A big figure set straight on the surface (WMDS Stat draws its own bordered box, which would nest). */
+function Figure({ name, value, change, note }: { name: string; value: string; change?: string; note?: string }) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-muted type-supporting">{name}</span>
+      <span className="flex items-center gap-3">
+        <span className="type-display-2 leading-none tabular-nums text-fg">{value}</span>
+        {change ? (
+          <Badge size="sm" variant="success" emphasis="muted">
+            {change}
+          </Badge>
+        ) : null}
+      </span>
+      {note ? <span className="text-muted type-supporting">{note}</span> : null}
+    </div>
+  );
+}
 
 function SiteVisual() {
   return (
-    <Card padding="none" className={cardClasses}>
-      <Card.Header
-        start={
-          <span className="flex items-center gap-2 font-mono text-xs text-muted">
-            <Status variant="dot" tone="success" besideLabel />
-            eastsidebakery.com
-          </span>
-        }
-        end={<Badge size="sm" emphasis="muted">Live</Badge>}
-      />
-      <Card.Body>
-        <Stat label="Page load" value="0.8s" trend={{ value: "-62%", direction: "up" }} context="vs the old site" />
-      </Card.Body>
-    </Card>
+    <Surface>
+      <div className="flex items-center justify-between gap-4">
+        <span className="flex items-center gap-2 font-mono text-xs text-muted">
+          <Status variant="dot" tone="success" besideLabel />
+          eastsidebakery.com
+        </span>
+        <Badge size="sm" emphasis="muted">
+          Live
+        </Badge>
+      </div>
+      <div className="mt-auto flex items-end justify-between gap-6">
+        <Figure name="Page load" value="0.8s" change="-62%" note="vs the old site" />
+        <div className="hidden w-2/5 flex-col gap-2.5 pb-2 sm:flex" aria-hidden>
+          <Line w="w-full" />
+          <Line w="w-4/5" />
+          <Line w="w-3/5" />
+        </div>
+      </div>
+    </Surface>
   );
 }
 
 function BrandVisual() {
   const swatches = ["--color-chart-categorical-1", "--color-chart-categorical-2", "--color-chart-categorical-3", "--color-chart-categorical-4"];
   return (
-    <Card padding="md" className={cardClasses}>
-      <div className="flex items-end justify-between gap-4">
+    <Surface>
+      <div className="flex items-start justify-between gap-4">
         <span className="type-display-1 leading-none text-fg" aria-hidden="true">
           Aa
         </span>
-        <span className="pb-2 text-right font-mono text-xs uppercase tracking-wider text-muted">Display / Text / Mono</span>
+        <span className={`${label} text-right`}>Display · Text · Mono</span>
       </div>
-      <div className="mt-6 grid grid-cols-4 gap-2" aria-hidden="true">
+      <div className="mt-auto grid grid-cols-4 gap-2" aria-hidden="true">
         {swatches.map((token) => (
-          <span key={token} className="aspect-square rounded-md" style={{ background: `var(${token})` }} />
+          <span key={token} className="aspect-[4/3] rounded-sm" style={{ background: `var(${token})` }} />
         ))}
       </div>
-    </Card>
+    </Surface>
   );
 }
 
 function SocialVisual() {
   return (
-    <Card padding="md" className={cardClasses}>
-      <p className="pb-4 font-mono text-xs uppercase tracking-wider text-muted">Reach this month</p>
+    <Surface className="justify-between">
+      <p className={label}>Reach this month</p>
       <ChartRankedBars
         aria-label="Reach by platform this month"
+        animate="none"
+        // Pass max: WMDS 0.4.28 draws every bar at 100% without it (a WMDS bug, reported).
+        max={20000}
         items={[
           { label: "Instagram", value: 18400, valueLabel: "18.4k" },
           { label: "TikTok", value: 12100, valueLabel: "12.1k" },
@@ -65,7 +103,33 @@ function SocialVisual() {
           { label: "Facebook", value: 2900, valueLabel: "2.9k" },
         ]}
       />
-    </Card>
+    </Surface>
+  );
+}
+
+function SearchVisual() {
+  return (
+    <Surface className="justify-between">
+      <p className={label}>Google Business profile</p>
+      <div className="flex items-end justify-between gap-6">
+        <Figure name="Rating" value="4.9" note="from 212 reviews" />
+        <span className="pb-2 text-2xl tracking-[0.2em] text-[var(--color-chart-categorical-4)]" aria-hidden>
+          ★★★★★
+        </span>
+      </div>
+    </Surface>
+  );
+}
+
+function EmailVisual() {
+  return (
+    <Surface className="justify-between">
+      <p className={label}>Thursday newsletter</p>
+      <div className="grid grid-cols-2 gap-6">
+        <Figure name="Opened" value="58%" change="+9 pts" />
+        <Figure name="Booked a table" value="41" note="this month" />
+      </div>
+    </Surface>
   );
 }
 
@@ -74,21 +138,22 @@ function CareVisual() {
     { label: "Uptime, 90 days", value: "99.98%" },
     { label: "Backups", value: "Daily" },
     { label: "Updates", value: "Tuesday" },
+    { label: "Small changes", value: "2 left" },
   ];
   return (
-    <Card padding="md" className={cardClasses}>
+    <Surface className="justify-center">
       <ul className="flex flex-col divide-y divide-border">
         {rows.map((row) => (
-          <li key={row.label} className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0">
-            <span className="flex items-center gap-2 text-fg">
+          <li key={row.label} className="flex items-center justify-between gap-4 py-3 type-large text-fg">
+            <span className="flex items-center gap-3">
               <Status variant="dot" tone="success" besideLabel />
               {row.label}
             </span>
-            <span className="font-mono text-sm tabular-nums text-muted">{row.value}</span>
+            <span className="font-mono tabular-nums text-muted">{row.value}</span>
           </li>
         ))}
       </ul>
-    </Card>
+    </Surface>
   );
 }
 
@@ -115,6 +180,18 @@ const services: ServicesSplitIndexService[] = [
     visual: <SocialVisual />,
   },
   {
+    title: "Local search",
+    meta: "From 2 weeks",
+    description: "Your Google profile, photos and reviews set up and kept fresh, so nearby customers find you first.",
+    visual: <SearchVisual />,
+  },
+  {
+    title: "Email",
+    meta: "Monthly",
+    description: "One short newsletter a week or a month, written with you and sent to the people who already like you.",
+    visual: <EmailVisual />,
+  },
+  {
     title: "Care plan",
     meta: "Monthly",
     description: "Hosting, backups, updates and small changes, so the site stays fast and nobody has to think about it.",
@@ -126,7 +203,7 @@ export default function Example() {
   return (
     <ServicesSplitIndex
       heading="Everything a small business needs to be found, and chosen."
-      intro="Four services, one team. Most clients start with one and add the rest when they're ready."
+      intro="Six services, one team. Most clients start with one and add the rest when they're ready."
       actions={
         <Button role="secondary" render={<a href="#contact" />}>
           Talk to us
