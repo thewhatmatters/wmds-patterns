@@ -25,8 +25,8 @@ export interface StatementInlinePillsProps {
   className?: string;
 }
 
-/** Full width; content on the WMDS page grid; section padding 48 / 64 top and bottom. */
-const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
+/** Full width; content on the WMDS page grid; a regular section: WMDS Band `md` spacing, 48px top and bottom (Spacing S8). */
+const gridClasses = "grid-page !py-[calc(var(--leading-base)*2)]";
 /** Left-aligned on phones, where the centred sentence would run past 2 lines; centred from md (Headings H8). */
 const innerClasses = "col-span-full flex flex-col items-start text-left md:items-center md:text-center";
 /**

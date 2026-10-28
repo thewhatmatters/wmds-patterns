@@ -55,7 +55,8 @@ const mediaClasses = "absolute inset-0 -z-10 size-full object-cover";
 /** Dark behind the call to action (AA on bright footage), clear by three quarters down so the picture shows around the card. */
 const scrimClasses =
   "pointer-events-none absolute inset-0 -z-10 bg-linear-to-b from-[color-mix(in_srgb,var(--color-background-body)_82%,transparent)] via-[color-mix(in_srgb,var(--color-background-body)_55%,transparent)] via-35% to-transparent to-75%";
-const gridClasses = "grid-page !pt-12 !pb-6 md:!pt-16 md:!pb-10";
+/** The closing section: WMDS Band `lg` spacing on top, 64 on phones and 96 from md (Spacing S8); the legal row closes 24 / 40. */
+const gridClasses = "grid-page !pb-6 md:!pb-10 !pt-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)]";
 const ctaClasses = "col-span-full flex flex-col items-center text-center text-fg";
 /** A long word breaks instead of running off a phone (Display rule D5). */
 const headlineClasses = "min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere] type-display-2 font-medium tracking-tight";
@@ -71,6 +72,21 @@ const labelClasses = "mb-3 text-muted type-eyebrow";
 /** A 44px tap row on phones; tighter where there's a pointer. */
 const linkItemClasses = "type-body text-fg [overflow-wrap:anywhere]";
 const linkClasses = "inline-block py-3 md:py-1";
+/** An email address breaks only before its "@" ("hello" / "@whatmatters.studio"), never mid-word. */
+const emailLinkClasses = linkClasses + " [overflow-wrap:normal]";
+
+/** Puts a line-break opportunity before the "@" of an email label; other labels pass through. */
+function linkLabel(label: string) {
+  const at = label.indexOf("@");
+  if (at <= 0) return label;
+  return (
+    <>
+      {label.slice(0, at)}
+      <wbr />
+      {label.slice(at)}
+    </>
+  );
+}
 const bottomClasses = "mt-16 flex flex-col gap-8 md:mt-24 md:flex-row md:items-end md:justify-between";
 const logoClasses = "h-12 w-auto md:h-20 [&>svg]:h-full [&>svg]:w-auto [&>img]:h-full [&>img]:w-auto";
 const legalClasses = "flex flex-col gap-1 text-muted type-caption md:items-end";
@@ -84,8 +100,8 @@ function Column({ column, id }: { column: FooterOverImageColumn; id: string }) {
       <ul aria-labelledby={id}>
         {column.links.map((link) => (
           <li key={link.label} className={linkItemClasses}>
-            <TextLink href={link.href} variant="quiet" external={link.external} className={linkClasses}>
-              {link.label}
+            <TextLink href={link.href} variant="quiet" external={link.external} className={link.label.includes("@") ? emailLinkClasses : linkClasses}>
+              {linkLabel(link.label)}
             </TextLink>
           </li>
         ))}

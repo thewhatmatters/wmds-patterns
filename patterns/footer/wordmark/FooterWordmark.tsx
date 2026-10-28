@@ -53,7 +53,8 @@ export interface FooterWordmarkProps {
 }
 
 /** Section padding 48 / 64 at the top; the legal line closes 24 / 40 above the page edge. */
-const gridClasses = "grid-page !pt-12 !pb-6 md:!pt-16 md:!pb-10";
+/** The closing section: WMDS Band `lg` spacing on top, 64 on phones and 96 from md (Spacing S8); the legal row closes 24 / 40. */
+const gridClasses = "grid-page !pb-6 md:!pb-10 !pt-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)]";
 /** The card: dark-theme scope, so its text, field and button take the WMDS dark tokens. Left half on desktop. */
 const cardClasses =
   "col-span-full flex min-h-72 flex-col justify-between gap-10 bg-[var(--color-background-body)] p-6 text-fg md:p-10 lg:col-span-6 lg:w-[calc(100%+var(--grid-column-gap)/2)]";

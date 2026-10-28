@@ -39,11 +39,11 @@ export interface ServicesSplitIndexProps {
   className?: string;
 }
 
-/** Full width; content on the WMDS page grid; section padding 48 / 64 top and bottom. */
-const gridClasses = "grid-page !pt-12 !pb-12 md:!pt-16 md:!pb-16";
+/** Full width; content on the WMDS page grid; a regular section: WMDS Band `md` spacing, 48px top and bottom (Spacing S8). */
+const gridClasses = "grid-page !py-[calc(var(--leading-base)*2)]";
 /** -mt-3 pulls the heading 12px under the caption across the 24px row gap (Eyebrow E5). Heading over the frame's columns; intro and CTA start on the list's first column, so the header lines up with the split below. */
 const headingClasses = "col-span-full -mt-3 text-balance type-heading-1 text-fg md:col-span-4 lg:col-span-6";
-const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-span-4 md:col-start-5 md:mt-6 lg:col-span-5 lg:col-start-7";
+const introClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:col-span-4 md:col-start-5 md:mt-6 lg:col-span-6 lg:col-start-7";
 /** Two ruled cells on the page grid (subgrid): the frame's half and the list's half share the top rule and a centre rule. */
 /** `minmax(0,1fr)` below md, so a long title can't widen the single column and scroll the page sideways. */
 const cellsClasses = "col-span-full mt-10 grid grid-cols-[minmax(0,1fr)] border-t border-border md:mt-16 md:grid-cols-subgrid";

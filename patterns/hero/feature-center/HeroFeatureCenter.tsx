@@ -47,14 +47,15 @@ export interface HeroFeatureCenterProps {
 const rootClasses = "relative w-full overflow-x-clip";
 /** The section lays its content on the WMDS page grid (centred, gutters, columns by breakpoint). */
 const sectionClasses = "grid-page relative !py-0";
-/** Centred copy across the page grid; the headline needs the width for 2 lines. Section padding 48 / 64 (the logos row closes with the same). */
+/** Centred copy across the page grid; the headline needs the width for 2 lines. The hero takes WMDS Band `lg` spacing, 64 on phones and 96 from md (Spacing S8); the logos row closes with the same. */
 /** Left-aligned until desktop: the centred headline runs past 2 lines on phones (4) and tablets (3); centred from lg, where it sets in 2 (Headings H8). */
-const copyClasses = "relative col-span-full flex flex-col items-start pt-12 text-left md:pt-16 lg:items-center lg:text-center";
+const copyClasses = "relative col-span-full flex flex-col items-start pt-[calc(var(--grid-baseline)*8)] md:pt-[calc(var(--leading-base)*4)] text-left lg:items-center lg:text-center";
 /** WMDS type-display-1 as it is (fluid 40px → 80px): about 58 characters take 2 lines at desktop. */
 const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere]";
 /** Headline→subhead 24, regular weight (type-large is semibold in some WMDS versions), about 42rem measure. */
 /** The subhead summarises the page, so it's a lead in ink, not muted (Lead L8, Body B9); about 2 lines at 390. */
-const subheadClasses = "mt-6 max-w-[42rem] text-pretty text-fg type-lead";
+/** From lg it sits on the middle 6 columns (4–9): half the grid less half a gutter, centred (Grid G8). */
+const subheadClasses = "mt-6 max-w-[42rem] text-pretty text-fg type-lead lg:w-[calc(50%-var(--grid-column-gap)*0.5)] lg:max-w-none";
 /** Subhead→CTAs 32. */
 const actionsClasses = "mt-8 flex flex-wrap items-center justify-start gap-3 lg:justify-center";
 /** The visual spans columns 2–11 at lg. CTAs→visual 64 (plus the grid's row gap). */
@@ -75,8 +76,8 @@ const haloClasses =
 /** The window: fades out over its last 30%, like a cropped app screen. */
 const frameClasses =
   "relative overflow-hidden rounded-[var(--radius-surface)] border border-border bg-surface [mask-image:linear-gradient(to_bottom,black_70%,transparent)]";
-/** Visual→proof is the grid's 24px row gap (the frame's faded foot already reads as space); bottom padding 48 / 64. */
-const logosWrapClasses = "relative col-span-full pb-12 md:pb-16";
+/** Visual→proof is the grid's 24px row gap (the frame's faded foot already reads as space); bottom padding is Band `lg` (S8). */
+const logosWrapClasses = "relative col-span-full pb-[calc(var(--grid-baseline)*8)] md:pb-[calc(var(--leading-base)*4)]";
 
 export function HeroFeatureCenter({
   nav,
@@ -175,7 +176,7 @@ export function HeroFeatureCenterLogos({ logos, label = "Clients" }: { logos: He
         <li
           key={item.name}
           aria-label={item.name}
-          className="flex min-w-0 basis-1/3 items-center justify-center px-1 py-5 text-muted lg:basis-1/6 [&_svg]:h-6 [&_svg]:w-auto [&_svg]:max-w-none lg:[&_svg]:h-8"
+          className="flex min-w-0 basis-1/3 items-center justify-center px-1 py-6 text-muted lg:basis-1/6 [&_svg]:h-6 [&_svg]:w-auto [&_svg]:max-w-none lg:[&_svg]:h-8"
         >
           <span aria-hidden className="contents">
             {item.logo}
