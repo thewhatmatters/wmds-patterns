@@ -82,6 +82,9 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/We reply within/);
       // T1: another way to reach the team.
       expect(html).toMatch(/href="(?:tel|mailto):/);
+      // An email label can break before its "@" instead of running past a narrow column (at 786 it overflowed).
+      const mailto = html.match(/<a[^>]*href="mailto:[^"]*"[^>]*>([\s\S]*?)<\/a>/);
+      if (mailto) expect(mailto[1]).toMatch(/<wbr\/?>@/);
       // T4: a honeypot, hidden from screen readers and the Tab order; no CAPTCHA.
       expect(html).toMatch(/aria-hidden="true"[^>]*data-intake-honeypot|data-intake-honeypot[^>]*aria-hidden="true"/);
       expect(html).not.toMatch(/captcha/i);

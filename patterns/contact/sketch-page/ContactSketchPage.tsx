@@ -41,9 +41,25 @@ const replyClasses = "type-supporting text-muted";
 const errorClasses = "rounded-[var(--radius-card-shell)] bg-error-muted p-4 type-body text-error";
 /** Below the form on phones, beside it from md, starting on the same row as the heading. */
 const asideClasses =
-  "col-span-full mt-12 flex flex-col gap-3 border-t border-border pt-8 md:col-span-2 md:col-start-7 md:row-start-1 md:mt-0 md:border-t-0 md:border-l md:pt-0 md:pl-6 lg:col-span-4 lg:col-start-9";
+  "col-span-full mt-12 flex min-w-0 flex-col gap-3 border-t border-border pt-8 md:col-span-2 md:col-start-7 md:row-start-1 md:mt-0 md:border-t-0 md:border-l md:pt-0 md:pl-6 lg:col-span-4 lg:col-start-9";
 const asideHeadingClasses = "type-heading-5 text-fg";
-const asideListClasses = "flex flex-col gap-2 type-body text-fg";
+/** min-w-0: the list may shrink to the aside's two md columns instead of pushing past the page. */
+const asideListClasses = "flex min-w-0 flex-col gap-2 type-body text-fg";
+/** An email address breaks only before its "@" ("hello" / "@whatmatters.studio"), as in Footer — Over Image; anywhere only if one half still won't fit. */
+const emailClasses = "[overflow-wrap:anywhere]";
+
+/** Puts a line-break opportunity before the "@" of an email address. */
+function emailLabel(email: string) {
+  const at = email.indexOf("@");
+  if (at <= 0) return email;
+  return (
+    <>
+      {email.slice(0, at)}
+      <wbr />
+      {email.slice(at)}
+    </>
+  );
+}
 
 /**
  * Contact — Sketch Page: the sketch request as its own page (Contact and booking forms T9). The nav and
@@ -96,7 +112,9 @@ export function ContactSketchPage({
             ) : null}
             {contact.email != null ? (
               <li>
-                <TextLink href={`mailto:${contact.email}`}>{contact.email}</TextLink>
+                <TextLink href={`mailto:${contact.email}`} className={emailClasses}>
+                  {emailLabel(contact.email)}
+                </TextLink>
               </li>
             ) : null}
             {contact.hours != null ? <li className="text-muted">{contact.hours}</li> : null}
