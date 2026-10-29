@@ -42,11 +42,11 @@ import { ContactSketchPage } from "./ContactSketchPage";
 
 ## Adapt it
 
-- Swap the example's copy, contact details and reply time for the client's own, and keep the reply time honest.
-- Steps: one page up to about six fields. If booking a time follows, send the details first and make booking optional (WMDS `CalEmbed`, "Skip, just email me" above the calendar) (T7, T8).
-- Spam: keep `IntakeHoneypot`, and on the server drop requests where it's filled, with rate limits. Never a CAPTCHA (T4).
-- After sending, show WMDS `IntakeConfirmation` on its own screen with `summary`, `replyTime` and `contact`, and send a confirmation email (T3).
-- The modal shortcut: `const [open, setOpen] = useIntakeUrlState("sketch")`, and pass `hasAnswers` so closing asks before discarding (T9).
+- **Another business's details:** swap the example's copy, contact details and reply time for the client's own, and keep the reply time honest.
+- **A booking step:** one page up to about six fields. If booking a time follows, send the details first and make booking optional (WMDS `CalEmbed`, "Skip, just email me" above the calendar) (T7, T8).
+- **Spam:** keep `IntakeHoneypot`, and on the server drop requests where it's filled, with rate limits. Never a CAPTCHA (T4).
+- **After sending:** show WMDS `IntakeConfirmation` on its own screen with `summary`, `replyTime` and `contact`, and send a confirmation email (T3).
+- **A modal shortcut:** `const [open, setOpen] = useIntakeUrlState("sketch")`, and pass `hasAnswers` so closing asks before discarding (T9).
 
 ## Notes
 
