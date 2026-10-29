@@ -102,8 +102,9 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       expect(source, `${folder}/${file}: one-off font size`).not.toMatch(/\btext-\[\d+(\.\d+)?(px|rem)\]/);
-      // W5 / W4: the page keeps the default --grid-max, and nothing has a fixed width wider than a phone.
-      expect(source, `${folder}/${file}: --grid-max override`).not.toMatch(/--grid-max/);
+      // W5 / W4: the page keeps the default --grid-max (reading it, as a bleed does, is fine; setting it isn't),
+      // and nothing has a fixed width wider than a phone.
+      expect(source, `${folder}/${file}: --grid-max override`).not.toMatch(/--grid-max\s*:/);
       expect(source, `${folder}/${file}: fixed width`).not.toMatch(/(?<![\w-])(?:min-)?w-\[(?:3[2-9]\d|[4-9]\d\d|\d{4,})px\]/);
       // G7: the page keeps one column count; a pattern never sets --grid-cols on a section.
       expect(source, `${folder}/${file}: --grid-cols override`).not.toMatch(/--grid-cols/);
@@ -195,6 +196,18 @@ describe.each(folders)("patterns/%s", (folder) => {
       const source = readFileSync(join(dir, file), "utf8");
       for (const [tag] of source.matchAll(/<IconButton\b.*size="sm".*$/gm)) {
         expect(/HitArea|before:-inset-1/.test(tag), `${folder}/${file}: small IconButton without a phone hit area`).toBe(true);
+      }
+    }
+    if (mod.meta.type === "Hero") {
+      // R2: one primary action in the hero itself (the example nav's CTA aside).
+      const bare = renderToString(<Example nav={undefined} />);
+      expect((bare.match(/data-role="primary"/g) ?? []).length, `${folder}: primary actions`).toBeLessThanOrEqual(1);
+      for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+        const source = readFileSync(join(dir, file), "utf8");
+        // R3: nothing in a hero advances on a timer (no auto-rotating slides or headlines).
+        expect(source, `${folder}/${file}: timer`).not.toMatch(/\bset(Interval|Timeout)\(/);
+        // R9: no bare full-screen height; only a screen height less a visible edge, e.g. calc(100svh-4rem).
+        expect(source, `${folder}/${file}: full-screen height`).not.toMatch(/(?<![\w-])(min-)?h-(screen|svh|dvh|lvh)\b|100[sdl]?vh(?!\s*-)/);
       }
     }
     // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.
