@@ -58,7 +58,7 @@ function SiteVisual() {
       </div>
       <div className="mt-auto flex items-end justify-between gap-6">
         <Figure name="Page load" value="0.8s" change="-62%" note="vs the old site" />
-        <div className="hidden w-2/5 flex-col gap-2.5 pb-2 sm:flex" aria-hidden>
+        <div className="hidden w-2/5 flex-col gap-2.5 pb-2 md:flex" aria-hidden>
           <Line w="w-full" />
           <Line w="w-4/5" />
           <Line w="w-3/5" />

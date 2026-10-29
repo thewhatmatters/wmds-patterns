@@ -40,7 +40,8 @@ const entries: Entry[] = Object.entries(modules)
   })
   .sort((a, b) => a.folder.localeCompare(b.folder));
 
-const widths = [390, 768, 1440] as const;
+/** Breakpoints rule P6: every review checks these six; 390 and 1440 stay the screenshot widths. 786 is the real tablet split. */
+const widths = [320, 390, 786, 1024, 1440, 1920] as const;
 
 /**
  * Slots view: outline every `data-slot` element in pink, and label it "Slot: name (optional)" just above
@@ -340,7 +341,7 @@ function Gallery() {
               title={current.meta.name}
               src={`?frame=${current.folder}&theme=${shownTheme}${overlays}`}
               style={{ width, height, zoom: scale }}
-              // box-content: the 1px border sits outside the chosen width, so 768 is 768 inside. Auto margins centre it both ways when it fits, and fall back to the top-left when it overflows (so nothing is cut off).
+              // box-content: the 1px border sits outside the chosen width, so 786 is 786 inside. Auto margins centre it both ways when it fits, and fall back to the top-left when it overflows (so nothing is cut off).
               className="m-auto box-content block shrink-0 border border-border bg-body"
             />
           ) : (

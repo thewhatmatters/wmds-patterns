@@ -11,6 +11,10 @@ A centred hero: an eyebrow pill, a 2-line headline, a subhead and a CTA row, the
 |---|---|---|
 | ![](light.png) | ![](dark.png) | ![](mobile.png) |
 
+## Layout
+
+**Centred** (Hero rule R7): use it when the headline holds **2 lines or fewer** at 1440 and the visual is the real thing (here the homepage sketch, with the glow behind it, never instead of it). It left-aligns below `lg`, where the headline runs 3 lines. For a services business with a picture of the work, prefer a **split** hero; for footage, an **over-media** hero with a scrim.
+
 ## Use it
 
 ```tsx

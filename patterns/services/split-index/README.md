@@ -46,7 +46,7 @@ import { ServicesSplitIndex } from "./ServicesSplitIndex";
 - **Frame shape:** square on tablet; on desktop 3:2 with 5–6 services and 16:9 with 3–4, so the list and frame end close together either way.
 - **Titles:** keep them to about 22 characters. WMDS Accordion sets the label on one line and cuts a longer one with an ellipsis. Meta ("From 6 weeks") hides in the row on phones and is repeated at the top of the open panel.
 - **Each picture renders twice** (in the frame and in its phone row). Fine for SVG and small images; for a video, load it lazily or pass a poster on phones.
-- **Phones (< 768px):** the frame is hidden and the open row shows its picture under the description.
+- **Phones (< 768px):** the frame is hidden and the open row shows its picture under the description, at full content width and 4:3. 4:3 is a minimum: a taller picture (a stat list on a 320px phone) grows the frame instead of being cropped. Pictures with figures are content (P1), so they always show.
 - **Motion:** the Accordion's own open and close, plus a **150ms ease-out crossfade** when the shown picture changes (CSS opacity, so the outgoing and incoming pictures overlap). Under `prefers-reduced-motion` the picture swaps with no fade. This is the one place the pattern animates beyond WMDS, by Randy's call (2026-10-28).
 
 ## Knobs
@@ -65,7 +65,7 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## Spacing
 
-Full width; section padding 48 / 64 top and bottom (phone / tablet and up); caption→heading 24; header→cells 40 / 64; 32 each side of the centre rule.
+Full width; section padding 48 top and bottom (WMDS Band `md`, Spacing S8); caption→heading 24; header→cells 40 / 64; 32 each side of the centre rule.
 
 ## WMDS
 

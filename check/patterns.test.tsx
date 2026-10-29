@@ -60,6 +60,11 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html.match(/<h[12][\s>]/g)).toHaveLength(1);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(renderToString(<Example as="h1" />).match(/<h1[\s>]/g)).toHaveLength(1);
+    } else if (mod.meta.type === "Header") {
+      // A header is the page's banner landmark with its nav; it never holds the page's h1.
+      expect(html).toMatch(/<header[\s>]/);
+      expect(html).toMatch(/<nav[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
     } else if (mod.meta.type === "Services") {
       // A services section sits further down the page: one h2 that names it, no h1 and no nav.
       expect(html).toMatch(/<section[^>]*aria-labelledby=/);
@@ -87,7 +92,8 @@ describe.each(folders)("patterns/%s", (folder) => {
         expect(tracking >= 0.08 && tracking <= 0.12, `${folder}/${file}: ${classList}`).toBe(true);
       }
     }
-    const Example = (await examples[`../patterns/${folder}/example.tsx`]()).default;
+    const mod = await examples[`../patterns/${folder}/example.tsx`]();
+    const Example = mod.default;
     const html = renderToString(<Example />);
     // H1: heading levels never skip.
     const levels = [...html.matchAll(/<h([1-6])[\s>]/g)].map(([, level]) => Number(level));
@@ -96,6 +102,9 @@ describe.each(folders)("patterns/%s", (folder) => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       expect(source, `${folder}/${file}: one-off font size`).not.toMatch(/\btext-\[\d+(\.\d+)?(px|rem)\]/);
+      // W5 / W4: the page keeps the default --grid-max, and nothing has a fixed width wider than a phone.
+      expect(source, `${folder}/${file}: --grid-max override`).not.toMatch(/--grid-max/);
+      expect(source, `${folder}/${file}: fixed width`).not.toMatch(/(?<![\w-])(?:min-)?w-\[(?:3[2-9]\d|[4-9]\d\d|\d{4,})px\]/);
       // G7: the page keeps one column count; a pattern never sets --grid-cols on a section.
       expect(source, `${folder}/${file}: --grid-cols override`).not.toMatch(/--grid-cols/);
       // G4: a responsive col-span doesn't silently reset a col-start set at a smaller breakpoint.
@@ -131,6 +140,18 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(label, `${folder}: vague button label`).not.toMatch(/^(submit|ok|click here|go)$/i);
       expect(label, `${folder}: exclamation in a button`).not.toMatch(/!/);
     }
+    if (mod.meta.type === "Hero") {
+      // Hero R2: one primary action at most (plus a secondary), not counting the site header.
+      const heroOnly = html.replace(/<header[\s\S]*?<\/header>/g, "");
+      expect((heroOnly.match(/data-role="primary"/g) ?? []).length, `${folder}: primaries`).toBeLessThanOrEqual(1);
+      for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+        const source = readFileSync(join(dir, file), "utf8");
+        // Hero R3: no auto-rotating slides or text.
+        expect(source, `${folder}/${file}: auto-rotation`).not.toMatch(/setInterval|aria-roledescription="carousel"|<Carousel\b/);
+        // Hero R9: content height plus Band padding; full-screen heights only for over-media heroes.
+        if (!/over-media|overMedia/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
+      }
+    }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
     // D9: one display block per pattern at most (a page holds two display moments: the hero and one closing moment).
@@ -162,6 +183,13 @@ describe.each(folders)("patterns/%s", (folder) => {
         expect(/size="(lg|sm)"/.test(tag), `${folder}/${file}: CTA without size="lg"`).toBe(true);
       }
     }
+    // P5: layout changes only at WMDS breakpoints (md, lg, xl): no `sm:` and no one-off min-[…]/max-[…] widths.
+    // One allowed exception (PD, 2026-10-28): `max-[359px]:hidden` on the example nav CTA, which the open menu repeats.
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      const source = readFileSync(join(dir, file), "utf8").replaceAll("max-[359px]:hidden", "");
+      expect(source, `${folder}/${file}: sm: breakpoint`).not.toMatch(/(?<![\w-])sm:/);
+      expect(source, `${folder}/${file}: one-off breakpoint`).not.toMatch(/(?<![\w-])(min|max)-\[\d+px\]:/);
+    }
     // K6: a 36px IconButton (size="sm") gets an invisible 44px hit area on phones (`before:-inset-1`).
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
@@ -177,7 +205,7 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
     // H8: a heading is centred on phones (a bare `text-center`, not `md:text-center`) only in patterns
     // measured to stay within 2 lines at 390 (2026-10-28). Others left-align below md.
-    const centredOnPhones = ["hero/phone-center", "footer/over-image"];
+    const centredOnPhones = ["footer/over-image"];
     if (/<h[12][\s>]/.test(html) && !centredOnPhones.includes(folder)) {
       expect(html, `${folder}: heading centred on phones`).not.toMatch(/class="[^"]*(?<![:\w-])text-center\b/);
     }

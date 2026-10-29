@@ -71,7 +71,8 @@ const moreClasses = "mt-12 grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4 lg:g
 const labelClasses = "mb-3 text-muted type-eyebrow";
 /** A 44px tap row on phones; tighter where there's a pointer. */
 const linkItemClasses = "type-body text-fg [overflow-wrap:anywhere] text-pretty";
-const linkClasses = "inline-block py-3 md:py-1";
+/** max-w-full + anywhere: a long address (hello@…) breaks inside its column at 320 instead of running past the card. */
+const linkClasses = "inline-block max-w-full py-3 [overflow-wrap:anywhere] md:py-1";
 /** An email address breaks only before its "@" ("hello" / "@whatmatters.studio"), never mid-word. */
 const emailLinkClasses = linkClasses + " [overflow-wrap:normal]";
 

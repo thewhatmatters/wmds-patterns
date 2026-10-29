@@ -25,12 +25,15 @@ function section(readme: string, title: string): string[] {
   return lines.slice(start + 1, end === -1 ? undefined : end);
 }
 
-/** Text props from "Slots and props": rows whose kind is ReactNode (copy), not slots or shorthands. */
+/**
+ * Text props from "Slots and props": rows whose kind is ReactNode (copy), or a list of `{ label, … }`
+ * items (a header's link labels), not slots or shorthands.
+ */
 export function textSlots(readme: string): string[] {
   return section(readme, "Slots and props")
     .filter((line) => line.startsWith("| `"))
     .map((line) => line.split("|").map((cell) => cell.trim()))
-    .filter(([, , kind]) => kind === "ReactNode")
+    .filter(([, , kind]) => kind === "ReactNode" || /^`\{ label\b/.test(kind))
     .map(([, prop]) => prop.replace(/`/g, ""));
 }
 

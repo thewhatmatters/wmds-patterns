@@ -54,7 +54,7 @@ export const exampleNav = (
             Contact
           </Button>
         </span>
-        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap max-[359px]:hidden">
+        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
           Get my free sketch
         </Button>
       </div>
@@ -67,6 +67,11 @@ export const exampleNav = (
         <SiteNav.MobileLink href="#process">Process</SiteNav.MobileLink>
         <SiteNav.MobileLink href="#contact">Contact</SiteNav.MobileLink>
       </>
+    }
+    mobileAction={
+      <Button role="primary" size="lg" render={<a href="#sketch" />}>
+        Get my free sketch
+      </Button>
     }
   />
 );
