@@ -122,6 +122,14 @@ describe.each(folders)("patterns/%s", (folder) => {
       }
       // S1: spacing comes from the scale or a token, never a one-off pixel value.
       expect(source, `${folder}/${file}: one-off spacing`).not.toMatch(/(?<![\w-])-?(?:p|m|gap|space)[xytrblse]?(?:-[xy])?-\[-?\d+(\.\d+)?px\]/);
+      // Errors and validation V1: messages say what to do, never "invalid", "please", "sorry", "oops".
+      for (const [, text] of source.matchAll(/"((?:Enter|Choose|Select|Check|Use)[^"]*)"/g)) {
+        expect(text, `${folder}/${file}: message wording`).not.toMatch(/\b(invalid|please|sorry|oops)\b/i);
+      }
+      // V10: an error or warning status always comes with a message.
+      for (const [element] of source.matchAll(/<Input\b[\s\S]*?\/>/g)) {
+        if (/status=(?:"(?:error|warning)"|\{)/.test(element)) expect(element, `${folder}/${file}: status without message`).toMatch(/\bmessage=/);
+      }
       // B2: running text is ragged right, never justified.
       expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
     }

@@ -46,6 +46,10 @@ import { FooterWordmark } from "./FooterWordmark";
 
 On the WMDS page grid: the card takes the left half (columns 1–6, plus half a gutter so it's exactly two tiles wide), the link columns the right half starting on column 7, the tiles span the full width in four equal cells (two per row on phones and tablets), the wordmark spans the content width.
 
+## Validation
+
+The email field uses WMDS messages, not the browser's bubble (Errors and validation rule): it's checked when you leave it and on Subscribe, the message says what to do ("Enter your email address", "Enter an email address like name@example.com"), screen readers hear "Error:" first, the error clears on the keystroke that fixes it, and what was typed stays. A one-field form needs no ErrorSummary; focus returns to the field instead. Needs WMDS 0.4.32 (earlier Inputs lost the typed value when a message appeared).
+
 ## Adapt it
 
 The first item is the example the gallery's Copy prompt uses.

@@ -163,10 +163,21 @@ export function FooterWordmark({
 }: FooterWordmarkProps) {
   const id = useId();
   const tilesRef = useTileInks(tiles.length);
+  // Errors and validation: WMDS messages instead of the browser's bubble. Checked on leaving the field
+  // and on submit, cleared on the keystroke that fixes it; what was typed always stays (V1–V4).
+  const [error, setError] = useState<string | undefined>();
+  const emailError = (value: string) =>
+    value.trim() === "" ? "Enter your email address" : /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(value.trim()) ? undefined : "Enter an email address like name@example.com";
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const email = new FormData(event.currentTarget).get("email");
-    if (typeof email === "string" && email) onSubscribe?.(email);
+    const email = String(new FormData(event.currentTarget).get("email") ?? "");
+    const problem = emailError(email);
+    setError(problem);
+    if (problem != null) {
+      event.currentTarget.querySelector<HTMLInputElement>("input[name=email]")?.focus();
+      return;
+    }
+    onSubscribe?.(email.trim());
   };
   return (
     <footer className={cn("relative w-full", className)} data-pattern="footer-wordmark">
@@ -176,11 +187,24 @@ export function FooterWordmark({
             {pitch}
           </p>
           <div>
-            <form className={formClasses} onSubmit={submit}>
+            <form className={formClasses} onSubmit={submit} noValidate>
               <label htmlFor={`${id}-email`} className="sr-only">
                 {emailLabel}
               </label>
-              <Input id={`${id}-email`} name="email" type="email" autoComplete="email" required placeholder={placeholder} size="lg" className="min-w-0 flex-1" />
+              <Input
+                id={`${id}-email`}
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                placeholder={placeholder}
+                size="lg"
+                className="min-w-0 flex-1"
+                status={error != null ? "error" : undefined}
+                message={error}
+                onBlur={(event) => event.currentTarget.value !== "" && setError(emailError(event.currentTarget.value))}
+                onChange={(event) => error != null && emailError(event.currentTarget.value) == null && setError(undefined)}
+              />
               <Button role="primary" size="lg" type="submit">
                 {submitLabel}
               </Button>
