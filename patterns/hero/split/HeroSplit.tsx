@@ -57,8 +57,11 @@ const copyClasses = {
 const headlineClasses = "type-display-2 min-w-0 max-w-full text-balance [overflow-wrap:anywhere]";
 /** Headline → lead 24; a lead in ink, measure 42rem at most (Lead L4, L8). */
 const leadClasses = "mt-6 max-w-[42rem] text-pretty text-fg type-lead";
-/** Lead → actions 32; primary first (Buttons U8). */
-const actionsClasses = "mt-8 flex flex-wrap items-center gap-3";
+/**
+ * Lead → actions 32; primary first (Buttons U8). On phones the pair doesn't fit one row beside a half-width
+ * column's worth of copy, so it stacks full width, primary on top; a row from md.
+ */
+const actionsClasses = "mt-8 flex flex-col items-stretch gap-3 self-stretch md:flex-row md:flex-wrap md:items-center md:self-start";
 /**
  * Actions → visual 48 on phones and tablets (the grid's 24px row gap plus 24). From lg, columns 7–12 on the
  * copy's row.
@@ -70,10 +73,10 @@ const visualCellClasses = "col-span-full mt-6 min-w-0 lg:col-start-7 lg:col-span
  */
 const visualBleedClasses = "lg:mr-[calc((min(100vw,var(--grid-max))-100vw)*0.5-var(--grid-margin))]";
 /**
- * At least 4:3 below lg, and no clip: a taller picture grows the frame instead of being cropped. From lg it
- * takes the picture's own shape.
+ * At least 1:1 on phones, so the fold cuts it mid-frame at 390×844 (the scroll cue, Hero R4); at least 4:3 on
+ * tablets. No clip: a taller picture grows the frame instead of being cropped. From lg, the picture's own shape.
  */
-const visualFrameClasses = "flex aspect-[4/3] w-full items-stretch [&>*]:w-full lg:aspect-auto";
+const visualFrameClasses = "flex aspect-square w-full items-stretch [&>*]:w-full md:aspect-[4/3] lg:aspect-auto";
 
 export function HeroSplit({
   nav,
