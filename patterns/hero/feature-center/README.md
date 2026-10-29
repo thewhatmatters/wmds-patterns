@@ -77,7 +77,7 @@ Section padding 48 / 64 top and bottom (phone / tablet and up), headline→subhe
 - `--hero-glow` is a pattern knob, not an allow-listed WMDS knob.
 - **No dark brand-surface version yet.** WMDS `Band` tones shipped in 0.4.28: for a dark hero on the brand surface, wrap the section in `<Band tone="inverse">` and give the CTA the light ink (a per-tone primary knob is also an open WMDS gap).
 - CSS can't fit a headline to a line count; long headlines need a smaller size by hand.
-- Checked against **@thewhatmatters/wmds 0.4.31** (npm).
+- Checked against **@thewhatmatters/wmds 0.4.32** (npm).
 
 **Alignment (Headings H8):** left-aligned on phones and tablets, where the centred headline would run past 2 lines; centred from desktop (`lg`), where it sets in 2. The subhead and CTA row follow it.
 
