@@ -89,7 +89,7 @@ export function TestimonialTiltedCards({ eyebrow, heading, actions, quotes, tone
         </div>
 
         <div className={rowClasses} data-slot="quotes">
-          <Carousel aria-labelledby={headingId} bleed itemWidth={{ base: 85, md: 50, lg: 34 }} progress="start">
+          <Carousel aria-labelledby={headingId} bleed itemWidth={{ base: 85, md: 50, lg: 34 }} progress="center">
             {quotes.map((item, index) => (
               <Carousel.Item key={index}>
                 <div className={itemInnerClasses}>

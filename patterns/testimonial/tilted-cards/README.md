@@ -42,7 +42,7 @@ import { TestimonialTiltedCards } from "./TestimonialTiltedCards";
 
 ## Behaviour
 
-- **The row** is WMDS `Carousel` (`bleed`, scrubber at the start): drag, trackpad, touch and keyboard from WMDS, named by the heading. Cards are 85% of the row on phones, half on tablet, a third on desktop, so the next card always peeks.
+- **The row** is WMDS `Carousel` (`bleed`, scrubber centred under the row, Randy 2026-10-29): drag, trackpad, touch and keyboard from WMDS, named by the heading. Cards are 85% of the row on phones, half on tablet, a third on desktop, so the next card always peeks.
 - **Each quote** is a `figure` with a `blockquote` and a `figcaption` (name, role, avatar). The quotation mark is decorative (`aria-hidden`).
 - **Tilt** is a still `rotate` on each card, with 16px of room above and below so the corners clear the row's clip. Nothing animates; with reduced motion nothing changes.
 
