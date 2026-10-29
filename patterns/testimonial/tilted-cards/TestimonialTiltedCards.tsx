@@ -4,8 +4,8 @@
  * "Client Confessions"). On a WMDS `Band`, the inverse field by default. A centred heading on top; each card
  * holds the quote, centred between two quotation marks, and a small byline. No photos.
  *
- * Motion: the row drifts slowly (WMDS Carousel `autoplay`). It holds on hover and focus, has a Pause button,
- * and doesn't move under reduced motion. A hand badge follows a mouse over the row (Carousel `cursor`).
+ * Motion: the row repeats seamlessly (WMDS Carousel `loop`) and drifts slowly one way (`autoplay`). It holds on
+ * hover and focus, has a Pause button, and doesn't move under reduced motion. A hand badge follows a mouse over the row (Carousel `cursor`).
  */
 import { useId, type ReactNode } from "react";
 import { Band, Card, Carousel, cn, type BandTone, type CardTone } from "@thewhatmatters/wmds";
@@ -26,7 +26,7 @@ export interface TestimonialTiltedCardsProps {
   heading: ReactNode;
   /** Slot, optional: one CTA under the heading, e.g. a WMDS outline `<Button>` to case studies. */
   actions?: ReactNode;
-  /** The quotes, 5–8 of them, so the row has somewhere to drift. */
+  /** The quotes, an even number from 4 to 8, so the two card colours keep alternating where the loop joins. */
   quotes: TestimonialTiltedCardsQuote[];
   /** The section's WMDS Band tone: `inverse` (default, the brand's dark surface), `field` or `default`. */
   tone?: BandTone;
@@ -68,9 +68,10 @@ const markBottomClasses = "pointer-events-none absolute bottom-0 left-5 type-hea
 /** The quote: centred, in the card's ink. */
 const quoteClasses = "type-large text-balance text-fg";
 /** The byline: smaller than the quote, the name in bold over the role. */
-const bylineClasses = "mt-6 flex flex-col items-center gap-0.5";
-const nameClasses = "type-supporting font-semibold text-fg";
-const roleClasses = "type-supporting text-muted";
+const bylineClasses = "mt-6 flex flex-col items-center gap-0";
+/** Name and role set tight together, as one byline (line height 1.25). */
+const nameClasses = "type-supporting font-semibold leading-tight text-fg";
+const roleClasses = "type-supporting leading-tight text-muted";
 
 /** A hand, pointing the way the row moves: the default follow badge. */
 const handCursor = (
@@ -123,7 +124,7 @@ export function TestimonialTiltedCards({
             aria-labelledby={headingId}
             bleed
             itemWidth={{ base: 85, md: 46, lg: 30 }}
-            progress="center"
+            loop
             autoplay={autoplay}
             cursor={cursor ?? undefined}
           >

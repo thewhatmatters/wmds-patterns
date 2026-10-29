@@ -38,6 +38,11 @@ const quotes: TestimonialTiltedCardsQuote[] = [
     name: "Priya Raman",
     role: "Director, Lantern Yoga",
   },
+  {
+    quote: "We stopped apologising for our website. Now it's the first thing we send people, before the menu.",
+    name: "Tomás Reyes",
+    role: "Chef-owner, Cinder & Sotol",
+  },
 ];
 
 export default function Example(props: Partial<TestimonialTiltedCardsProps>) {

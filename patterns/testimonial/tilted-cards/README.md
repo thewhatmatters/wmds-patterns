@@ -25,7 +25,7 @@ import { TestimonialTiltedCards } from "./TestimonialTiltedCards";
   actions={<Button role="outline" size="lg" render={<a href="/work" />}>See the work</Button>}
   quotes={[
     { quote: "Now people book a cake on the site…", name: "Maria Delgado", role: "Owner, Eastside Bakery" },
-    // 5–8 quotes
+    // an even number, 4–8
   ]}
 />
 ```
@@ -37,7 +37,7 @@ import { TestimonialTiltedCards } from "./TestimonialTiltedCards";
 | `heading` | ReactNode | The section's `h2`, one short line, centred (WMDS `type-display-2`) |
 | `eyebrow` | ReactNode | Optional: a short label above the heading (`type-eyebrow`) |
 | `actions` | slot, optional | One CTA under the heading: a WMDS outline `<Button size="lg">` |
-| `quotes` | array | 5–8 quotes: `quote` (20–45 words, no quotation marks), `name`, optional `role` |
+| `quotes` | array | An even number of quotes, 4–8, so the two card colours keep alternating where the loop joins: `quote` (20–45 words, no quotation marks), `name`, optional `role` |
 | `tone` | `"inverse"` (default), `"field"`, `"default"` | The WMDS Band tone; everything inside re-skins with it |
 | `cardTones` | `[CardTone, CardTone]` | The two card colours the row alternates (WMDS Card `tone`). Default `["field", "light"]` |
 | `autoplay` | boolean, default `true` | The row drifts slowly on its own (WMDS Carousel `autoplay`); see Behaviour |
@@ -45,8 +45,8 @@ import { TestimonialTiltedCards } from "./TestimonialTiltedCards";
 
 ## Behaviour
 
-- **The row** is WMDS `Carousel` (`bleed`, scrubber centred under the row, Randy 2026-10-29): drag, trackpad, touch and keyboard from WMDS, named by the heading. Cards are 85% of the row on phones, 46% on tablet, 30% on desktop.
-- **Drift** (`autoplay`): about 24px a second, back and forth. It holds on hover, on focus inside the row, during a drag, off screen and in a hidden tab; a Pause / Play button sits beside the scrubber (WCAG 2.2.2); it never moves under reduced motion.
+- **The row** is WMDS `Carousel` (`bleed`, `loop`): the quotes repeat seamlessly, so the row never ends (Randy 2026-10-29). Drag, trackpad, touch and keyboard from WMDS, named by the heading; no scrubber, since a loop has no end. Cards are 85% of the row on phones, 46% on tablet, 30% on desktop.
+- **Drift** (`autoplay`): about 24px a second, one way, wrapping invisibly. It holds on hover, on focus inside the row, during a drag, off screen and in a hidden tab; a Pause / Play button sits under the row (WCAG 2.2.2: anything that moves on its own for more than 5 seconds needs a way to stop it); it never moves under reduced motion.
 - **Cursor:** a hand badge follows a mouse over the row (devices with a fine pointer that can hover only); decorative.
 - **Each quote** is an `article` card with a `figure`, `blockquote` and `figcaption` (name, role). The two quotation marks are decorative (`aria-hidden`).
 - **Centred on phones** (Headings H8): the heading holds 1 line at 390 and each quote is short, so both stay centred (measured 2026-10-29).
@@ -73,7 +73,7 @@ Full width; WMDS Band `md` spacing (48 top and bottom); eyebrow→heading 12; he
 
 ## WMDS
 
-**Needs @thewhatmatters/wmds 0.4.33** (Card `tone`, Carousel `autoplay` and `cursor`, built for this pattern on the WMDS branch `lead-engineer/card-tones-carousel-motion`); bump the pin when it publishes. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
+**Needs @thewhatmatters/wmds 0.4.33** (Card `tone`, Carousel `autoplay`, `loop` and `cursor`, built for this pattern on the WMDS branch `lead-engineer/card-tones-carousel-motion`); bump the pin when it publishes. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
 
 - **Card tones: built.** WMDS 0.4.33 adds Card `tone` (`inverse`, `field`, `light`) and a scoped light palette (`[data-theme="light"]`), so a paper card sits on a dark band.
 - **WMDS-GAP: no quote part.** There's no WMDS `Quote` / testimonial atom (marks, quote, attribution), so the pattern composes `figure` + `blockquote` + `figcaption`. Worth a WMDS part if a second testimonial pattern needs the same.
