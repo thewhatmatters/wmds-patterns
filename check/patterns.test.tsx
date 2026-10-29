@@ -233,7 +233,7 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
     // H8: a heading is centred on phones (a bare `text-center`, not `md:text-center`) only in patterns
     // measured to stay within 2 lines at 390 (2026-10-28). Others left-align below md.
-    const centredOnPhones = ["footer/over-image"];
+    const centredOnPhones = ["footer/over-image", "testimonial/tilted-cards"];
     if (/<h[12][\s>]/.test(html) && !centredOnPhones.includes(folder)) {
       expect(html, `${folder}: heading centred on phones`).not.toMatch(/class="[^"]*(?<![:\w-])text-center\b/);
     }

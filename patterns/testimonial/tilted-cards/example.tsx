@@ -1,6 +1,6 @@
 /**
  * Example content for Testimonial — Tilted Cards. The clients and quotes are made up for the example, and no
- * photos are used (WMDS `Avatar` shows initials), so it's licence-free; a client page uses real quotes with
+ * photos are used, so it's licence-free; a client page uses real quotes with
  * permission.
  */
 import { Button } from "@thewhatmatters/wmds";
@@ -9,12 +9,11 @@ import { TestimonialTiltedCards, type TestimonialTiltedCardsQuote, type Testimon
 export const meta = {
   type: "Testimonial",
   name: "Testimonial — Tilted Cards",
-  purpose: "Client quotes as cards at small alternating angles in a row the visitor drags, on a dark field.",
+  purpose: "Client quotes as cards dropped at uneven angles, alternating two colours, in a row that drifts and drags.",
 };
 
 const quotes: TestimonialTiltedCardsQuote[] = [
   {
-    result: "Bookings up 40%",
     quote: "We used to take orders by text at midnight. Now people book a cake on the site and it shows up on our calendar.",
     name: "Maria Delgado",
     role: "Owner, Eastside Bakery",
@@ -25,7 +24,6 @@ const quotes: TestimonialTiltedCardsQuote[] = [
     role: "Founder, Northloop Physio",
   },
   {
-    result: "Calls doubled in a quarter",
     quote: "I asked for a website. I got a plan for the next year, and a site I can change myself on a Sunday.",
     name: "Jen Whitaker",
     role: "Whitaker Roofing",
@@ -36,7 +34,6 @@ const quotes: TestimonialTiltedCardsQuote[] = [
     role: "Manager, Casa Ortega",
   },
   {
-    result: "Bounce rate down by a third",
     quote: "Clear about price, clear about dates, and they told us what not to build. Rare, and worth a lot.",
     name: "Priya Raman",
     role: "Director, Lantern Yoga",
@@ -47,7 +44,7 @@ export default function Example(props: Partial<TestimonialTiltedCardsProps>) {
   return (
     <TestimonialTiltedCards
       eyebrow="Clients"
-      heading="What it's like to work with us."
+      heading="What our clients say."
       actions={
         <Button role="outline" size="lg" render={<a href="#work" />}>
           See the work
