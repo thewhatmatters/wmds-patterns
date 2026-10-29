@@ -52,5 +52,5 @@ import { HeaderMobileMenu } from "./HeaderMobileMenu";
 ## Notes
 
 - Screenshots and the review set (closed, open and scrolled at 320, 390, 786, 1024 and 1440, light and dark) are in Lead Engineer's `files/header-mobile-menu/`.
-- Checked against **@thewhatmatters/wmds 0.4.34** (npm); `mobileAction` and the new phone menu shipped in 0.4.31.
+- Checked against **@thewhatmatters/wmds 0.4.35** (npm); `mobileAction` and the new phone menu shipped in 0.4.31.
 - Not yet in WMDS: sub-pages that open in place with a back row (N8), and hover-open dropdowns with 0.5s delays (N4; SiteNav menus open on click today).

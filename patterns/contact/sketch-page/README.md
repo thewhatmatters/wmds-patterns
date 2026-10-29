@@ -1,6 +1,6 @@
 # Contact — Sketch Page
 
-status: draft
+status: approved
 
 The WhatMatters sketch request as its own page (Contact and booking forms rule, Rule 20). The nav and hero can still open the same form as a modal shortcut (WMDS `IntakeModal` with `useIntakeUrlState`), but the page exists too: it can be linked, bookmarked and refreshed.
 **File:** `ContactSketchPage.tsx` (copy it). **Example:** `example.tsx`.
@@ -50,5 +50,5 @@ import { ContactSketchPage } from "./ContactSketchPage";
 
 ## Notes
 
-- Checked against **@thewhatmatters/wmds 0.4.35** (needs `IntakeHoneypot`, released with this pattern).
+- Checked against **@thewhatmatters/wmds 0.4.35** (`IntakeHoneypot` shipped there).
 - Uses WMDS base colours only. The failure message is a plain `role="alert"` block until WMDS has an inline alert (gap #51).
