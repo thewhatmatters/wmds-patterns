@@ -1,6 +1,6 @@
 # Hero — Over Media
 
-status: draft
+status: approved
 
 Built to Product Designer's spec (`hero/over-media`, Tasks #43, WMDS gap #47) on WMDS 0.4.31.
 **File:** `HeroOverMedia.tsx` (copy it). **Example:** `example.tsx`: a restaurant on East 6th over Randy's Envato pick ("Blurred Restaurant Interior With Bartender in Background"). The clip is a licensed preview kept in `gallery/public/local/`, never committed; without it the gallery shows the dark page colour behind the copy.

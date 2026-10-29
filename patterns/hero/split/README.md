@@ -1,6 +1,6 @@
 # Hero — Split
 
-status: draft
+status: approved
 
 Built to Product Designer's spec (`hero/split`, Tasks #43, WMDS gap #47) on WMDS 0.4.31.
 **File:** `HeroSplit.tsx` (copy it). **Example:** `example.tsx`: WhatMatters' own pitch beside a hairline homepage sketch in a browser frame, with the phone version over its corner (licence-free; replace it with real work).
