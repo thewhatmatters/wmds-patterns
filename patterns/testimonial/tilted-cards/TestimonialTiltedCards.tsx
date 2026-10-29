@@ -5,7 +5,8 @@
  * holds the quote, centred between two quotation marks, and a small byline. No photos.
  *
  * Motion: the row repeats seamlessly (WMDS Carousel `loop`) and drifts slowly one way (`autoplay`). It holds on
- * hover and focus, has a Pause button, and doesn't move under reduced motion. A hand badge follows a mouse over the row (Carousel `cursor`).
+ * hover and focus, has a Pause button, and doesn't move under reduced motion. A drag stays where it's let go (no
+ * snap), and the cards lean the way the row moves (`--carousel-velocity`), then ease upright. A hand badge follows a mouse over the row (Carousel `cursor`).
  */
 import { useId, type ReactNode } from "react";
 import { Band, Card, Carousel, cn, type BandTone, type CardTone } from "@thewhatmatters/wmds";
@@ -60,6 +61,11 @@ const lays = [
 ] as const;
 /** Room above and below for the tilt and lift; the card runs 12px past its slot each side, so neighbours overlap a little. */
 const itemInnerClasses = "h-full -mx-3 py-8";
+/**
+ * The lean: while the row moves, each card tips toward the way it's going (WMDS Carousel's
+ * `--carousel-velocity`, -1 to 1), up to 8°, and eases back upright when it stops. 0 under reduced motion.
+ */
+const leanClasses = "h-full rotate-[calc(var(--carousel-velocity,0)*8deg)] transition-[rotate] duration-medium ease-out";
 /** The card: WMDS Card with its own tone; quote and byline centred between the two marks. */
 const cardClasses = "relative h-full min-h-64 items-center justify-center px-8 py-12 text-center md:px-10";
 /** Quotation marks in two corners, top right and bottom left: decorative (the blockquote carries the meaning). */
@@ -125,12 +131,14 @@ export function TestimonialTiltedCards({
             bleed
             itemWidth={{ base: 85, md: 46, lg: 30 }}
             loop
+            snap={false}
             autoplay={autoplay}
             cursor={cursor ?? undefined}
           >
             {quotes.map((item, index) => (
               <Carousel.Item key={index}>
                 <div className={itemInnerClasses}>
+                  <div className={leanClasses}>
                   <Card
                     as="article"
                     tone={cardTones[index % 2]}
@@ -153,6 +161,7 @@ export function TestimonialTiltedCards({
                       &rdquo;
                     </span>
                   </Card>
+                  </div>
                 </div>
               </Carousel.Item>
             ))}

@@ -47,6 +47,8 @@ import { TestimonialTiltedCards } from "./TestimonialTiltedCards";
 
 - **The row** is WMDS `Carousel` (`bleed`, `loop`): the quotes repeat seamlessly, so the row never ends (Randy 2026-10-29). Drag, trackpad, touch and keyboard from WMDS, named by the heading; no scrubber, since a loop has no end. Cards are 85% of the row on phones, 46% on tablet, 30% on desktop.
 - **Drift** (`autoplay`): about 24px a second, one way, wrapping invisibly. It holds on hover, on focus inside the row, during a drag, off screen and in a hidden tab; a Pause / Play button sits under the row (WCAG 2.2.2: anything that moves on its own for more than 5 seconds needs a way to stop it); it never moves under reduced motion.
+- **Drag:** the row stays where it's let go (no snap), and keeps a little momentum.
+- **Lean:** while the row moves, the cards tip toward the way it's going (up to 8°, from WMDS Carousel's `--carousel-velocity`) and ease back upright when it stops. None under reduced motion.
 - **Cursor:** a hand badge follows a mouse over the row (devices with a fine pointer that can hover only); decorative.
 - **Each quote** is an `article` card with a `figure`, `blockquote` and `figcaption` (name, role). The two quotation marks are decorative (`aria-hidden`).
 - **Centred on phones** (Headings H8): the heading holds 1 line at 390 and each quote is short, so both stay centred (measured 2026-10-29).
@@ -73,7 +75,7 @@ Full width; WMDS Band `md` spacing (48 top and bottom); eyebrow→heading 12; he
 
 ## WMDS
 
-**Needs @thewhatmatters/wmds 0.4.33** (Card `tone`, Carousel `autoplay`, `loop` and `cursor`, built for this pattern on the WMDS branch `lead-engineer/card-tones-carousel-motion`); bump the pin when it publishes. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
+**Needs @thewhatmatters/wmds 0.4.33** (Card `tone`, Carousel `autoplay`, `loop`, `cursor` and `--carousel-velocity`, built for this pattern on the WMDS branch `lead-engineer/card-tones-carousel-motion`); bump the pin when it publishes. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
 
 - **Card tones: built.** WMDS 0.4.33 adds Card `tone` (`inverse`, `field`, `light`) and a scoped light palette (`[data-theme="light"]`), so a paper card sits on a dark band.
 - **WMDS-GAP: no quote part.** There's no WMDS `Quote` / testimonial atom (marks, quote, attribution), so the pattern composes `figure` + `blockquote` + `figcaption`. Worth a WMDS part if a second testimonial pattern needs the same.
