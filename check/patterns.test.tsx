@@ -71,6 +71,20 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<figure[\s>][\s\S]*<blockquote[\s>][\s\S]*<figcaption[\s>]/);
+    } else if (mod.meta.type === "Contact") {
+      // A contact page holds the page's one h1 and its form (Contact and booking forms T1–T5, T9).
+      expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<form[\s>]/);
+      // T5: the button says what happens.
+      expect(html).not.toMatch(/<button[^>]*type="submit"[^>]*>\s*Submit\s*</i);
+      // T2: when we'll reply, near the button.
+      expect(html).toMatch(/We reply within/);
+      // T1: another way to reach the team.
+      expect(html).toMatch(/href="(?:tel|mailto):/);
+      // T4: a honeypot, hidden from screen readers and the Tab order; no CAPTCHA.
+      expect(html).toMatch(/aria-hidden="true"[^>]*data-intake-honeypot|data-intake-honeypot[^>]*aria-hidden="true"/);
+      expect(html).not.toMatch(/captcha/i);
     } else if (mod.meta.type === "Services") {
       // A services section sits further down the page: one h2 that names it, no h1 and no nav.
       expect(html).toMatch(/<section[^>]*aria-labelledby=/);
