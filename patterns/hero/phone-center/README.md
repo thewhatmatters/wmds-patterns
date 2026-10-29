@@ -84,6 +84,6 @@ Section padding 48 / 64 at the top (phone / tablet and up; the fading stage is t
 
 - No WMDS media component (image or video with poster, a pause control, reduced-motion handling); the pattern carries its own small video player until WMDS has one.
 - No WMDS device frame; the iPhone outline is SVG inside the pattern.
-- Checked against **@thewhatmatters/wmds 0.4.30** (npm).
+- Checked against **@thewhatmatters/wmds 0.4.31** (npm).
 
 **Display copy (Rule 3, D7):** shorten, don't shrink. If your headline runs past 3 lines on phones, cut the words; keep the type step.
