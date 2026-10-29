@@ -16,7 +16,7 @@ export function FooterWordmarkExample(props: Partial<FooterWordmarkProps>) {
   return (
     <FooterWordmark
       pitch="One idea for your site in your inbox every Thursday."
-      placeholder="you@yourbusiness.com"
+      emailLabel="Email for the Thursday idea"
       onSubscribe={(email) => setStatus(`Thanks. The next one goes to ${email}.`)}
       status={status}
       columns={[

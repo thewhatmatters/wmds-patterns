@@ -29,9 +29,8 @@ export interface FooterWordmarkTile {
 export interface FooterWordmarkProps {
   /** Slot: the newsletter card's line (one or two short sentences). */
   pitch: ReactNode;
-  /** The email field's label, read by screen readers (the field shows `placeholder`). */
+  /** The email field's visible label, above the field. Name what they get ("Email for the Thursday idea"). */
   emailLabel?: string;
-  placeholder?: string;
   /** The submit button's text. */
   submitLabel?: string;
   /** Called with the email on submit; wire it to your newsletter provider. */
@@ -60,6 +59,7 @@ const cardClasses =
   "col-span-full flex min-h-72 flex-col justify-between gap-10 bg-[var(--color-background-body)] p-6 text-fg md:p-10 lg:col-span-6 lg:w-[calc(100%+var(--grid-column-gap)/2)]";
 /** A heading step, not display: the wordmark below is the footer's one display moment (Display D9). */
 const pitchClasses = "max-w-[18em] text-balance type-heading-1 font-normal text-fg";
+const emailLabelClasses = "mb-2 block type-label text-fg";
 const formClasses = "flex flex-col gap-3 md:flex-row md:items-stretch";
 /** Link columns: the right half, starting on its first column; two columns of large links. */
 const columnsClasses = "col-span-full mt-12 grid grid-cols-2 gap-x-6 gap-y-10 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:px-6 lg:pt-10";
@@ -148,8 +148,7 @@ function FittedName({ name }: { name: string }) {
 
 export function FooterWordmark({
   pitch,
-  emailLabel = "Email address",
-  placeholder = "you@example.com",
+  emailLabel = "Email",
   submitLabel = "Subscribe",
   onSubscribe,
   status,
@@ -187,17 +186,17 @@ export function FooterWordmark({
             {pitch}
           </p>
           <div>
+            {/* A visible label above the row, so the field and its button stay level (Labels F1, F7). */}
+            <label htmlFor={`${id}-email`} className={emailLabelClasses}>
+              {emailLabel}
+            </label>
             <form className={formClasses} onSubmit={submit} noValidate>
-              <label htmlFor={`${id}-email`} className="sr-only">
-                {emailLabel}
-              </label>
               <Input
                 id={`${id}-email`}
                 name="email"
                 type="email"
                 autoComplete="email"
                 required
-                placeholder={placeholder}
                 size="lg"
                 className="min-w-0 flex-1"
                 status={error != null ? "error" : undefined}

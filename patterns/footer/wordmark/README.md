@@ -34,7 +34,7 @@ import { FooterWordmark } from "./FooterWordmark";
 | `pitch` | ReactNode | The newsletter card's line: one sentence, WMDS `type-display-3`, about 18em wide |
 | `onSubscribe` | `(email) => void` | Called with the email on submit; wire it to the newsletter provider. The field is a WMDS `Input` (type email, required, with a screen-reader label) and the button a WMDS `Button` |
 | `status` | ReactNode, optional | A line under the form after submitting (sent, already subscribed, an error), announced politely |
-| `emailLabel`, `placeholder`, `submitLabel` | string, optional | The field's spoken label, its placeholder, and the button's text |
+| `emailLabel`, `submitLabel` | string, optional | The field's visible label (above it; no placeholder) and the button's text |
 | `columns` | `{ label, links }[]` | Two columns of 2–5 large WMDS `TextLink`s (quiet, `type-heading-1`) on the right half |
 | `tiles` | `{ label, href, color }[]`, optional | 2–4 coloured category links (services, menus, locations); `color` is a WMDS colour token. In light mode the tile is that colour darkened 25% with white text (every example tile 4.9:1 or better); in dark mode it's the colour as is, with dark text |
 | `name` | string | The brand name, set in the heading font and sized to fill the row at every width |
