@@ -64,4 +64,4 @@ The first item is the example the gallery's Copy prompt uses.
 ## WMDS-GAPs
 
 - **Media component:** no WMDS image or video component with a focal point, a poster under reduced motion and a pause control; the pattern carries its own small player and `focus` prop until WMDS has one.
-- Checked against **@thewhatmatters/wmds 0.4.31** (npm).
+- Checked against **@thewhatmatters/wmds 0.4.32** (npm).

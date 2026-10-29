@@ -122,8 +122,29 @@ describe.each(folders)("patterns/%s", (folder) => {
       }
       // S1: spacing comes from the scale or a token, never a one-off pixel value.
       expect(source, `${folder}/${file}: one-off spacing`).not.toMatch(/(?<![\w-])-?(?:p|m|gap|space)[xytrblse]?(?:-[xy])?-\[-?\d+(\.\d+)?px\]/);
+      // Errors and validation V1: messages say what to do, never "invalid", "please", "sorry", "oops".
+      for (const [, text] of source.matchAll(/"((?:Enter|Choose|Select|Check|Use)[^"]*)"/g)) {
+        expect(text, `${folder}/${file}: message wording`).not.toMatch(/\b(invalid|please|sorry|oops)\b/i);
+      }
+      // V10: an error or warning status always comes with a message.
+      for (const [element] of source.matchAll(/<Input\b[\s\S]*?\/>/g)) {
+        if (/status=(?:"(?:error|warning)"|\{)/.test(element)) expect(element, `${folder}/${file}: status without message`).toMatch(/\bmessage=/);
+      }
+      // Labels and placeholders F9: no placeholders in forms (examples go in the hint); search may name its action.
+      for (const [element] of source.matchAll(/<(?:Input|TextArea)\b[\s\S]*?\/>/g)) {
+        expect(element, `${folder}/${file}: placeholder in a form field`).not.toMatch(/\bplaceholder=/);
+      }
       // B2: running text is ragged right, never justified.
       expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
+    }
+    // Labels and placeholders F1 / F7: every text field has a visible label tied to it.
+    for (const [input] of html.matchAll(/<(?:input|textarea)\b[^>]*>/g)) {
+      if (/type="(?:hidden|search|checkbox|radio|submit)"/.test(input)) continue;
+      const id = input.match(/\sid="([^"]+)"/)?.[1];
+      expect(id, `${folder}: field without an id`).toBeTruthy();
+      const label = html.match(new RegExp(`<label\\b[^>]*for="${id}"[^>]*>`))?.[0];
+      expect(label, `${folder}: field #${id} without a label`).toBeTruthy();
+      expect(label, `${folder}: field #${id} with a hidden label`).not.toMatch(/sr-only/);
     }
     // K1 / K8 / K9: links go somewhere, say where, and a new tab says so.
     for (const [, anchor, inner] of html.matchAll(/<a\b((?:"[^"]*"|'[^']*'|[^>"'])*)>([\s\S]*?)<\/a>/g)) {

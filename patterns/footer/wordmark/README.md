@@ -34,7 +34,7 @@ import { FooterWordmark } from "./FooterWordmark";
 | `pitch` | ReactNode | The newsletter card's line: one sentence, WMDS `type-display-3`, about 18em wide |
 | `onSubscribe` | `(email) => void` | Called with the email on submit; wire it to the newsletter provider. The field is a WMDS `Input` (type email, required, with a screen-reader label) and the button a WMDS `Button` |
 | `status` | ReactNode, optional | A line under the form after submitting (sent, already subscribed, an error), announced politely |
-| `emailLabel`, `placeholder`, `submitLabel` | string, optional | The field's spoken label, its placeholder, and the button's text |
+| `emailLabel`, `submitLabel` | string, optional | The field's visible label (above it; no placeholder) and the button's text |
 | `columns` | `{ label, links }[]` | Two columns of 2–5 large WMDS `TextLink`s (quiet, `type-heading-1`) on the right half |
 | `tiles` | `{ label, href, color }[]`, optional | 2–4 coloured category links (services, menus, locations); `color` is a WMDS colour token. In light mode the tile is that colour darkened 25% with white text (every example tile 4.9:1 or better); in dark mode it's the colour as is, with dark text |
 | `name` | string | The brand name, set in the heading font and sized to fill the row at every width |
@@ -45,6 +45,10 @@ import { FooterWordmark } from "./FooterWordmark";
 ## Grid
 
 On the WMDS page grid: the card takes the left half (columns 1–6, plus half a gutter so it's exactly two tiles wide), the link columns the right half starting on column 7, the tiles span the full width in four equal cells (two per row on phones and tablets), the wordmark spans the content width.
+
+## Validation
+
+The email field uses WMDS messages, not the browser's bubble (Errors and validation rule): it's checked when you leave it and on Subscribe, the message says what to do ("Enter your email address", "Enter an email address like name@example.com"), screen readers hear "Error:" first, the error clears on the keystroke that fixes it, and what was typed stays. A one-field form needs no ErrorSummary; focus returns to the field instead. Needs WMDS 0.4.32 (earlier Inputs lost the typed value when a message appeared).
 
 ## Adapt it
 
