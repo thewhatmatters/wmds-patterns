@@ -153,6 +153,15 @@ describe.each(folders)("patterns/%s", (folder) => {
         if (!/over-media|overMedia/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
       }
     }
+    // Logo strip O4: every logo in a logos slot carries the company name as text (not only aria-label);
+    // O5: no auto-moving marquee without a Pause button.
+    const logos = html.match(/data-slot="logos"[\s\S]*?<\/ul>/)?.[0];
+    if (logos != null) {
+      for (const [item] of logos.matchAll(/<li\b[\s\S]*?<\/li>/g)) {
+        expect(item, `${folder}: logo without a text name`).toMatch(/class="sr-only">[^<]+</);
+      }
+      if (/marquee|animate-/.test(logos)) expect(logos, `${folder}: marquee without Pause`).toMatch(/>Pause</);
+    }
     // E6: an eyebrow is never a heading element.
     expect(html, `${folder}: eyebrow as heading`).not.toMatch(/<h[1-6][^>]*data-slot="eyebrow"/);
     // D9: one display block per pattern at most (a page holds two display moments: the hero and one closing moment).

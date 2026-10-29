@@ -175,12 +175,14 @@ export function HeroFeatureCenterLogos({ logos, label = "Clients" }: { logos: He
       {logos.map((item) => (
         <li
           key={item.name}
-          aria-label={item.name}
           className="flex min-w-0 basis-1/3 items-center justify-center px-1 py-6 text-muted lg:basis-1/6 [&_svg]:h-6 [&_svg]:w-auto [&_svg]:max-w-none lg:[&_svg]:h-8"
         >
+          {/* The company name is the text alternative (Logo strip O4, WCAG 1.1.1). An aria-label on a
+              plain list item is often skipped, so the name is real (visually hidden) text and the mark is decoration. */}
           <span aria-hidden className="contents">
             {item.logo}
           </span>
+          <span className="sr-only">{item.name}</span>
         </li>
       ))}
     </ul>

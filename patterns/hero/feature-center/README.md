@@ -49,7 +49,7 @@ import { HeroFeatureCenter, HeroFeatureCenterLogos } from "./HeroFeatureCenter";
 | `actions` | slot, optional | The CTA row: any buttons or links. When set, `primaryAction` / `secondaryAction` are ignored |
 | `primaryAction` / `secondaryAction` | `{ label, href }` | Shorthand for a primary and an outline (secondary-level) button (Buttons U1, U4) |
 | `visual` | slot, optional | What goes in the framed window: product shot, site, video. Decorative (`aria-hidden`) unless you change that |
-| `logos` | slot, optional | Proof under the visual. `<HeroFeatureCenterLogos logos={[{ name, logo }]} />` (6 is typical; 3 per row on phones, 6 at desktop; a short row centres), or a marquee, a quote, a stats row |
+| `logos` | slot, optional | Proof under the visual (Logo strip rule). `<HeroFeatureCenterLogos logos={[{ name, logo }]} />`: **4–8 real clients, with their permission**, one muted colour, 3 per row on phones and 6 at desktop (a short row centres). The client's name is the text alternative; a mark never links to the client's site |
 
 ## Knobs
 
@@ -63,8 +63,8 @@ The first item is the example the gallery's Copy prompt uses.
 
 - **No product visual:** leave `visual` empty; the logos follow the CTAs.
 - **Different copy:** change the props. If the headline runs past 2 lines at desktop, shorten it or lower `--text-display-1-size`.
-- **More or fewer logos:** pass more or fewer to `HeroFeatureCenterLogos`. Over about 8, use a marquee in the `logos` slot instead of more rows.
-- **Marquee:** put any marquee in the `logos` slot; nothing else changes.
+- **More or fewer logos:** pass 4–8 to `HeroFeatureCenterLogos`. **Fewer than 4 real logos:** put one attributed quote (name, business, photo, a specific result) or one number someone can check in the `logos` slot, or leave it out. Never invent or borrow logos: the example marks are made-up Austin names.
+- **Marquee:** only with 9+ logos, and then with a visible Pause, a stop on hover and focus, a still row under reduced motion, and the repeated set `aria-hidden` (WCAG 2.2.2). Below 9, use the still row.
 - **One CTA, or three:** whatever you put in `actions`.
 - **Animation:** none by default. Add it in your copy (e.g. wrap the headline in WMDS `TextSequence`, or ease the visual in with `motion`).
 
