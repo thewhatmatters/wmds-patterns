@@ -65,6 +65,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<header[\s>]/);
       expect(html).toMatch(/<nav[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
+    } else if (mod.meta.type === "Testimonial") {
+      // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<figure[\s>][\s\S]*<blockquote[\s>][\s\S]*<figcaption[\s>]/);
     } else if (mod.meta.type === "Services") {
       // A services section sits further down the page: one h2 that names it, no h1 and no nav.
       expect(html).toMatch(/<section[^>]*aria-labelledby=/);
