@@ -68,7 +68,7 @@ Patterns are built and reviewed here, not in WMDS's Storybook.
 
 ## WMDS version
 
-Checked against **@thewhatmatters/wmds 0.4.31**, pinned exactly in `package.json` and installed from npm (public, no token). When WMDS publishes a new version, bump the pin, run `npm run check`, and fix any pattern it breaks.
+Checked against **@thewhatmatters/wmds 0.4.33**, pinned exactly in `package.json` and installed from npm (public, no token). When WMDS publishes a new version, bump the pin, run `npm run check`, and fix any pattern it breaks.
 
 ## GitHub Pages
 

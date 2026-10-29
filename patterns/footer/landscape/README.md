@@ -58,7 +58,7 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## WMDS-GAPs
 
-- Checked against **@thewhatmatters/wmds 0.4.32**. No WMDS gap found: the tokens cover it.
+- Checked against **@thewhatmatters/wmds 0.4.33**. No WMDS gap found: the tokens cover it.
 - Example clip: Envato "Abstract Mountain Range Flyover Animation" (Randy's pick, 2026-10-27). Until the licensed file is downloaded, the gallery plays Envato's preview from `gallery/public/local/` (not committed, not for publishing). On the published gallery the band stays empty until the licensed file is added at `gallery/public/examples/footer-landscape/` and the example points to it.
 
 Spacing: full width; 48px top and bottom on phones, 64px (4rem) from tablet up. With a band, the band is the bottom edge.

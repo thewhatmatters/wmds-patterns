@@ -1,9 +1,9 @@
 # Testimonial — Tilted Cards
 
-status: draft
+status: approved
 
 After Griflan's "Client Confessions" (details.so, https://www.details.so/inspo/griflan-99d0f7), and the claim tickets stacked at slight angles on Buck's Sauce (Inspiration board). Nothing copied but the idea: quotes as cards laid down at small, uneven angles, in a row you drag.
-**File:** `TestimonialTiltedCards.tsx` (copy it). **Example:** `example.tsx`, with made-up clients and quotes and no photos. Second pass after Randy's notes (2026-10-29): closer to Griflan.
+**File:** `TestimonialTiltedCards.tsx` (copy it). **Example:** `example.tsx`, with made-up clients and quotes and no photos. Second pass after Randy's notes, approved 2026-10-29: closer to Griflan.
 
 A WMDS `Band` (the inverse field by default) with a centred eyebrow, heading and one CTA, then the quotes in a WMDS `Carousel` that runs to the page edges and drifts slowly on its own. The cards alternate two colours (WMDS Card `tone`: `field`, then `light` paper), dropped at uneven angles and heights and overlapping a little. Each card holds the quote, centred between two quotation marks (top right, bottom left), and a small byline: the name in bold over the role. No photos.
 
@@ -75,7 +75,7 @@ Full width; WMDS Band `md` spacing (48 top and bottom); eyebrow→heading 12; he
 
 ## WMDS
 
-**Needs @thewhatmatters/wmds 0.4.33** (Card `tone`, Carousel `autoplay`, `loop`, `cursor` and `--carousel-velocity`, built for this pattern on the WMDS branch `lead-engineer/card-tones-carousel-motion`); bump the pin when it publishes. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
+Checked against **@thewhatmatters/wmds 0.4.33** (npm), which added Card `tone`, Carousel `autoplay`, `loop`, `cursor` and `--carousel-velocity` for this pattern. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
 
 - **Card tones: built.** WMDS 0.4.33 adds Card `tone` (`inverse`, `field`, `light`) and a scoped light palette (`[data-theme="light"]`), so a paper card sits on a dark band.
 - **WMDS-GAP: no quote part.** There's no WMDS `Quote` / testimonial atom (marks, quote, attribution), so the pattern composes `figure` + `blockquote` + `figcaption`. Worth a WMDS part if a second testimonial pattern needs the same.

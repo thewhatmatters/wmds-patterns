@@ -13,7 +13,7 @@
     "preview:pages": "vite preview --config gallery/vite.config.ts gallery --mode pages --outDir ../dist-pages --port 5191 --strictPort --host 127.0.0.1"
   },
   "dependencies": {
-    "@thewhatmatters/wmds": "0.4.32",
+    "@thewhatmatters/wmds": "0.4.33",
     "lucide-react": "^1.33.0",
     "motion": "^13.0.0",
     "react": "^19.2.0",
