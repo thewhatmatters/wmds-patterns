@@ -1,6 +1,8 @@
 # Header — Mobile Menu
 
-status: draft
+status: approved
+
+Approved by Randy on 2026-10-29 ("for now this works"); a revisit is on his list (Tasks #41).
 
 The site header Randy asked for ("We definitely need a mobile nav pattern"), built to the **Header and mobile menu rule** (Rule 12, 2026-10-28). WMDS `SiteNav` (0.4.31) does the behaviour; this pattern wires the links once for both the desktop bar and the phone menu.
 **File:** `HeaderMobileMenu.tsx` (copy it). **Example:** `example.tsx`, over a placeholder page tall enough to scroll.
