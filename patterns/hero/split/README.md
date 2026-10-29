@@ -71,4 +71,4 @@ At 1440×900 the headline, lead and actions are on screen and the hero ends abov
 ## WMDS-GAPs
 
 - **Bleed helper:** WMDS has no utility to bleed one side of a grid cell to the viewport edge. The pattern carries the calc (`(min(100vw, --grid-max) − 100vw) / 2 − --grid-margin`) until WMDS has one.
-- Checked against **@thewhatmatters/wmds 0.4.33** (npm).
+- Checked against **@thewhatmatters/wmds 0.4.34** (npm).

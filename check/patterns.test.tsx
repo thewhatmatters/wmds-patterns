@@ -140,6 +140,13 @@ describe.each(folders)("patterns/%s", (folder) => {
       for (const [element] of source.matchAll(/<(?:Input|TextArea)\b[\s\S]*?\/>/g)) {
         expect(element, `${folder}/${file}: placeholder in a form field`).not.toMatch(/\bplaceholder=/);
       }
+      // Required and optional Q8: no badge inside an autofill field (autofill paints over it); say "(optional)" in the label.
+      for (const [element] of source.matchAll(/<Input\b[\s\S]*?\/>/g)) {
+        if (!/\bendBadge=/.test(element)) continue;
+        expect(element, `${folder}/${file}: badge on an autofill field`).not.toMatch(
+          /autoComplete="[^"]*\b(name|given-name|family-name|email|username|new-password|current-password|organization|street-address|address-line\d|address-level\d|postal-code|country|tel)\b/,
+        );
+      }
       // B2: running text is ragged right, never justified.
       expect(source, `${folder}/${file}: justified text`).not.toMatch(/\btext-justify\b|text-align:\s*justify/);
     }
@@ -151,6 +158,14 @@ describe.each(folders)("patterns/%s", (folder) => {
       const label = html.match(new RegExp(`<label\\b[^>]*for="${id}"[^>]*>`))?.[0];
       expect(label, `${folder}: field #${id} without a label`).toBeTruthy();
       expect(label, `${folder}: field #${id} with a hidden label`).not.toMatch(/sr-only/);
+    }
+    // Required and optional Q2 / Q3: required fields say so in code, and no label uses an asterisk.
+    for (const [label] of html.matchAll(/<label\b[^>]*>([\s\S]*?)<\/label>/g)) {
+      expect(label, `${folder}: asterisk in a label`).not.toMatch(/\*/);
+    }
+    for (const [form] of html.matchAll(/<form\b[\s\S]*?<\/form>/g)) {
+      const fields = [...form.matchAll(/<(?:input|textarea)\b[^>]*>/g)].map(([field]) => field).filter((field) => !/type="(?:hidden|submit)"/.test(field));
+      if (fields.length === 1) expect(fields[0], `${folder}: a one-field form's field is required`).toMatch(/\s(?:required|aria-required="true")/);
     }
     // K1 / K8 / K9: links go somewhere, say where, and a new tab says so.
     for (const [, anchor, inner] of html.matchAll(/<a\b((?:"[^"]*"|'[^']*'|[^>"'])*)>([\s\S]*?)<\/a>/g)) {

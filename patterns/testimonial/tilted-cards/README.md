@@ -75,7 +75,7 @@ Full width; WMDS Band `md` spacing (48 top and bottom); eyebrow→heading 12; he
 
 ## WMDS
 
-Checked against **@thewhatmatters/wmds 0.4.33** (npm), which added Card `tone`, Carousel `autoplay`, `loop`, `cursor` and `--carousel-velocity` for this pattern. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
+Checked against **@thewhatmatters/wmds 0.4.34** (npm), which added Card `tone`, Carousel `autoplay`, `loop`, `cursor` and `--carousel-velocity` for this pattern. Uses `Band`, `Card`, `Carousel`; the example adds `Button`.
 
 - **Card tones: built.** WMDS 0.4.33 adds Card `tone` (`inverse`, `field`, `light`) and a scoped light palette (`[data-theme="light"]`), so a paper card sits on a dark band.
 - **WMDS-GAP: no quote part.** There's no WMDS `Quote` / testimonial atom (marks, quote, attribution), so the pattern composes `figure` + `blockquote` + `figcaption`. Worth a WMDS part if a second testimonial pattern needs the same.
