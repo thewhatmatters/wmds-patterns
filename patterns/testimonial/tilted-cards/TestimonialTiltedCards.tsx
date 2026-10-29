@@ -63,9 +63,10 @@ const lays = [
 const itemInnerClasses = "h-full -mx-3 py-8";
 /**
  * The lean: while the row moves, each card tips toward the way it's going (WMDS Carousel's
- * `--carousel-velocity`, -1 to 1), up to 8°, and eases back upright when it stops. 0 under reduced motion.
+ * `--carousel-velocity`, -1 to 1, smoothed by a Motion spring in WMDS), up to 8°, and eases back upright
+ * when it stops. 0 under reduced motion.
  */
-const leanClasses = "h-full rotate-[calc(var(--carousel-velocity,0)*8deg)] transition-[rotate] duration-medium ease-out";
+const leanClasses = "h-full rotate-[calc(var(--carousel-velocity,0)*8deg)]";
 /** The card: WMDS Card with its own tone; quote and byline centred between the two marks. */
 const cardClasses = "relative h-full min-h-64 items-center justify-center px-8 py-12 text-center md:px-10";
 /** Quotation marks in two corners, top right and bottom left: decorative (the blockquote carries the meaning). */
