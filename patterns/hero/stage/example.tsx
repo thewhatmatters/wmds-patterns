@@ -1,6 +1,6 @@
 /**
- * Example content for Hero — Stage, in six variants (the gallery's Variant control): the plain page with the
- * framed site sketch and logos, centred or at the start, and the restaurant over its video or photo, at the start,
+ * Example content for Hero — Stage, in five variants (the gallery's Variant control): the plain page with the
+ * framed site sketch and logos, centred or at the start (the window follows the copy), and the restaurant over its video or photo, at the start,
  * centre or end. The picture is Randy's Envato pick ("Blurred Restaurant Interior With Bartender in
  * Background"), licensed for the private gallery and kept in gallery/public/local, never committed here; without
  * it the hero shows the dark page colour under the scrim. Replace every part with the client's own.
@@ -135,7 +135,6 @@ export const meta = {
     { id: "video-start", label: "Video · start" },
     { id: "image-center", label: "Photo · centre" },
     { id: "image-end", label: "Photo · end" },
-    { id: "video-window", label: "Video · window" },
   ],
 };
 
@@ -186,7 +185,6 @@ export const variants: Record<string, Partial<HeroStageProps>> = {
   "video-start": { ...restaurant, backdrop: video, align: "start" },
   "image-center": { ...restaurant, backdrop: photo, align: "center" },
   "image-end": { ...restaurant, backdrop: { ...photo, focus: "30% 50%" }, align: "end" },
-  "video-window": { ...studio, backdrop: video, align: "center", logos: undefined },
 };
 
 /** The variant the gallery asks for (`?variant=` on the frame), else the first. Your page passes props instead. */

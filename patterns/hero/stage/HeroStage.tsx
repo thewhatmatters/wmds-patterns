@@ -23,9 +23,10 @@ export type HeroStageBackdrop =
     }
   | {
       kind: "video";
-      /** A decorative looping video: muted, no controls, its `poster` under reduced motion. */
+      /** A decorative looping video: muted, no controls. */
       src: string;
-      poster?: string;
+      /** Required: what shows before the video loads, under reduced motion and in Safari's low-power mode. */
+      poster: string;
       focus?: string;
     };
 
@@ -46,8 +47,13 @@ export interface HeroStageProps {
   backdrop?: HeroStageBackdrop;
   /** Where the copy sits. Default: `center` on a plain page, `start` over a backdrop. Phones are always `start`. */
   align?: HeroStageAlign;
-  /** Slot, optional: what goes in the framed window (a product shot, a site). Decorative unless it carries content. */
+  /**
+   * Slot, optional: what goes in the framed window (a product shot, a site). Plain page only: over a backdrop the
+   * picture is the visual, and a window on it turns both murky (Product Designer, 2026-10-30), so it's left out.
+   */
   visual?: ReactNode;
+  /** `true` (default): the window is decoration, hidden from screen readers. `false` when it carries content people need. */
+  visualDecorative?: boolean;
   /** Slot, optional: proof under the hero. Usually `<HeroStageLogos logos={…} />`. */
   logos?: ReactNode;
   /**
@@ -75,22 +81,15 @@ const backdropSectionClasses = {
   full: "relative isolate flex w-full flex-col overflow-hidden min-h-[calc(100svh-4rem)]",
 } as const;
 /** The grid over the backdrop: copy at the bottom of the picture, Band `lg` spacing (96, 64 on phones; S8). */
-const backdropGridClasses = {
-  bottom:
-    "grid-page mt-auto w-full !pt-[calc(var(--grid-baseline)*8)] !pb-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)] md:!pb-[calc(var(--leading-base)*4)]",
-  top: "grid-page w-full !pt-[calc(var(--grid-baseline)*8)] !pb-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)] md:!pb-[calc(var(--leading-base)*4)]",
-} as const;
+const backdropGridClasses =
+  "grid-page mt-auto w-full !pt-[calc(var(--grid-baseline)*8)] !pb-[calc(var(--grid-baseline)*8)] md:!pt-[calc(var(--leading-base)*4)] md:!pb-[calc(var(--leading-base)*4)]";
 const mediaClasses = "absolute inset-0 -z-10 size-full object-cover";
 /**
- * Scrim in the dark page colour. Bottom-up behind bottom-set copy: the headline clears 3:1 and the lead and buttons
- * 4.5:1 over the brightest frame of the example video, fading clear at the top. With a `visual` the copy sits at
- * the top, so the scrim covers evenly.
+ * Bottom-up scrim in the dark page colour, 74% up to 70% of the height (the copy stacks taller on phones): the
+ * headline clears 4:1 and the eyebrow, lead and buttons 10:1 over the brightest of 9 frames, fading clear at the top.
  */
-const scrimClasses = {
-  bottom:
-    "pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-[color-mix(in_srgb,var(--color-background-body)_90%,transparent)] via-[color-mix(in_srgb,var(--color-background-body)_74%,transparent)] via-50% to-transparent to-95%",
-  even: "pointer-events-none absolute inset-0 -z-10 bg-[color-mix(in_srgb,var(--color-background-body)_80%,transparent)]",
-} as const;
+const scrimClasses =
+  "pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-[color-mix(in_srgb,var(--color-background-body)_90%,transparent)] via-[color-mix(in_srgb,var(--color-background-body)_74%,transparent)] via-70% to-transparent to-95%";
 
 /**
  * The copy column. Phones and tablets are always left-aligned: a centred headline runs 3–4 lines there (Headings
@@ -115,15 +114,18 @@ const copyClasses = {
 const headlineClasses = "type-display-1 min-w-0 max-w-[min(16em,100%)] text-balance [overflow-wrap:anywhere]";
 /** Headline → lead 24, regular weight, in ink (Lead L8, Body B9), measure 42rem at most. */
 const leadClasses = "mt-6 max-w-[42rem] text-pretty text-fg type-lead";
-/** Lead → actions 32; primary first (Buttons U8). Centred or end-aligned with the copy from lg. */
+/** Lead → actions 32; primary first (Buttons U8). Full width and stacked below sm, so two pills don't sit at odd widths. */
 const actionsClasses = {
-  start: "mt-8 flex flex-wrap items-center justify-start gap-3",
-  center: "mt-8 flex flex-wrap items-center justify-start gap-3 lg:justify-center",
-  end: "mt-8 flex flex-wrap items-center justify-start gap-3 lg:justify-end",
+  start: "mt-8 flex flex-wrap items-center justify-start gap-3 max-sm:w-full max-sm:flex-col max-sm:items-stretch",
+  center: "mt-8 flex flex-wrap items-center justify-start gap-3 max-sm:w-full max-sm:flex-col max-sm:items-stretch lg:justify-center",
+  end: "mt-8 flex flex-wrap items-center justify-start gap-3 max-sm:w-full max-sm:flex-col max-sm:items-stretch lg:justify-end",
 } as const;
 
-/** The visual spans columns 2–11 at lg. CTAs → visual 64 (plus the grid's row gap). */
-const visualWrapClasses = "relative col-span-full mt-16 lg:col-start-2 lg:col-end-12";
+/** The visual spans columns 2–11 at lg, or 1–12 with start-aligned copy so its edge meets the copy's. CTAs → visual 64. */
+const visualWrapClasses = {
+  center: "relative col-span-full mt-16 lg:col-start-2 lg:col-end-12",
+  start: "relative col-span-full mt-16",
+} as const;
 /**
  * The backlight. `--hero-glow` sets its colour (a pattern knob); default, a light tint of `--color-brand-outline`.
  * A wide radial gradient with eased stops just inside the frame's top, and a halo the shape of the frame.
@@ -149,7 +151,7 @@ const plainBottom = "col-span-full pb-[calc(var(--grid-baseline)*8)] md:pb-[calc
 const cueClasses = "pointer-events-none absolute inset-x-0 bottom-4 flex justify-center text-muted";
 
 /** Decorative looping video: plays only on screen, holds the poster under reduced motion. */
-function BackgroundVideo({ src, poster, focus }: { src: string; poster?: string; focus?: string }) {
+function BackgroundVideo({ src, poster, focus }: { src: string; poster: string; focus?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
   useEffect(() => {
     const video = ref.current;
@@ -194,6 +196,7 @@ export function HeroStage({
   backdrop,
   align,
   visual,
+  visualDecorative = true,
   logos,
   fullHeight = false,
   className,
@@ -239,9 +242,16 @@ export function HeroStage({
     </div>
   );
 
+  if (onBackdrop && visual != null) {
+    console.warn("[Hero — Stage] `visual` is for a plain page; over a backdrop the picture is the visual, so it's left out.");
+  }
   const frameWindow =
-    visual != null ? (
-      <div className={cn(visualWrapClasses, glowColorClasses)} aria-hidden data-hero-visual="">
+    visual != null && !onBackdrop ? (
+      <div
+        className={cn(placed === "start" ? visualWrapClasses.start : visualWrapClasses.center, glowColorClasses)}
+        aria-hidden={visualDecorative || undefined}
+        data-hero-visual=""
+      >
         <div className={glowClasses} />
         <div className={haloClasses} />
         <div className={frameClasses} data-slot="visual" data-slot-optional="">
@@ -274,11 +284,9 @@ export function HeroStage({
               {backdrop.media}
             </div>
           )}
-          <div className={visual != null ? scrimClasses.even : scrimClasses.bottom} />
-          {/* With a window the copy sits at the top of the picture and the window below it; without, the copy sits at the bottom. */}
-          <div className={visual != null ? backdropGridClasses.top : backdropGridClasses.bottom}>
+          <div className={scrimClasses} />
+          <div className={backdropGridClasses}>
             {copy}
-            {frameWindow}
             {proof("backdrop")}
           </div>
           {fullHeight ? (
