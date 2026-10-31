@@ -208,8 +208,8 @@ describe.each(folders)("patterns/%s", (folder) => {
         const source = readFileSync(join(dir, file), "utf8");
         // Hero R3: no auto-rotating slides or text.
         expect(source, `${folder}/${file}: auto-rotation`).not.toMatch(/setInterval|aria-roledescription="carousel"|<Carousel\b/);
-        // Hero R9: content height plus Band padding; full-screen heights only for over-media heroes.
-        if (!/over-media|overMedia/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
+        // Hero R9: content height plus Band padding; full-screen heights only for heroes over media (Over Media, Stage with a backdrop).
+        if (!/over-media|overMedia|hero\/stage/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
       }
     }
     // Logo strip O4: every logo in a logos slot carries the company name as text (not only aria-label);

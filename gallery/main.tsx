@@ -13,7 +13,8 @@ import { useMeasure } from "./measure";
 
 /** `themes` limits a pattern to the themes its example suits; both when left out. */
 type Theme = "light" | "dark";
-type Meta = { type: string; name: string; purpose: string; themes?: Theme[] };
+/** `variants`: a pattern shown several ways (Hero — Stage); its example reads `?variant=` from the frame URL. */
+type Meta = { type: string; name: string; purpose: string; themes?: Theme[]; variants?: { id: string; label: string }[] };
 type Entry = { folder: string; meta: Meta; Example: ComponentType; code: string; prompt: string; status: "draft" | "approved" };
 
 const modules = import.meta.glob<{ default: ComponentType; meta: Meta }>("../patterns/*/*/example.tsx", { eager: true });
@@ -235,10 +236,13 @@ function Gallery() {
   const [slots, setSlots] = useState<"off" | "on">(params.get("slots") === "on" ? "on" : "off");
   const [measure, setMeasure] = useState<"off" | "on">(params.get("measure") === "on" ? "on" : "off");
   const [fonts, setFonts] = useState<FontChoice>(() => readFontChoice(params));
+  const [variant, setVariant] = useState(params.get("variant") ?? "");
   const [fontsOpen, setFontsOpen] = useState(Object.keys(readFontChoice(params)).length > 0);
   // The overlays' query string, shared by the address bar and the frame.
-  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}${fontQuery(fonts)}`;
   const current = entries.find((entry) => entry.folder === folder) ?? entries[0];
+  const variants = current?.meta.variants ?? [];
+  const shownVariant = variants.some((option) => option.id === variant) ? variant : (variants[0]?.id ?? "");
+  const overlays = `${slots === "on" ? "&slots=on" : ""}${measure === "on" ? "&measure=on" : ""}${fontQuery(fonts)}${shownVariant ? `&variant=${shownVariant}` : ""}`;
   // Scale a frame wider than the pane down to fit; it still lays out at its real width.
   const stage = useRef<HTMLDivElement>(null);
   const [available, setAvailable] = useState(1440);
@@ -310,6 +314,22 @@ function Gallery() {
               <CopyButton label="Copy code" text={current.code} />
               <CopyButton label="Copy prompt" text={current.prompt} />
             </>
+          ) : null}
+          {variants.length ? (
+            <label className="flex items-center gap-2 text-sm">
+              <span className="text-xs text-muted">Variant</span>
+              <select
+                value={shownVariant}
+                onChange={(event) => setVariant(event.currentTarget.value)}
+                className="min-h-8 rounded-md border border-border bg-body px-2 text-sm"
+              >
+                {variants.map((option) => (
+                  <option key={option.id} value={option.id}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           ) : null}
           <Toggle label="Theme" options={themes} value={shownTheme} onChange={setTheme} />
           {themes.length === 1 ? <span className="text-xs text-muted">{themes[0]} only</span> : null}

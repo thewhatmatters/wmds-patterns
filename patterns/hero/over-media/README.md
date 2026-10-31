@@ -1,5 +1,7 @@
 # Hero — Over Media
 
+> **Replaced by Hero — Stage** (`patterns/hero/stage`; Randy, 2026-10-30). Stage does this layout and more (backdrop: none / image / video; align: start / centre / end). This folder is removed once Stage is approved.
+
 status: approved
 
 Built to Product Designer's spec (`hero/over-media`, Tasks #43, WMDS gap #47) on WMDS 0.4.31.
