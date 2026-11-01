@@ -15,9 +15,9 @@ import { useMeasure } from "./measure";
 type Theme = "light" | "dark";
 /** `variants`: a pattern shown several ways (Hero — Stage); its example reads `?variant=` from the frame URL. */
 type Meta = { type: string; name: string; purpose: string; themes?: Theme[]; variants?: { id: string; label: string }[] };
-type Entry = { folder: string; meta: Meta; Example: ComponentType; code: string; prompt: string; status: "draft" | "approved" };
+type Entry = { folder: string; meta: Meta; Example: ComponentType<{ variant?: string }>; code: string; prompt: string; status: "draft" | "approved" };
 
-const modules = import.meta.glob<{ default: ComponentType; meta: Meta }>("../patterns/*/*/example.tsx", { eager: true });
+const modules = import.meta.glob<{ default: ComponentType<{ variant?: string }>; meta: Meta }>("../patterns/*/*/example.tsx", { eager: true });
 // The repo's own files, as text at build time, so Copy code and Copy prompt can't drift from them.
 const sources = import.meta.glob<string>("../patterns/*/*/*.tsx", { query: "?raw", import: "default", eager: true });
 const readmes = import.meta.glob<string>("../patterns/*/*/README.md", { query: "?raw", import: "default", eager: true });
@@ -107,7 +107,8 @@ function Frame({ entry, theme, slots, measure, fonts }: { entry: Entry; theme: T
   }, []);
   return (
     <div ref={content} className="bg-body text-fg">
-      <entry.Example />
+      {/* Only a pattern with variants gets the prop (other examples pass their props to the pattern). */}
+      {entry.meta.variants ? <entry.Example variant={new URLSearchParams(location.search).get("variant") ?? undefined} /> : <entry.Example />}
     </div>
   );
 }

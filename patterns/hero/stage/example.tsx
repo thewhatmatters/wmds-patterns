@@ -187,16 +187,9 @@ export const variants: Record<string, Partial<HeroStageProps>> = {
   "image-end": { ...restaurant, backdrop: { ...photo, focus: "30% 50%" }, align: "end" },
 };
 
-/** The variant the gallery asks for (`?variant=` on the frame), else the first. Your page passes props instead. */
-function chosenVariant() {
-  const id = typeof location === "undefined" ? null : new URLSearchParams(location.search).get("variant");
-  return variants[id ?? ""] ?? variants["plain-center"];
-}
-
-/** The pattern filled with the example content. Leave `nav` out when the page already has one. */
-export function HeroStageExample(props: Partial<HeroStageProps>) {
-  const variant = chosenVariant();
-  return <HeroStage nav={exampleNav} headline="" {...variant} {...props} />;
+/** The pattern filled with the example content, in one of the variants (the gallery passes `variant`). Leave `nav` out when the page already has one. */
+export function HeroStageExample({ variant = "plain-center", ...props }: Partial<HeroStageProps> & { variant?: string }) {
+  return <HeroStage nav={exampleNav} headline="" {...(variants[variant] ?? variants["plain-center"])} {...props} />;
 }
 
 export default HeroStageExample;

@@ -154,12 +154,12 @@ const cueClasses = "pointer-events-none absolute inset-x-0 bottom-4 flex justify
 const pauseClasses = "absolute bottom-3 end-3 z-10 md:bottom-4 md:end-4";
 
 const pauseIcon = (
-  <svg viewBox="0 0 24 24" aria-hidden focusable="false">
+  <svg viewBox="0 0 24 24" className="size-5" aria-hidden focusable="false">
     <path d="M9 5v14M15 5v14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
 const playIcon = (
-  <svg viewBox="0 0 24 24" aria-hidden focusable="false">
+  <svg viewBox="0 0 24 24" className="size-5" aria-hidden focusable="false">
     <path d="M8 5.5v13l10.5-6.5z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
   </svg>
 );
