@@ -1,5 +1,7 @@
 # Hero — Feature Center
 
+> **Replaced by Hero — Stage** (`patterns/hero/stage`; Randy, 2026-10-30). Stage does this layout and more (backdrop: none / image / video; align: start / centre / end). This folder is removed once Stage is approved.
+
 status: approved
 
 Randy approved it in the gallery on 2026-10-27.
