@@ -5,12 +5,9 @@
   "description": "Page patterns built on WMDS, for agents to copy and adapt. Also a skill (SKILL.md).",
   "type": "module",
   "scripts": {
-    "gallery": "vite --config gallery/vite.config.ts gallery --port 5190 --strictPort --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "vitest run --config check/vitest.config.ts",
-    "check": "npm run typecheck && npm run test && npm run build:pages",
-    "build:pages": "vite build --config gallery/vite.config.ts gallery --mode pages --outDir ../dist-pages --emptyOutDir",
-    "preview:pages": "vite preview --config gallery/vite.config.ts gallery --mode pages --outDir ../dist-pages --port 5191 --strictPort --host 127.0.0.1"
+    "check": "npm run typecheck && npm run test"
   },
   "dependencies": {
     "@thewhatmatters/wmds": "0.4.35",
@@ -20,11 +17,9 @@
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "22.20.5",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.4",
     "tailwindcss": "^4.3.3",
     "typescript": "~6.0.2",
     "vite": "^8.2.0",
