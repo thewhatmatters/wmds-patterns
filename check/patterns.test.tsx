@@ -29,11 +29,12 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
   });
 
-  it("imports only @thewhatmatters/wmds, React and its own files", () => {
+  it("imports only @thewhatmatters/wmds, React, Motion and its own files", () => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       for (const [, from] of source.matchAll(/from "([^"]+)"/g)) {
-        expect(from, `${folder}/${file}`).toMatch(/^(@thewhatmatters\/wmds|react|\.\/)/);
+        // Motion (motion.dev) is a WMDS peer, so patterns may use it for motion (Randy, 2026-10-29).
+        expect(from, `${folder}/${file}`).toMatch(/^(@thewhatmatters\/wmds|react|motion\/react$|\.\/)/);
       }
     }
   });
@@ -65,6 +66,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<header[\s>]/);
       expect(html).toMatch(/<nav[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
+    } else if (mod.meta.type === "Steps") {
+      // A steps section: one h2 that names it, no h1 and no nav, the steps as an ordered list, each with an h3.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<ol[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
     } else if (mod.meta.type === "Testimonial") {
       // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
