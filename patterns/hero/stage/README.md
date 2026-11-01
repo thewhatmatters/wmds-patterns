@@ -1,8 +1,8 @@
 # Hero — Stage
 
-status: draft
+status: approved
 
-One hero for two jobs (Randy, 2026-10-30). It replaces **Hero — Feature Center** and **Hero — Over Media**, which stay in the gallery marked as replaced until this one is approved.
+One hero for two jobs (Randy, 2026-10-30). It replaced **Hero — Feature Center** and **Hero — Over Media** (approved 2026-11-01).
 **File:** `HeroStage.tsx` (copy it). **Example:** `example.tsx`, in five variants (the gallery's **Variant** control passes `variant` to the example). The backdrop variants use Randy's Envato pick ("Blurred Restaurant Interior With Bartender in Background"), licensed for the private gallery and kept in `gallery/public/local/`, never committed here; without it the hero shows the dark page colour under the scrim.
 
 Two choices make the layouts:

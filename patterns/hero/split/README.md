@@ -14,8 +14,8 @@ The default hero for services (Hero R7): left-aligned copy (an eyebrow, the head
 ## Split, centred or over media (Hero R7)
 
 - **Split** (this one): a services business, or anything with real work, a product or the sketch to show. The default.
-- **Centred** (Hero — Feature Center, Hero — Phone Center): a headline of 2 lines or fewer and no picture, or one product shot under it. If you have no real picture, use a centred hero without one; never fill the visual with stock or filler (R8).
-- **Over media** (Hero — Over Media): food, places, a room people come to, where the atmosphere is the pitch.
+- **Centred** (Hero — Stage on the page, Hero — Phone Center): a headline of 2 lines or fewer and no picture, or one product shot under it. If you have no real picture, use a centred hero without one; never fill the visual with stock or filler (R8).
+- **Over media** (Hero — Stage with a backdrop): food, places, a room people come to, where the atmosphere is the pitch.
 
 ## Use it
 
