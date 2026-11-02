@@ -3,7 +3,7 @@
 status: approved
 
 One hero for two jobs (Randy, 2026-10-30). It replaced **Hero — Feature Center** and **Hero — Over Media** (approved 2026-11-01).
-**File:** `HeroStage.tsx` (copy it). **Example:** `example.tsx`, in five variants (the gallery's **Variant** control passes `variant` to the example). The backdrop variants use Randy's Envato pick ("Blurred Restaurant Interior With Bartender in Background"), licensed for the private gallery and kept in `gallery/public/local/`, never committed here; without it the hero shows the dark page colour under the scrim.
+**File:** `HeroStage.tsx` (copy it). **Example:** `example.tsx`, in four variants (the gallery's **Variant** control passes `variant` to the example). The backdrop variants use Randy's Envato pick ("Blurred Restaurant Interior With Bartender in Background"), licensed for the private gallery and kept in `gallery/public/local/`, never committed here; without it the hero shows the dark page colour under the scrim.
 
 Two choices make the layouts:
 
@@ -51,7 +51,7 @@ import { HeroStage } from "./HeroStage";
 
 | Prop | Kind | Notes |
 |---|---|---|
-| `nav` | slot, optional | Leave it empty when the page already has a nav |
+| `nav` | slot, optional | Leave it empty when the page already has a nav. Over a backdrop, give the page's WMDS `SiteNav` `overMedia`: it lays over the picture with no fill and light links, and the hero adds a top fade so they read on bright frames; once you scroll, it's the usual frosted pill (Randy, 2026-11-01) |
 | `eyebrow` | ReactNode | Optional. 1–3 words in sentence case, 12px above the headline. Plain `type-eyebrow` unless `eyebrowHref` is set (then one outlined pill link with an arrow, E10) |
 | `eyebrowHref` | string, optional | Where the eyebrow links |
 | `headline` | ReactNode | The page's only H1: 12 words at most, 2 lines at desktop. WMDS `type-display-1` |

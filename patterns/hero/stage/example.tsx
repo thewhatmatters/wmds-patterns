@@ -1,7 +1,7 @@
 /**
- * Example content for Hero — Stage, in five variants (the gallery's Variant control): the plain page with the
- * framed site sketch and logos, centred or at the start (the window follows the copy), and the restaurant over its video or photo, at the start,
- * centre or end. The picture is Randy's Envato pick ("Blurred Restaurant Interior With Bartender in
+ * Example content for Hero — Stage, in four variants (the gallery's Variant control): the plain page with the
+ * framed site sketch and logos, centred or at the start (the window follows the copy), and the restaurant over its video,
+ * at the start or centred, under a transparent nav (WMDS `SiteNav overMedia`). The picture is Randy's Envato pick ("Blurred Restaurant Interior With Bartender in
  * Background"), licensed for the private gallery and kept in gallery/public/local, never committed here; without
  * it the hero shows the dark page colour under the scrim. Replace every part with the client's own.
  */
@@ -82,47 +82,48 @@ export function SiteSketch() {
 }
 
 /** An example site nav, to show the hero under one. A real page keeps its own nav. */
-export const exampleNav = (
-  <SiteNav
-    placement="inline"
-    state="expanded"
-    start={<SiteNav.Brand href="#home">WhatMatters</SiteNav.Brand>}
-    middle={
-      <SiteNav.Links>
-        <SiteNav.Link href="#services">Services</SiteNav.Link>
-        <SiteNav.Link href="#work">Work</SiteNav.Link>
-        <SiteNav.Link href="#pricing">Pricing</SiteNav.Link>
-        <SiteNav.Link href="#process">Process</SiteNav.Link>
-      </SiteNav.Links>
-    }
-    end={
-      <div className="flex items-center gap-2">
-        <span className="max-md:hidden">
-          <Button role="ghost" size="sm" render={<a href="#contact" />}>
-            Contact
-          </Button>
-        </span>
-        <Button role="primary" size="sm" render={<a href="#sketch" />} className="whitespace-nowrap">
-          Get my free sketch
+/** An example site nav, to show the hero under one. A real page keeps its own nav. Over the video, `overMedia`. */
+export function ExampleNav({ overMedia = false }: { overMedia?: boolean }) {
+  const brand = overMedia ? "Cinder & Sotol" : "WhatMatters";
+  const links = overMedia ? ["Menu", "Bar", "Events", "Visit"] : ["Services", "Work", "Pricing", "Process"];
+  const cta = overMedia ? { href: "#book", label: "Book a table" } : { href: "#sketch", label: "Get my free sketch" };
+  return (
+    <SiteNav
+      placement="inline"
+      state="expanded"
+      overMedia={overMedia}
+      start={<SiteNav.Brand href="#home">{brand}</SiteNav.Brand>}
+      middle={
+        <SiteNav.Links>
+          {links.map((link) => (
+            <SiteNav.Link key={link} href={`#${link.toLowerCase()}`}>
+              {link}
+            </SiteNav.Link>
+          ))}
+        </SiteNav.Links>
+      }
+      end={
+        <Button role="primary" size="sm" render={<a href={cta.href} />} className="whitespace-nowrap">
+          {cta.label}
         </Button>
-      </div>
-    }
-    mobile={
-      <>
-        <SiteNav.MobileLink href="#services">Services</SiteNav.MobileLink>
-        <SiteNav.MobileLink href="#work">Work</SiteNav.MobileLink>
-        <SiteNav.MobileLink href="#pricing">Pricing</SiteNav.MobileLink>
-        <SiteNav.MobileLink href="#process">Process</SiteNav.MobileLink>
-        <SiteNav.MobileLink href="#contact">Contact</SiteNav.MobileLink>
-      </>
-    }
-    mobileAction={
-      <Button role="primary" size="lg" render={<a href="#sketch" />}>
-        Get my free sketch
-      </Button>
-    }
-  />
-);
+      }
+      mobile={
+        <>
+          {links.map((link) => (
+            <SiteNav.MobileLink key={link} href={`#${link.toLowerCase()}`}>
+              {link}
+            </SiteNav.MobileLink>
+          ))}
+        </>
+      }
+      mobileAction={
+        <Button role="primary" size="lg" render={<a href={cta.href} />}>
+          {cta.label}
+        </Button>
+      }
+    />
+  );
+}
 
 /** Read by the gallery and the check. Keep it in step with this pattern's row in SKILL.md. */
 export const meta = {
@@ -133,8 +134,7 @@ export const meta = {
     { id: "plain-center", label: "Page · centre" },
     { id: "plain-start", label: "Page · start" },
     { id: "video-start", label: "Video · start" },
-    { id: "image-center", label: "Photo · centre" },
-    { id: "image-end", label: "Photo · end" },
+    { id: "video-center", label: "Video · centre" },
   ],
 };
 
@@ -174,22 +174,18 @@ const restaurant: Partial<HeroStageProps> = {
   actions: restaurantActions,
 };
 const video = { kind: "video", src: `${base}local/footer-over-image.mp4`, poster: `${base}local/footer-over-image.jpg` } as const;
-const photo = {
-  kind: "image",
-  media: <img src={`${base}local/footer-over-image.jpg`} alt="" width={1280} height={720} />,
-} as const;
 
 export const variants: Record<string, Partial<HeroStageProps>> = {
   "plain-center": { ...studio, align: "center" },
   "plain-start": { ...studio, align: "start" },
   "video-start": { ...restaurant, backdrop: video, align: "start" },
-  "image-center": { ...restaurant, backdrop: photo, align: "center" },
-  "image-end": { ...restaurant, backdrop: { ...photo, focus: "30% 50%" }, align: "end" },
+  "video-center": { ...restaurant, backdrop: video, align: "center" },
 };
 
 /** The pattern filled with the example content, in one of the variants (the gallery passes `variant`). Leave `nav` out when the page already has one. */
 export function HeroStageExample({ variant = "plain-center", ...props }: Partial<HeroStageProps> & { variant?: string }) {
-  return <HeroStage nav={exampleNav} headline="" {...(variants[variant] ?? variants["plain-center"])} {...props} />;
+  const chosen = variants[variant] ?? variants["plain-center"];
+  return <HeroStage nav={<ExampleNav overMedia={chosen.backdrop != null} />} headline="" {...chosen} {...props} />;
 }
 
 export default HeroStageExample;

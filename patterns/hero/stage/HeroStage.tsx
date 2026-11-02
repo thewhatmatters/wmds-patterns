@@ -31,7 +31,10 @@ export type HeroStageBackdrop =
     };
 
 export interface HeroStageProps {
-  /** Slot, optional: a nav above the hero. Leave it empty when the page already has a nav (the usual case). */
+  /**
+   * Slot, optional: a nav above the hero. Leave it empty when the page already has a nav (the usual case). Over a
+   * backdrop, pass WMDS `<SiteNav overMedia>` (here or as the page's nav): it lays over the picture with light ink.
+   */
   nav?: ReactNode;
   /** Optional: a short line above the headline, 1–3 words in sentence case (the capitals come from the style). */
   eyebrow?: ReactNode;
@@ -74,11 +77,12 @@ const rootClasses = "relative w-full overflow-x-clip";
 const plainSectionClasses = "grid-page relative !py-0";
 /**
  * Over a backdrop: the picture's height, at least 28rem on phones, 36rem from md, 40rem from lg, or the screen
- * less 64px with `fullHeight`. Dark-theme scope, so the WMDS ink, muted text and buttons read on the scrim.
+ * less 64px with `fullHeight`. Dark-theme scope, so the WMDS ink, muted text and buttons read on the scrim. The top
+ * keeps the nav's height clear, so a nav laid over the picture never sits on the copy.
  */
 const backdropSectionClasses = {
-  content: "relative isolate flex w-full flex-col overflow-hidden min-h-[28rem] md:min-h-[36rem] lg:min-h-[40rem]",
-  full: "relative isolate flex w-full flex-col overflow-hidden min-h-[calc(100svh-4rem)]",
+  content: "relative isolate flex w-full flex-col overflow-hidden pt-[var(--site-nav-height)] min-h-[28rem] md:min-h-[36rem] lg:min-h-[40rem]",
+  full: "relative isolate flex w-full flex-col overflow-hidden pt-[var(--site-nav-height)] min-h-[calc(100svh-4rem)]",
 } as const;
 /** The grid over the backdrop: copy at the bottom of the picture, Band `lg` spacing (96, 64 on phones; S8). */
 const backdropGridClasses =
@@ -88,6 +92,12 @@ const mediaClasses = "absolute inset-0 -z-10 size-full object-cover";
  * Bottom-up scrim in the dark page colour, 74% up to 70% of the height (the copy stacks taller on phones): the
  * headline clears 4:1 and the eyebrow, lead and buttons 10:1 over the brightest of 9 frames, fading clear at the top.
  */
+/**
+ * The nav over the picture (WMDS `SiteNav overMedia`, in the slot or as the page's own nav): a top fade in the dark
+ * page colour so its light links read on bright frames (4.5:1 or more on the example video), clear by 12rem.
+ */
+const topScrimClasses =
+  "pointer-events-none absolute inset-x-0 top-0 -z-10 h-48 bg-linear-to-b from-[color-mix(in_srgb,var(--color-background-body)_80%,transparent)] to-transparent";
 const scrimClasses =
   "pointer-events-none absolute inset-0 -z-10 bg-linear-to-t from-[color-mix(in_srgb,var(--color-background-body)_90%,transparent)] via-[color-mix(in_srgb,var(--color-background-body)_74%,transparent)] via-70% to-transparent to-95%";
 
@@ -321,6 +331,7 @@ export function HeroStage({
             </div>
           )}
           <div className={scrimClasses} />
+          <div className={topScrimClasses} />
           <div className={backdropGridClasses}>
             {copy}
             {proof("backdrop")}
