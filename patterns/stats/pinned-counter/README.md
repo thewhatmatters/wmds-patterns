@@ -2,7 +2,7 @@
 
 status: draft
 
-After CoMinVi's pinned stats dial (details.so, https://www.details.so/inspo/cominvi-8bbec0). Nothing copied but the idea: the section pins, and each key figure gets the whole screen in turn, a huge number with a row of ticks lit up to it. CoMinVi's ticks run round a large dial; here they run in a straight WMDS meter across the page, because WMDS's ring can't be that big yet (see WMDS).
+After CoMinVi's pinned stats dial (details.so, https://www.details.so/inspo/cominvi-8bbec0). Nothing copied but the idea: the section pins around one large dial of ticks, and each key figure takes the hole in turn. The dial never resets: moving to the next figure sweeps it from the last figure's share to the next (70% → 38% → 98% in the example), and the number counts from the last figure to the next (Randy, 2026-11-03: a bar that empties and refills for every figure made no sense).
 **File:** `StatsPinnedCounter.tsx` (copy it). **Example:** `example.tsx`, a studio's four figures (made up).
 
 The section takes one screen of scroll per figure. On the pinned screen: the heading as a small label top-left, the figure in the middle (WMDS `type-display-hero`) with its label under it, a mono "02 / 04" and the figure's category at the sides, and a WMDS `Chart.SegmentedBar` of 72 tall ticks along the bottom that fills to the figure as you scroll into it.
@@ -67,5 +67,5 @@ Full width; the pinned screen has 48px top and bottom (Band `md`); the side labe
 Built on **@thewhatmatters/wmds 0.4.35** (npm): `Band`, `Chart.Frame` (`segmentHeight`), `Chart.SegmentedBar`. Motion **13.5.1** (the WMDS peer).
 
 - **Check change:** `npm run check` allows `motion/react` imports (the same change as on `work/pinned-parallax` and `steps/stacked-cards`), has a rule for the new Stats type (one h2, no h1, no nav, every figure in a `dl`), and lists this pattern as centred on phones (the centred text is the figure; the h2 is left-aligned).
-- **WMDS-GAP: ChartSegmentedRing can't be big.** CoMinVi's dial is a ring of ticks most of a screen tall. WMDS `Chart.SegmentedRing` is the same idea but tops out at `lg` (192px), its centre type is sized for that, and its tick geometry (`chartSegmentedRingTickPath`) isn't exported. Proposed: `size="fluid"` (fills its container, square; centre value in container-query units). Then this pattern can switch the bar for the dial in one line. WMDS main is at 0.4.43 while patterns pin 0.4.35, so it needs a release and a pin bump.
+- **Chart.SegmentedRing `size="fluid"` + `animate="always"`** (WMDS branch `lead-engineer/ring-fluid`, after 0.4.44): the dial fills its box and sweeps from each value to the next. Until that's released, this pattern only builds against the local WMDS build; the pin bump follows the release.
 - **WMDS-GAP: no count-up figure.** Every stats pattern will rebuild the eased count and the reduced-motion jump. Proposed: a WMDS `CountUp` (or a `Stat` `animate` option) on the Motion peer.
