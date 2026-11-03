@@ -8,7 +8,7 @@
  * Phones get a plain list (a tall sticky card would cover the screen); reduced motion keeps the stack but no
  * scaling.
  */
-import { useId, useRef, type ReactNode } from "react";
+import { useId, useRef, type CSSProperties, type ReactNode } from "react";
 import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { Band, Card, cn, type BandTone, type CardTone } from "@thewhatmatters/wmds";
 
@@ -42,7 +42,14 @@ export interface StepsStackedCardsProps {
 /** Heading over the first half of the grid; intro and its column start where the cards' right half starts (Grid rule). */
 const headingClasses = "col-span-full text-balance type-heading-1 text-fg lg:col-span-6";
 const introClasses = "col-span-full mt-4 text-pretty text-fg type-lead md:mt-6 lg:col-span-5 lg:col-start-7 lg:mt-0 lg:self-end";
-const listClasses = "col-span-full mt-10 flex flex-col gap-4 md:mt-16 md:gap-[16svh]";
+/**
+ * From md, an empty spacer closes the list (`::after`, inside it): a sticky card only holds while the list has room
+ * below it, so without one the last card never sticks and slides over the strip before it (Randy, 2026-11-03:
+ * step 3's title was covered). With it, the last card settles a full strip below the one before and the finished
+ * stack holds for a beat before it leaves together.
+ */
+const listClasses =
+  "col-span-full mt-10 flex flex-col gap-4 md:mt-16 md:gap-[16svh] md:after:block md:after:h-[24svh] md:after:content-['']";
 /** Cards take turns in these WMDS tones. */
 const tones: CardTone[] = ["field", "inverse", "light"];
 /** From md, each card sticks a strip lower than the one before, so every earlier card's top strip stays in view. */
@@ -50,7 +57,11 @@ const itemClasses = "md:sticky";
 const stackTop = 96;
 const strip = 72;
 /** Inside a card: number and meta on top, title and copy at the bottom, the visual on the right from md. */
-const cardInnerClasses = "grid gap-6 p-6 md:h-[min(34rem,70svh)] md:grid-cols-2 md:gap-8 md:p-8";
+/**
+ * From md, every card is short enough for the finished stack to fit the screen: the screen less the last card's
+ * sticky top (`--stack-last`, set on the list) and 5rem (the Band's 3rem under it, 2rem of card frame), at most 34rem.
+ */
+const cardInnerClasses = "grid gap-6 p-6 md:h-[min(34rem,calc(100svh-var(--stack-last)-5rem))] md:grid-cols-2 md:gap-8 md:p-8";
 const numberRowClasses = "flex flex-wrap items-baseline gap-x-4 gap-y-1";
 const numberClasses = "type-heading-2 text-fg";
 const metaClasses = "type-eyebrow text-muted";
@@ -110,7 +121,12 @@ export function StepsStackedCards({ eyebrow, heading, intro, steps, tone = "defa
             {intro}
           </p>
         ) : null}
-        <ol ref={listRef} className={listClasses} data-slot="steps">
+        <ol
+          ref={listRef}
+          className={listClasses}
+          style={{ "--stack-last": `${stackTop + (steps.length - 1) * strip}px` } as CSSProperties}
+          data-slot="steps"
+        >
           {steps.map((step, index) => (
             <Step key={index} step={step} index={index} count={steps.length} progress={scrollYProgress} />
           ))}
