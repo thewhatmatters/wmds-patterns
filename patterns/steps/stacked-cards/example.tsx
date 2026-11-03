@@ -10,6 +10,8 @@ export const meta = {
   type: "Steps",
   name: "Steps — Stacked Cards",
   purpose: "A how-it-works section where each step's card sticks and the next slides over it, leaving a strip of each.",
+  /** Moves as the page scrolls: the gallery shows it a screen tall and scrolls inside the frame. */
+  scroll: true,
 };
 
 /** A paper card in the visual area, so each picture reads the same on every card tone. */
