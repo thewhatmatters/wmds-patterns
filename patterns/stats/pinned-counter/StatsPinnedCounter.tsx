@@ -1,13 +1,14 @@
 /**
- * Stats — Pinned Counter: a few key figures shown one at a time while the section is pinned, each a huge number
- * that counts up over a row of WMDS meter ticks that fill to it (after CoMinVi's pinned stats dial). Scrolling
- * moves to the next figure; a mono counter and the figure's category sit at the screen's sides (above the meter
- * on phones).
+ * Stats — Pinned Counter: a few key figures shown one at a time while the section is pinned, around one large
+ * WMDS dial of ticks (after CoMinVi's pinned stats dial). The dial stays put: scrolling to the next figure sweeps
+ * the same dial from the last figure's share to the next (70% → 38% → 98%), and the number in its hole counts
+ * from the last figure to the next, so each step reads as the gauge moving, never resetting. A mono counter and
+ * the figure's category sit at the screen's sides (under the dial on phones).
  *
- * Motion (motion.dev, `motion/react`, the WMDS peer): scroll position picks the figure and fills the meter
- * (useScroll); the number counts to its value over 0.8s, easing out (animate on a motion value). Under prefers-reduced-motion the number and the meter
- * jump straight to each figure. Every figure is also in a plain list for screen readers, so nothing depends on
- * scrolling to be read.
+ * Motion (motion.dev, `motion/react`, the WMDS peer): scroll position picks the figure (useScroll); the dial is
+ * WMDS `Chart.SegmentedRing` with `animate="always"` (a spring from the last value); the number tweens over 0.8s,
+ * easing out. Under prefers-reduced-motion both jump straight to each figure. Every figure is also in a plain
+ * list for screen readers, so nothing depends on scrolling to be read.
  */
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "motion/react";
@@ -26,7 +27,7 @@ export interface StatsPinnedCounterStat {
   suffix?: string;
   /** Decimal places shown. Default 0. */
   decimals?: number;
-  /** Where a full meter sits: 100 for a percentage, the goal for a count. Default 100. */
+  /** Where a full dial sits: 100 for a percentage, the goal for a count. Default 100. */
   max?: number;
 }
 
@@ -42,18 +43,19 @@ export interface StatsPinnedCounterProps {
 
 /* Every class is written out in full (never interpolated) so Tailwind sees it. */
 
-/** The pinned screen: heading at the top, the figure in the middle, the meter under it, side labels at mid-height. */
-const pinClasses = "sticky top-0 col-span-full grid h-svh grid-rows-[auto_1fr_auto] py-[calc(var(--leading-base)*2)]";
+/** The pinned screen: heading at the top, the dial filling the middle, side labels at mid-height. */
+const pinClasses = "sticky top-0 col-span-full grid h-svh grid-rows-[auto_1fr] py-[calc(var(--leading-base)*2)]";
 const headingClasses = "type-eyebrow text-muted";
-const figureClasses = "flex flex-col items-center justify-center text-center";
-const numberClasses = "type-display-hero tabular-nums leading-none text-fg";
-const labelClasses = "mt-4 type-heading-3 text-fg";
-/** Phones: a row just above the meter. From md: at mid-height, either side of the figure. */
+/** The dial's box: as wide as the content allows, never taller than the screen leaves (it's square). */
+const dialClasses = "mx-auto flex w-[min(100%,calc(100svh-12rem))] items-center self-center";
+/** The figure's label under the number, inside the hole. */
+const labelClasses = "mt-[3cqi] max-w-[60cqi] text-balance type-heading-3 text-fg";
+/** Phones: a row under the dial. From md: at mid-height, either side of the dial. */
 const sideRowClasses =
-  "pointer-events-none absolute inset-x-0 bottom-36 flex justify-between md:top-1/2 md:bottom-auto md:-translate-y-1/2";
+  "pointer-events-none absolute inset-x-0 bottom-10 flex justify-between md:top-1/2 md:bottom-auto md:-translate-y-1/2";
 const sideClasses = "font-mono text-xs uppercase tracking-[0.08em] text-muted";
-/** WMDS meter ticks, 64px tall, across the content width. */
-const meterHeight = 64;
+/** Ticks round the dial. */
+const dialSegments = 72;
 
 function format(value: number, stat: StatsPinnedCounterStat) {
   return `${stat.prefix ?? ""}${value.toFixed(stat.decimals ?? 0)}${stat.suffix ?? ""}`;
@@ -66,17 +68,15 @@ export function StatsPinnedCounter({ heading, stats, tone = "default", className
   const count = stats.length;
   const { scrollYProgress } = useScroll({ target: trackRef, offset: ["start start", "end end"] });
 
-  // Which figure, and how far into its stretch of scroll: the meter fills over the first 40% of each stretch.
+  // Which figure: one screen of scroll each.
   const [index, setIndex] = useState(0);
-  const [fill, setFill] = useState(1);
   useMotionValueEvent(scrollYProgress, "change", (progress) => {
-    const position = Math.min(count - 0.0001, Math.max(0, progress * count));
-    setIndex(Math.floor(position));
-    setFill(Math.min(1, (position % 1) / 0.4));
+    setIndex(Math.floor(Math.min(count - 0.0001, Math.max(0, progress * count))));
   });
 
   const stat = stats[index];
   const target = stat.value;
+  // The number moves from wherever it is (the last figure) to this one; it never restarts at zero.
   const number = useMotionValue(target);
   useEffect(() => {
     if (reduce) {
@@ -88,7 +88,6 @@ export function StatsPinnedCounter({ heading, stats, tone = "default", className
   }, [target, reduce, number]);
   const shown = useTransform(number, (value) => format(value, stat));
   const max = stat.max ?? 100;
-  const meterValue = reduce ? target : target * fill;
 
   return (
     <div className={cn("relative w-full", className)} data-pattern="stats-pinned-counter">
@@ -108,14 +107,18 @@ export function StatsPinnedCounter({ heading, stats, tone = "default", className
                 </div>
               ))}
             </dl>
-            <div className={figureClasses} aria-hidden="true" data-slot="figure">
-              <motion.p className={numberClasses}>{shown}</motion.p>
-              <p className={labelClasses}>{stat.label}</p>
-            </div>
-            <div aria-hidden="true" data-slot="meter">
-              <Chart.Frame segmentHeight={meterHeight}>
-                <Chart.SegmentedBar value={meterValue} max={max} tone="primary" segments={72} />
-              </Chart.Frame>
+            {/* One dial for every figure: its value changes, so it sweeps from the last share to this one. */}
+            <div className={dialClasses} aria-hidden="true" data-slot="figure">
+              <Chart.SegmentedRing
+                value={target}
+                max={max}
+                size="fluid"
+                animate={reduce ? "none" : "always"}
+                segments={dialSegments}
+                tone="primary"
+                centerValue={<motion.span>{shown}</motion.span>}
+                centerLabel={<span className={labelClasses}>{stat.label}</span>}
+              />
             </div>
             <div className={sideRowClasses} aria-hidden="true">
               <span className={sideClasses}>

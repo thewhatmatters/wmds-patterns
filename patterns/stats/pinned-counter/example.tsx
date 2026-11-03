@@ -7,7 +7,7 @@ import { StatsPinnedCounter, type StatsPinnedCounterProps, type StatsPinnedCount
 export const meta = {
   type: "Stats",
   name: "Stats — Pinned Counter",
-  purpose: "Key figures one at a time on a pinned screen: a huge number counts up over WMDS meter ticks that fill to it.",
+  purpose: "Key figures one at a time on a pinned screen, around one large dial of ticks that sweeps from each figure to the next.",
   /** Moves as the page scrolls: the gallery shows it a screen tall and scrolls inside the frame. */
   scroll: true,
 };
