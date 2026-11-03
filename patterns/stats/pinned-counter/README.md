@@ -1,6 +1,6 @@
 # Stats — Pinned Counter
 
-status: draft
+status: approved
 
 After CoMinVi's pinned stats dial (details.so, https://www.details.so/inspo/cominvi-8bbec0). Nothing copied but the idea: the section pins around one large dial of ticks, and each key figure takes the hole in turn. The dial only builds: every figure is the same measure in one unit, shown lowest first, so each step sweeps it up from the last figure to the next (12% → 31% → 54% → 82% in the example) and the number counts up with it (Randy, 2026-11-03: never mix a percentage with a plain count, and never let the dial drop back).
 **File:** `StatsPinnedCounter.tsx` (copy it). **Example:** `example.tsx`, a studio's four figures (made up).
