@@ -8,6 +8,8 @@ export const meta = {
   type: "Stats",
   name: "Stats — Pinned Counter",
   purpose: "Key figures one at a time on a pinned screen: a huge number counts up over WMDS meter ticks that fill to it.",
+  /** Moves as the page scrolls: the gallery shows it a screen tall and scrolls inside the frame. */
+  scroll: true,
 };
 
 const stats: StatsPinnedCounterStat[] = [
