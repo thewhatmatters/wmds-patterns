@@ -2,7 +2,7 @@
 
 status: draft
 
-After CoMinVi's pinned stats dial (details.so, https://www.details.so/inspo/cominvi-8bbec0). Nothing copied but the idea: the section pins around one large dial of ticks, and each key figure takes the hole in turn. The dial never resets: moving to the next figure sweeps it from the last figure's share to the next (70% → 38% → 98% in the example), and the number counts from the last figure to the next (Randy, 2026-11-03: a bar that empties and refills for every figure made no sense).
+After CoMinVi's pinned stats dial (details.so, https://www.details.so/inspo/cominvi-8bbec0). Nothing copied but the idea: the section pins around one large dial of ticks, and each key figure takes the hole in turn. The dial only builds: every figure is the same measure in one unit, shown lowest first, so each step sweeps it up from the last figure to the next (12% → 31% → 54% → 82% in the example) and the number counts up with it (Randy, 2026-11-03: never mix a percentage with a plain count, and never let the dial drop back).
 **File:** `StatsPinnedCounter.tsx` (copy it). **Example:** `example.tsx`, a studio's four figures (made up).
 
 The section takes one screen of scroll per figure. On the pinned screen: the heading as a small label top-left, the figure in the middle (WMDS `type-display-hero`) with its label under it, a mono "02 / 04" and the figure's category at the sides, and a WMDS `Chart.SegmentedBar` of 72 tall ticks along the bottom that fills to the figure as you scroll into it.
@@ -19,11 +19,12 @@ The screenshots are single moments of the scroll; frames are in the night's repo
 import { StatsPinnedCounter } from "./StatsPinnedCounter";
 
 <StatsPinnedCounter
-  heading="By the numbers"
+  heading="What a new site does"
+  unit={{ suffix: "%", max: 100 }}
   stats={[
-    { value: 140, max: 200, label: "Sites launched", category: "Since 2019" },
-    { value: 38, suffix: "%", label: "More enquiries in the first quarter", category: "Average" },
-    // 3–5 figures
+    { value: 12, label: "More enquiries after one month", category: "Month 1" },
+    { value: 31, label: "More enquiries after three months", category: "Month 3" },
+    // 3–5 figures, one measure, lowest first
   ]}
 />
 ```
@@ -35,7 +36,8 @@ The app needs `motion` (the WMDS peer) installed.
 | Prop | Kind | Notes |
 |---|---|---|
 | `heading` | ReactNode | The section's `h2`, short, set as a small label at the top of the pinned screen |
-| `stats` | array | 3–5 figures: `value`, `label` (what it counts), optional `category` (side label), `prefix`, `suffix`, `decimals`, `max` (a full meter; default 100) |
+| `stats` | array | 3–5 figures of one measure: `value`, `label` (this step, e.g. "After three months"), optional `category` (side label). Shown lowest first, whatever order you pass |
+| `unit` | object, optional | The one unit every figure shares: `prefix`, `suffix`, `decimals`, `max` (a full dial). Default `{ suffix: "%", max: 100 }`; for a count, e.g. `{ max: 200 }` |
 | `tone` | `"default"` (default), `"inverse"`, `"field"` | The WMDS Band tone |
 
 ## Motion
@@ -54,7 +56,7 @@ The app needs `motion` (the WMDS peer) installed.
 
 The first item is the example the gallery's Copy prompt uses.
 
-- **Your own figures:** keep 3–5, each with a real source; set `max` so a full meter means something (a goal, the scale's top).
+- **Your own figures:** 3–5 steps of one measure (all percentages, or all counts of the same thing), each with a real source; set `unit.max` so a full dial means something (a goal, the scale's top). Different kinds of figure belong in a different stats pattern, not on one dial.
 - **On the brand's dark surface:** `tone="inverse"`.
 - **Shorter scroll:** change `count * 100` (svh per figure) to `count * 70`.
 

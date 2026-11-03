@@ -1,8 +1,9 @@
 /**
  * Stats — Pinned Counter: a few key figures shown one at a time while the section is pinned, around one large
  * WMDS dial of ticks (after CoMinVi's pinned stats dial). The dial stays put: scrolling to the next figure sweeps
- * the same dial from the last figure's share to the next (70% → 38% → 98%), and the number in its hole counts
- * from the last figure to the next, so each step reads as the gauge moving, never resetting. A mono counter and
+ * the same dial up from the last figure to the next (12% → 31% → 54% → 82%), and the number in its hole counts
+ * up with it, so each step reads as one measure building. Every figure shares one unit and scale, and they're
+ * shown lowest first, so the dial never drops back. A mono counter and
  * the figure's category sit at the screen's sides (under the dial on phones).
  *
  * Motion (motion.dev, `motion/react`, the WMDS peer): scroll position picks the figure (useScroll); the dial is
@@ -15,27 +16,36 @@ import { animate, motion, useMotionValue, useMotionValueEvent, useReducedMotion,
 import { Band, Chart, cn, type BandTone } from "@thewhatmatters/wmds";
 
 export interface StatsPinnedCounterStat {
-  /** The figure: 35, 1200, 4.9. */
+  /** The figure, in the section's one unit: 6, 20, 47. */
   value: number;
-  /** What it counts, short: "Projects shipped". */
+  /** What this step of the build is, short: "After three months". */
   label: string;
-  /** Optional: a word or two at the screen's side, e.g. "Since 2019". */
+  /** Optional: a word or two at the screen's side, e.g. "Q2". */
   category?: string;
-  /** Optional: before the number, e.g. "$". */
+}
+
+/**
+ * The one unit every figure shares, so the dial reads as one measure building up (Randy, 2026-11-03: never a
+ * percentage beside a plain count). Default: a percentage out of 100.
+ */
+export interface StatsPinnedCounterUnit {
+  /** Before the number, e.g. "$". */
   prefix?: string;
-  /** Optional: after the number, e.g. "%" or "k". */
+  /** After the number, e.g. "%" or "k". */
   suffix?: string;
   /** Decimal places shown. Default 0. */
   decimals?: number;
-  /** Where a full dial sits: 100 for a percentage, the goal for a count. Default 100. */
-  max?: number;
+  /** Where a full dial sits: 100 for a percentage, the goal for a count. */
+  max: number;
 }
 
 export interface StatsPinnedCounterProps {
   /** The section's heading, short: "By the numbers". Small, at the top of the pinned screen. */
   heading: ReactNode;
-  /** The figures, 3–5. */
+  /** The figures, 3–5, all in `unit`. Shown lowest first, so the dial only ever builds. */
   stats: StatsPinnedCounterStat[];
+  /** The figures' shared unit and scale. Default `{ suffix: "%", max: 100 }`. */
+  unit?: StatsPinnedCounterUnit;
   /** The WMDS Band tone. Default `default`. */
   tone?: BandTone;
   className?: string;
@@ -57,11 +67,15 @@ const sideClasses = "font-mono text-xs uppercase tracking-[0.08em] text-muted";
 /** Ticks round the dial. */
 const dialSegments = 72;
 
-function format(value: number, stat: StatsPinnedCounterStat) {
-  return `${stat.prefix ?? ""}${value.toFixed(stat.decimals ?? 0)}${stat.suffix ?? ""}`;
+const percent: StatsPinnedCounterUnit = { suffix: "%", max: 100 };
+
+function format(value: number, unit: StatsPinnedCounterUnit) {
+  return `${unit.prefix ?? ""}${value.toFixed(unit.decimals ?? 0)}${unit.suffix ?? ""}`;
 }
 
-export function StatsPinnedCounter({ heading, stats, tone = "default", className }: StatsPinnedCounterProps) {
+export function StatsPinnedCounter({ heading, stats: given, unit = percent, tone = "default", className }: StatsPinnedCounterProps) {
+  // Lowest first: every step moves the dial and the number up, never back.
+  const stats = [...given].sort((a, b) => a.value - b.value);
   const headingId = useId();
   const trackRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
@@ -86,8 +100,8 @@ export function StatsPinnedCounter({ heading, stats, tone = "default", className
     const controls = animate(number, target, { duration: 0.8, ease: [0.16, 1, 0.3, 1] });
     return () => controls.stop();
   }, [target, reduce, number]);
-  const shown = useTransform(number, (value) => format(value, stat));
-  const max = stat.max ?? 100;
+  const shown = useTransform(number, (value) => format(value, unit));
+  const max = unit.max;
 
   return (
     <div className={cn("relative w-full", className)} data-pattern="stats-pinned-counter">
@@ -103,7 +117,7 @@ export function StatsPinnedCounter({ heading, stats, tone = "default", className
               {stats.map((item) => (
                 <div key={item.label}>
                   <dt>{item.label}</dt>
-                  <dd>{format(item.value, item)}</dd>
+                  <dd>{format(item.value, unit)}</dd>
                 </div>
               ))}
             </dl>

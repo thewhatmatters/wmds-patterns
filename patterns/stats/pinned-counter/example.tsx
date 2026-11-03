@@ -1,24 +1,24 @@
 /**
- * Example content for Stats — Pinned Counter: a studio's figures. Made up for the example; a client page uses
- * its own, with a source for each.
+ * Example content for Stats — Pinned Counter: one measure (more enquiries than before launch) building over a
+ * year. Made up for the example; a client page uses its own, with a source for each.
  */
 import { StatsPinnedCounter, type StatsPinnedCounterProps, type StatsPinnedCounterStat } from "./StatsPinnedCounter";
 
 export const meta = {
   type: "Stats",
   name: "Stats — Pinned Counter",
-  purpose: "Key figures one at a time on a pinned screen, around one large dial of ticks that sweeps from each figure to the next.",
+  purpose: "One measure building on a pinned screen: a large dial of ticks sweeps up from each figure to the next, all in one unit.",
   /** Moves as the page scrolls: the gallery shows it a screen tall and scrolls inside the frame. */
   scroll: true,
 };
 
 const stats: StatsPinnedCounterStat[] = [
-  { value: 140, max: 200, label: "Sites launched", category: "Since 2019" },
-  { value: 38, suffix: "%", label: "More enquiries in the first quarter", category: "Average" },
-  { value: 4.9, max: 5, decimals: 1, suffix: "/5", label: "Client rating", category: "62 reviews" },
-  { value: 6, max: 12, label: "Weeks from first call to launch", category: "Typical" },
+  { value: 12, label: "More enquiries after one month", category: "Month 1" },
+  { value: 31, label: "More enquiries after three months", category: "Month 3" },
+  { value: 54, label: "More enquiries after six months", category: "Month 6" },
+  { value: 82, label: "More enquiries after a year", category: "Month 12" },
 ];
 
 export default function Example(props: Partial<StatsPinnedCounterProps>) {
-  return <StatsPinnedCounter heading="By the numbers" stats={stats} {...props} />;
+  return <StatsPinnedCounter heading="What a new site does" stats={stats} unit={{ suffix: "%", max: 100 }} {...props} />;
 }
