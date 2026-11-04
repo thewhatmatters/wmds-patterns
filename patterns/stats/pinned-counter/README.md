@@ -66,8 +66,8 @@ Full width; the pinned screen has 48px top and bottom (Band `md`); the side labe
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.35** (npm): `Band`, `Chart.Frame` (`segmentHeight`), `Chart.SegmentedBar`. Motion **13.5.1** (the WMDS peer).
+Built on **@thewhatmatters/wmds 0.4.45** (npm): `Band`, `Chart.SegmentedRing` (`size="fluid"`, `animate="always"`). Motion **13.5.1** (the WMDS peer).
 
 - **Check change:** `npm run check` allows `motion/react` imports (the same change as on `work/pinned-parallax` and `steps/stacked-cards`), has a rule for the new Stats type (one h2, no h1, no nav, every figure in a `dl`), and lists this pattern as centred on phones (the centred text is the figure; the h2 is left-aligned).
-- **Chart.SegmentedRing `size="fluid"` + `animate="always"`** (WMDS branch `lead-engineer/ring-fluid`, after 0.4.44): the dial fills its box and sweeps from each value to the next. Until that's released, this pattern only builds against the local WMDS build; the pin bump follows the release.
+- **Chart.SegmentedRing `size="fluid"` + `animate="always"`** (new in WMDS 0.4.45): the dial fills its box and sweeps from each value to the next.
 - **WMDS-GAP: no count-up figure.** Every stats pattern will rebuild the eased count and the reduced-motion jump. Proposed: a WMDS `CountUp` (or a `Stat` `animate` option) on the Motion peer.
