@@ -62,4 +62,5 @@ Full width; Band `md` spacing (48 top and bottom); label above the row with 16 b
 Built on **@thewhatmatters/wmds 0.4.35** (npm): `Band`, `Carousel` (`autoplay`, `loop`, `fade`). No Motion import, no new library.
 
 - **Check change:** `npm run check` has a rule for the new Logos type (one h2, no h1, no nav, every mark with its company name as text). The existing Logo strip O4/O5 checks run on it too.
+- **WMDS-GAP (bug): Carousel `loop` widens the page.** The looped copies spill about 4,200px past the row (measured at 1440: the document scrolled sideways to 4,638px). The pattern clips its own row cell (`overflow-x-clip`) so the page stays 1,440 / 390 wide; WMDS should contain its loop inside the Carousel.
 - **WMDS-GAP: Carousel loop needs enough items.** With fewer marks than fill the row, the loop shows a gap. WMDS could repeat the set until it fills the row (a `minRepeat` or automatic fill), so a client with six logos can still use a marquee.

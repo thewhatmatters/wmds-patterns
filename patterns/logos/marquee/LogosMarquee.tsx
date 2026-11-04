@@ -30,9 +30,10 @@ export interface LogosMarqueeProps {
 
 /* Every class is written out in full (never interpolated) so Tailwind sees it. */
 
-/** Label on the first columns, the row on the rest: 2 + 6 of 8 on tablet, 3 + 9 of 12 on desktop; stacked on phones. */
-const labelClasses = "col-span-full text-muted type-eyebrow md:col-span-2 md:self-center lg:col-span-3";
-const rowClasses = "col-span-full mt-4 min-w-0 md:col-span-6 md:col-start-3 md:mt-0 lg:col-span-9 lg:col-start-4";
+/** Label on the first columns, the row on the rest: 2 + 6 of 8 on tablet, 3 + 9 of 12 on desktop; stacked on phones. From md the label sits on the marks' centre line (24px down a 64px cell). */
+const labelClasses = "col-span-full text-muted type-eyebrow md:col-span-2 md:mt-6 md:self-start lg:col-span-3";
+/** `overflow-x-clip`: the looped Carousel's copies spill past its row and would widen the page (WMDS-GAP in the README). */
+const rowClasses = "col-span-full mt-4 min-w-0 overflow-x-clip md:col-span-6 md:col-start-3 md:mt-0 lg:col-span-9 lg:col-start-4";
 /** One mark per cell, centred, muted; marks are 24px tall on phones and 32 from md. */
 const cellClasses =
   "flex h-16 items-center justify-center px-4 text-muted [&_svg]:h-6 [&_svg]:w-auto [&_svg]:max-w-none md:[&_svg]:h-8";
