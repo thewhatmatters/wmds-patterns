@@ -72,6 +72,15 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
+    } else if (mod.meta.type === "Pricing") {
+      // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
+      // somewhere, and the comparison (when present) is a real table with row headers.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<h3[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/data-slot="action"[\s\S]*?<a [^>]*href="[^"]+"/);
+      if (/data-slot="compare"/.test(html)) expect(html).toMatch(/<th[^>]*scope="row"/);
     } else if (mod.meta.type === "Testimonial") {
       // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
