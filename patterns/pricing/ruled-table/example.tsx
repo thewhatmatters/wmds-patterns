@@ -34,7 +34,7 @@ const tiers: PricingRuledTableTier[] = [
     ),
   },
   {
-    name: "Custom",
+    name: "Larger build",
     description: "A shop, a member area or anything the others don't cover.",
     price: null,
     action: (
