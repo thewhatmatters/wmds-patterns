@@ -1,6 +1,6 @@
 # Steps — Stacked Cards
 
-status: draft
+status: approved
 
 After Understory's stacked steps (details.so, https://www.details.so/inspo/understory-b9f3e8). Nothing copied but the idea: each step is a wide card that sticks as you scroll, the next one slides up over it, and a strip of every earlier card ("Step 1", "Step 2") stays showing above, like a stack of index cards.
 **File:** `StepsStackedCards.tsx` (copy it). **Example:** `example.tsx`, a studio's four steps from first call to launch, each with a small WMDS composition of what the step produces (licence-free).
@@ -68,7 +68,7 @@ Full width; Band `md` spacing (48 top and bottom); eyebrow→heading 12; header�
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.35** (npm): `Band`, `Card` (`tone`); the example adds `Stat`, `Status`, `ChartRankedBars`. Motion **13.5.1** (the WMDS peer).
+Built on **@thewhatmatters/wmds 0.4.45** (npm): `Band`, `Card` (`tone`); the example adds `Stat`, `Status`, `ChartRankedBars`. Motion **13.5.1** (the WMDS peer).
 
 - **Check change:** `npm run check` allows `motion/react` imports in patterns (Motion is a WMDS peer; Randy, 2026-10-29; the same change is on `work/pinned-parallax`), and has a rule for the new Steps type: one h2, no h1, no nav, the steps an ordered list with an h3 each.
 - **WMDS-GAP: ChartRankedBars needs `max`.** Without it the bars render near-empty (3 of 3 weeks drew a sliver); the example passes `max={3}`. The default should be the largest item's value (also noted on Services — Split Index).

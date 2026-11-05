@@ -1,9 +1,14 @@
 /**
- * Example content for Hero — Feature Center: placeholder client marks (not real logos), a hairline site
- * sketch for the visual, and a nav. Shows the pattern filled in; replace all of it with real content.
+ * Example content for Hero — Stage, in five variants (the gallery's Variant control): the plain page with the
+ * framed site sketch and logos, centred or at the start (the window follows the copy), and the restaurant over its video or photo, at the start,
+ * centre or end. The picture is Randy's Envato pick ("Blurred Restaurant Interior With Bartender in
+ * Background"), licensed for the private gallery and kept in gallery/public/local, never committed here; without
+ * it the hero shows the dark page colour under the scrim. Replace every part with the client's own.
  */
 import { Button, SiteNav } from "@thewhatmatters/wmds";
-import { HeroFeatureCenter, HeroFeatureCenterLogos, type HeroFeatureCenterLogo, type HeroFeatureCenterProps } from "./HeroFeatureCenter";
+import { HeroStage, HeroStageLogos, type HeroStageLogo, type HeroStageProps } from "./HeroStage";
+
+const base = import.meta.env.BASE_URL;
 
 /**
  * Placeholder client marks: each a different wordmark (weight, case, a simple symbol on some), drawn in
@@ -50,7 +55,7 @@ function Wordmark({ spec }: { spec: MarkSpec }) {
     </svg>
   );
 }
-export const exampleLogos = (count: number): HeroFeatureCenterLogo[] =>
+export const exampleLogos = (count: number): HeroStageLogo[] =>
   marks.slice(0, count).map((spec) => ({ name: spec.name, logo: <Wordmark spec={spec} /> }));
 
 /** Placeholder product visual: a still, hairline sketch of a small site (nav, headline, image, button). */
@@ -122,40 +127,69 @@ export const exampleNav = (
 /** Read by the gallery and the check. Keep it in step with this pattern's row in SKILL.md. */
 export const meta = {
   type: "Hero",
-  name: "Hero — Feature Center",
-  purpose: "Centred pitch and CTAs over the product in a backlit frame, then a row of client logos.",
+  name: "Hero — Stage",
+  purpose: "The pitch on the page or over a photo or video, at the start, centre or end, with an optional product window and logos.",
+  variants: [
+    { id: "plain-center", label: "Page · centre" },
+    { id: "plain-start", label: "Page · start" },
+    { id: "video-start", label: "Video · start" },
+    { id: "image-center", label: "Photo · centre" },
+    { id: "image-end", label: "Photo · end" },
+  ],
 };
 
-/** The pattern filled with the example content. Leave `nav` out when the page already has one. */
-export function HeroFeatureCenterExample(props: Partial<HeroFeatureCenterProps>) {
-  return (
-    <HeroFeatureCenter
-      nav={exampleNav}
-      eyebrow="Free sketch in 48 hours"
-      eyebrowHref="#sketch"
-      headline="Websites that bring Austin in the door."
-      subhead={
-        <>
-          We build what customers check first.
-          <br />
-          Live in two weeks, from $750.
-        </>
-      }
-      actions={
-        <>
-          <Button role="primary" size="lg" render={<a href="#sketch" />}>
-            Get my free sketch
-          </Button>
-          <Button role="outline" size="lg" render={<a href="#work" />}>
-            See our work
-          </Button>
-        </>
-      }
-      visual={<SiteSketch />}
-      logos={<HeroFeatureCenterLogos logos={exampleLogos(6)} />}
-      {...props}
-    />
-  );
+const studioActions = (
+  <>
+    <Button role="primary" size="lg" render={<a href="#sketch" />}>
+      Get my free sketch
+    </Button>
+    <Button role="outline" size="lg" render={<a href="#work" />}>
+      See our work
+    </Button>
+  </>
+);
+const restaurantActions = (
+  <>
+    <Button role="primary" size="lg" render={<a href="#book" />}>
+      Book a table
+    </Button>
+    <Button role="outline" size="lg" render={<a href="#menu" />}>
+      See the menu
+    </Button>
+  </>
+);
+const studio: Partial<HeroStageProps> = {
+  eyebrow: "Free sketch in 48 hours",
+  eyebrowHref: "#sketch",
+  headline: "Websites that bring Austin in the door.",
+  lead: "We build what customers check first. Live in two weeks, from $750.",
+  actions: studioActions,
+  visual: <SiteSketch />,
+  logos: <HeroStageLogos logos={exampleLogos(6)} />,
+};
+const restaurant: Partial<HeroStageProps> = {
+  eyebrow: "East 6th · Austin",
+  headline: "Wood-fired Sonoran food on East 6th.",
+  lead: "Open late Thursday to Saturday.",
+  actions: restaurantActions,
+};
+const video = { kind: "video", src: `${base}local/footer-over-image.mp4`, poster: `${base}local/footer-over-image.jpg` } as const;
+const photo = {
+  kind: "image",
+  media: <img src={`${base}local/footer-over-image.jpg`} alt="" width={1280} height={720} />,
+} as const;
+
+export const variants: Record<string, Partial<HeroStageProps>> = {
+  "plain-center": { ...studio, align: "center" },
+  "plain-start": { ...studio, align: "start" },
+  "video-start": { ...restaurant, backdrop: video, align: "start" },
+  "image-center": { ...restaurant, backdrop: photo, align: "center" },
+  "image-end": { ...restaurant, backdrop: { ...photo, focus: "30% 50%" }, align: "end" },
+};
+
+/** The pattern filled with the example content, in one of the variants (the gallery passes `variant`). Leave `nav` out when the page already has one. */
+export function HeroStageExample({ variant = "plain-center", ...props }: Partial<HeroStageProps> & { variant?: string }) {
+  return <HeroStage nav={exampleNav} headline="" {...(variants[variant] ?? variants["plain-center"])} {...props} />;
 }
 
-export default HeroFeatureCenterExample;
+export default HeroStageExample;

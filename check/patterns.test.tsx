@@ -72,6 +72,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<ol[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
+    } else if (mod.meta.type === "Stats") {
+      // A stats section: one h2 that names it, no h1 and no nav, and every figure readable as text (a dl).
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
     } else if (mod.meta.type === "Testimonial") {
       // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
@@ -215,8 +221,8 @@ describe.each(folders)("patterns/%s", (folder) => {
         const source = readFileSync(join(dir, file), "utf8");
         // Hero R3: no auto-rotating slides or text.
         expect(source, `${folder}/${file}: auto-rotation`).not.toMatch(/setInterval|aria-roledescription="carousel"|<Carousel\b/);
-        // Hero R9: content height plus Band padding; full-screen heights only for over-media heroes.
-        if (!/over-media|overMedia/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
+        // Hero R9: content height plus Band padding; full-screen heights only for a hero over media (Stage with a backdrop).
+        if (!/hero\/stage/.test(folder)) expect(source, `${folder}/${file}: full-screen hero`).not.toMatch(/\b(min-)?h-(screen|svh|dvh|lvh)\b|100s?vh/);
       }
     }
     // Logo strip O4: every logo in a logos slot carries the company name as text (not only aria-label);
@@ -293,7 +299,7 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
     // H8: a heading is centred on phones (a bare `text-center`, not `md:text-center`) only in patterns
     // measured to stay within 2 lines at 390 (2026-10-28). Others left-align below md.
-    const centredOnPhones = ["footer/over-image", "testimonial/tilted-cards"];
+    const centredOnPhones = ["footer/over-image", "testimonial/tilted-cards", "stats/pinned-counter"]; // stats: the centred text is the figure, not the h2 (left-aligned)
     if (/<h[12][\s>]/.test(html) && !centredOnPhones.includes(folder)) {
       expect(html, `${folder}: heading centred on phones`).not.toMatch(/class="[^"]*(?<![:\w-])text-center\b/);
     }
@@ -302,5 +308,5 @@ describe.each(folders)("patterns/%s", (folder) => {
 
 it("finds at least one pattern", () => {
   expect(folders.length).toBeGreaterThan(0);
-  expect(existsSync(join(patternsDir, "hero", "feature-center"))).toBe(true);
+  expect(existsSync(join(patternsDir, "hero", "stage"))).toBe(true);
 });
