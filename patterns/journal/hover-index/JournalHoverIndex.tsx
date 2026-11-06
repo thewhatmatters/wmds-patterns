@@ -44,9 +44,9 @@ const headingClasses = "col-span-full text-balance type-heading-1 lg:col-span-6"
 /** Intro and action start where the second half starts (column 7, Grid rule). */
 const asideClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:mt-6 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end";
 const listClasses = "relative col-span-full mt-10 md:mt-16";
-/** The cover: 240px wide at 4:3, centred on the pointer and lifted above it, over the list, never catching clicks. */
+/** The cover: 240px wide at 4:3, just right of the pointer and centred on it, so it never hides the title being read; never catches clicks. */
 const coverClasses =
-  "pointer-events-none fixed left-0 top-0 z-20 aspect-[4/3] w-60 -translate-x-1/2 -translate-y-[115%] overflow-hidden rounded-lg shadow-raised [&>*]:size-full [&>img]:object-cover";
+  "pointer-events-none fixed left-0 top-0 z-20 aspect-[4/3] w-60 translate-x-8 -translate-y-1/2 overflow-hidden rounded-lg shadow-raised [&>*]:size-full [&>img]:object-cover";
 
 /** Fine pointer that can hover (a mouse or trackpad), and motion allowed. */
 function useCanFollow() {
@@ -113,7 +113,8 @@ export function JournalHoverIndex({ lead, heading, intro, actions, posts, tone =
         ) : null}
 
         <div ref={listRef} className={listClasses} onPointerMove={onMove} onPointerLeave={() => setActive(null)} data-slot="posts">
-          <IndexList aria-labelledby={headingId} size="md" titleAs="h3">
+          {/* Titles in `sm` (type-heading-3), two steps under the h2 (Headings rule). */}
+          <IndexList aria-labelledby={headingId} size="sm" titleAs="h3">
             {posts.map((post) => (
               <IndexList.Item key={post.href} title={post.title} href={post.href} meta={post.meta} />
             ))}
