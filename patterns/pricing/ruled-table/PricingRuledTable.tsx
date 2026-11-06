@@ -70,7 +70,8 @@ const tiersClasses = "col-span-full mt-10 grid border-l border-t border-border l
 const tierClasses = "flex flex-col gap-6 border-b border-r border-border p-6";
 /** From lg: the one grid, packages heading the columns. */
 const gridClasses = "col-span-full mt-16 hidden lg:block";
-const priceRowClasses = "flex min-h-14 items-baseline gap-2 overflow-hidden";
+/** `relative`: the outgoing price (AnimatePresence popLayout lifts it out absolutely) is placed in this row, not the table's corner. */
+const priceRowClasses = "relative flex min-h-14 items-baseline gap-2 overflow-hidden";
 const priceClasses = "type-display-3 tabular-nums text-fg";
 const priceNoteClasses = "text-muted";
 /** Phones and tablets: the comparison under the stacked packages. */
