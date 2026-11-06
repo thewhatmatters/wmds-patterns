@@ -1,11 +1,11 @@
 # Pricing — Ruled Table
 
-status: draft
+status: approved
 
-After Heron AI's pricing (Inspiration board #9; details.so, https://www.details.so/inspo/heronaiapp-eddac6). Nothing copied but the structure: packages in ruled cells, a billing toggle above them, and a comparison table under them.
+After Heron AI's pricing (Inspiration board #9; details.so, https://www.details.so/inspo/heronaiapp-eddac6). Nothing copied but the structure: one ruled grid whose columns the packages head, the comparison rows running under them, the headers pinned while the rows scroll, and a billing toggle above (Randy, 2026-11-06).
 **File:** `PricingRuledTable.tsx` (copy it). **Example:** `example.tsx`, a studio's three website packages (made-up prices and features).
 
-Built for service businesses that sell fixed-price packages, not subscriptions: the toggle switches between **Pay once** and **Spread over 12 months** (the price spread across the months, plus a small fee), and each price slides to its new figure. Heading on the left half; intro and toggle on the right half (column 7). The packages sit in ruled cells that share their rules: name (`h3`), an optional badge ("Most picked"), one line on who it's for, the price, how it's paid, and the CTA. A WMDS `Table` under them compares what each includes.
+Built for service businesses that sell fixed-price packages, not subscriptions: the toggle switches between **Pay once** and **Spread over 12 months** (the price spread across the months, plus a small fee), and each price slides to its new figure. Heading on the left half; intro and toggle on the right half (column 7). From 1024 it's one WMDS `Table` (`rules="grid"`, `stickyHeader`, equal columns): each package heads a column with its name (`h3`), an optional badge ("Most picked") and one line on who it's for, then a second header row with the price, how it's paid and the CTA, so prices and buttons line up across packages; the comparison rows run under them in the same columns. Phones and tablets stack the packages as ruled cells and show the comparison below.
 
 | Light | Dark (monthly) | Mobile (390) |
 |---|---|---|
@@ -68,7 +68,7 @@ Full width; Band `md` spacing (48 top and bottom); header → packages 40 / 64 (
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.45** (npm): `Band`, `SegmentedControl`, `Badge`, `Status`, `Table`; the example adds `Button`. Motion **13.5.1** (the WMDS peer).
+Built on **@thewhatmatters/wmds 0.4.47** (npm): `Band`, `SegmentedControl`, `Badge`, `Status`, `Table` (`rules="grid"`, `stickyHeader`, `TableHead wrap`, new in 0.4.47); the example adds `Button`. Motion **13.5.1** (the WMDS peer).
 
 - **Check change:** `npm run check` has a rule for the new Pricing type: one h2, an h3 per package, no h1, no nav, every package's action a link, and the comparison (when present) with row headers.
 - **WMDS-GAP: no check mark.** WMDS has no check glyph for "included" (patterns can't import lucide). The pattern uses a WMDS `Status` dot plus the word; Heron uses a ticked box. Proposed: a `Status` `variant="check"` or a small WMDS `CheckMark`.
