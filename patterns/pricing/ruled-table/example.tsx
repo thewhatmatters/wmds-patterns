@@ -49,10 +49,18 @@ const tiers: PricingRuledTableTier[] = [
 
 const rows: PricingRuledTableRow[] = [
   { feature: "Pages", values: ["Up to 5", "Up to 12", "As needed"] },
+  { feature: "Design rounds", values: ["1", "2", "3"] },
+  { feature: "Works on phones", values: [true, true, true] },
+  { feature: "Contact form", values: [true, true, true] },
   { feature: "Copy written for you", values: [false, true, true] },
+  { feature: "Photos edited for the web", values: [false, true, true] },
   { feature: "Bookings or menu", values: [false, true, true] },
+  { feature: "Google Business profile set up", values: [false, true, true] },
+  { feature: "Search basics (titles, maps, speed)", values: [true, true, true] },
   { feature: "Online shop", values: [false, false, true] },
+  { feature: "Member area", values: [false, false, true] },
   { feature: "Edit it yourself", values: [true, true, true] },
+  { feature: "Visitor stats", values: [false, true, true] },
   { feature: "Care after launch", values: ["2 weeks", "1 month", "3 months"] },
 ];
 
