@@ -36,8 +36,8 @@ export interface LogosMarqueeProps {
 
 /** Label on the first columns, the row on the rest: 2 + 6 of 8 on tablet, 3 + 9 of 12 on desktop; stacked on phones. From md the label sits on the marks' centre line (24px down a 64px cell). */
 const labelClasses = "col-span-full text-muted type-eyebrow md:col-span-2 md:mt-6 md:self-start lg:col-span-3";
-/** `above`: the label on its own line over the marks, from the first column. */
-const labelAboveClasses = "col-span-full text-muted type-eyebrow";
+/** `above`: the label on its own line, centred over the marks (Randy, 2026-11-05). */
+const labelAboveClasses = "col-span-full text-center text-muted type-eyebrow";
 /** `overflow-x-clip`: the looped Carousel's copies spill past its row and would widen the page (WMDS-GAP in the README). */
 const rowClasses = "col-span-full mt-4 min-w-0 overflow-x-clip md:col-span-6 md:col-start-3 md:mt-0 lg:col-span-9 lg:col-start-4";
 /** `above`: the marks across the full content width, 16px under the label. */

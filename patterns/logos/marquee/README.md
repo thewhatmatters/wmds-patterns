@@ -31,7 +31,7 @@ import { LogosMarquee } from "./LogosMarquee";
 |---|---|---|
 | `label` | ReactNode | The strip's name, short: "Trusted by", "Clients". It's the section's `h2` and names the row |
 | `logos` | array | 8–16 marks: `name` (the company, read by screen readers) and `logo` (slot: a monochrome `<svg>` in `currentColor`) |
-| `labelPlacement` | `"inline"` (default) or `"above"` | The label beside the marks (first columns), or on its own line above them with the marks across the full width (Randy, 2026-11-05) |
+| `labelPlacement` | `"inline"` (default) or `"above"` | The label beside the marks (first columns), or on its own line, centred, above them with the marks across the full width (Randy, 2026-11-05) |
 | `speed` | number, default `32` | Drift in px a second |
 | `tone` | `"default"` (default), `"inverse"`, `"field"` | The WMDS Band tone |
 
