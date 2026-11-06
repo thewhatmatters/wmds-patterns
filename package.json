@@ -10,7 +10,7 @@
     "check": "npm run typecheck && npm run test"
   },
   "dependencies": {
-    "@thewhatmatters/wmds": "0.4.35",
+    "@thewhatmatters/wmds": "0.4.45",
     "lucide-react": "^1.33.0",
     "motion": "^13.0.0",
     "react": "^19.2.0",
