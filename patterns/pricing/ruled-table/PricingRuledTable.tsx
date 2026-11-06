@@ -64,8 +64,8 @@ const headerClasses = "col-span-full lg:col-span-6";
 const headingClasses = "text-balance type-heading-1 text-fg";
 /** Intro and toggle start where the second half starts (column 7, Grid rule). */
 const asideClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:mt-6 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end";
-/** Phones and tablets (the columns don't fit): the packages stacked as ruled cells that share their rules, two across on tablets. */
-const tiersClasses = "col-span-full mt-10 grid border-l border-t border-border md:grid-cols-2 lg:hidden";
+/** Phones and tablets (the columns don't fit): the packages stacked as ruled cells that share their rules. */
+const tiersClasses = "col-span-full mt-10 grid border-l border-t border-border lg:hidden";
 const tierClasses = "flex flex-col gap-6 border-b border-r border-border p-6";
 /** From lg: the one grid, packages heading the columns. */
 const gridClasses = "col-span-full mt-16 hidden lg:block";
