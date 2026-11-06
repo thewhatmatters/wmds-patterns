@@ -1,6 +1,6 @@
 # Logos — Marquee
 
-status: draft
+status: approved
 
 After Interfere's "Trusted and funded by" strip (details.so, https://www.details.so/inspo/interfere-9ec844). Nothing copied but the structure: a short label on the left, the marks drifting past on the right and fading out at both edges.
 **File:** `LogosMarquee.tsx` (copy it). **Example:** `example.tsx`, twelve made-up Austin businesses as simple SVG wordmarks in `currentColor` (licence-free stand-ins).
@@ -60,7 +60,7 @@ Full width; Band `md` spacing (48 top and bottom); label above the row with 16 b
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds** with `Carousel` `autoplay.pause: "on-focus"` (WMDS branch `lead-engineer/carousel-pause-on-focus`, after 0.4.45; the pin bump follows its release): `Band`, `Carousel` (`autoplay`, `loop`, `fade`). No Motion import, no new library.
+Built on **@thewhatmatters/wmds 0.4.47** (npm): `Band`, `Carousel` (`autoplay` with `pause: "on-focus"`, new in 0.4.46; `loop`, `fade`). No Motion import, no new library.
 
 - **Check change:** `npm run check` has a rule for the new Logos type (one h2, no h1, no nav, every mark with its company name as text). The existing Logo strip O4/O5 checks run on it too.
 - **WMDS-GAP (bug): Carousel `loop` widens the page.** The looped copies spill about 4,200px past the row (measured at 1440: the document scrolled sideways to 4,638px). The pattern clips its own row cell (`overflow-x-clip`) so the page stays 1,440 / 390 wide; WMDS should contain its loop inside the Carousel.
