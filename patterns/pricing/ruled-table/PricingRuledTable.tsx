@@ -6,8 +6,9 @@
  *
  * From lg it's one WMDS `Table` (`rules="grid"`, equal columns from a `colgroup`): an empty corner over the feature
  * names, then a `TableHead wrap` per package, in two header rows (name and who it's for; then the price and the CTA)
- * so every price and button lines up across the packages. Phones and tablets can't fit the columns, so they get the
- * packages stacked as ruled cells and the comparison as a table below.
+ * so every price and button lines up across the packages. The header stays pinned to the top while the rows scroll
+ * under it (`stickyHeader`, as Heron does; set `--table-sticky-top` to sit it under a fixed nav). Phones and tablets
+ * can't fit the columns, so they get the packages stacked as ruled cells and the comparison as a table below.
  *
  * Motion (motion.dev, `motion/react`, the WMDS peer): when the toggle changes, each price slides up into place over
  * 200ms (transform and opacity). Under reduced motion the prices simply change.
@@ -224,7 +225,7 @@ export function PricingRuledTable({
 
         {/* From lg: one grid, the packages heading the columns the rows run under. */}
         <div className={gridClasses} data-slot="grid">
-          <Table aria-label="Packages and what each includes" rules="grid">
+          <Table aria-label="Packages and what each includes" rules="grid" stickyHeader>
             <colgroup>
               <col />
               {tiers.map((tier) => (
