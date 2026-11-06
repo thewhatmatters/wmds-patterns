@@ -5,7 +5,7 @@ status: draft
 After United Carriers' "What's moving in your industry" (details.so, https://www.details.so/inspo/unitedcarriers-702f7b), with the two-tone heading from Atlas (Inspiration board). Nothing copied but the idea: the latest posts as a quiet ruled index. Laid out like a table (Randy, 2026-11-06): the date in its own columns, the title across the width, the post's tags at the end, a fill on the hovered row, and a small cover that follows the mouse over the row it's on. No arrows.
 **File:** `JournalHoverIndex.tsx` (copy it). **Example:** `example.tsx`, six made-up posts (one on another site) with cut-paper SVG covers in WMDS chart colours (licence-free).
 
-A WMDS `Band`: a two-tone heading on the left half (a muted first line, then the rest in ink), an intro and one action on the right half (column 7), then the posts as a WMDS `IndexList` on the page grid (`columns="page"`): the date in the first two columns, the title (`h3`, `type-heading-3`) across the width, then the tags (WMDS `Badge`s). Each row is one link (`rowLink`) with a quiet fill on hover and keyboard focus; a post elsewhere opens a new tab. With a mouse, a 240px cover of the post under the pointer trails beside it on a spring.
+A WMDS `Band`: a two-tone heading on the left half (a muted first line, then the rest in ink), an intro and one action on the right half (column 7), then the posts as a WMDS `IndexList` on the page grid (`columns="page"`): the date in the first two columns, the title (`h3`, `type-heading-3`) across the width, then the tags (WMDS `Badge`s). Each row is one link (`rowLink`) with a quiet fill on hover and keyboard focus; a post elsewhere opens a new tab. With a mouse, a 360px, 16:9 cover of the post under the pointer trails beside it on a spring.
 
 | Light | Dark | Mobile (390) |
 |---|---|---|
@@ -50,13 +50,13 @@ The app needs `motion` (the WMDS peer) installed.
 
 ## Knobs
 
-- `size="sm"` on the IndexList (titles two steps under the h2); badge `emphasis` (outline by default); `w-60` (cover width), `translate-x-8` (gap from the pointer), the spring values.
+- `size="sm"` on the IndexList (titles two steps under the h2); badge `emphasis` (outline by default); `w-90` (cover width), `aspect-video`, `translate-x-8` (gap from the pointer), the spring values.
 
 ## Adapt it
 
 The first item is the example the gallery's Copy prompt uses.
 
-- **Your posts:** 4–8 latest, each with its date, one tag (two at most) and its cover image (`alt=""`, 4:3 reads best); mark posts on other sites `external`. Leave `cover` out and the rows stand on their own.
+- **Your posts:** 4–8 latest, each with its date, one tag (two at most) and its cover image (`alt=""`; it's cropped to 16:9); mark posts on other sites `external`. Leave `cover` out and the rows stand on their own.
 - **One-tone heading:** pass the whole heading in `heading` and an empty `lead`.
 
 ## Spacing

@@ -27,7 +27,7 @@ export interface JournalHoverIndexPost {
   tags?: string[];
   /** The post lives on another site: it opens in a new tab. */
   external?: boolean;
-  /** Slot, optional: the cover that follows the pointer, an `<img alt="">` (decorative; 4:3 reads best). */
+  /** Slot, optional: the cover that follows the pointer, an `<img alt="">` (decorative; cropped to 16:9). */
   cover?: ReactNode;
 }
 
@@ -56,9 +56,9 @@ const asideClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:mt-6
 const listClasses = "mt-10 md:mt-16";
 /** Wraps the rows to read the pointer; a subgrid row, so the rows stay on the page grid. */
 const pointerClasses = "col-span-full grid grid-cols-subgrid";
-/** The cover: 240px wide at 4:3, just right of the pointer and centred on it, so it never hides the title being read; never catches clicks. */
+/** The cover: 360px wide at 16:9 (Randy, 2026-11-06), just right of the pointer and centred on it, so it never hides the title being read; never catches clicks. */
 const coverClasses =
-  "pointer-events-none fixed left-0 top-0 z-20 aspect-[4/3] w-60 translate-x-8 -translate-y-1/2 overflow-hidden rounded-lg shadow-raised [&>*]:size-full [&>img]:object-cover";
+  "pointer-events-none fixed left-0 top-0 z-20 aspect-video w-90 translate-x-8 -translate-y-1/2 overflow-hidden rounded-lg shadow-raised [&>*]:size-full [&>img]:object-cover";
 
 /** Fine pointer that can hover (a mouse or trackpad), and motion allowed. */
 function useCanFollow() {

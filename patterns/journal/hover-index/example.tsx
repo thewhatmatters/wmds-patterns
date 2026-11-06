@@ -17,7 +17,7 @@ const c = (n: number) => `var(--color-chart-categorical-${n})`;
 
 function Cover({ field, children }: { field: string; children: ReactNode }) {
   return (
-    <svg viewBox="0 0 400 300" width={400} height={300} aria-hidden className="block size-full">
+    <svg viewBox="0 0 400 300" width={400} height={225} preserveAspectRatio="xMidYMid slice" aria-hidden className="block size-full">
       <rect width="400" height="300" fill={field} />
       {children}
     </svg>
