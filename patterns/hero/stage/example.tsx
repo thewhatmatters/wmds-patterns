@@ -130,6 +130,8 @@ export const meta = {
   type: "Hero",
   name: "Hero — Stage",
   purpose: "The pitch on the page or over a photo or video, at the start, centre or end, with an optional product window and logos.",
+  /** The video variants fill the first screen: the gallery shows a screen-tall frame so that reads true. */
+  scroll: true,
   variants: [
     { id: "plain-center", label: "Page · centre" },
     { id: "plain-start", label: "Page · start" },
@@ -178,8 +180,8 @@ const video = { kind: "video", src: `${base}local/footer-over-image.mp4`, poster
 export const variants: Record<string, Partial<HeroStageProps>> = {
   "plain-center": { ...studio, align: "center" },
   "plain-start": { ...studio, align: "start" },
-  "video-start": { ...restaurant, backdrop: video, align: "start" },
-  "video-center": { ...restaurant, backdrop: video, align: "center" },
+  "video-start": { ...restaurant, backdrop: video, align: "start", fullHeight: true },
+  "video-center": { ...restaurant, backdrop: video, align: "center", fullHeight: true },
 };
 
 /** The pattern filled with the example content, in one of the variants (the gallery passes `variant`). Leave `nav` out when the page already has one. */

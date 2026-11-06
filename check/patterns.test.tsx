@@ -309,8 +309,12 @@ describe.each(folders)("patterns/%s", (folder) => {
         const source = readFileSync(join(dir, file), "utf8");
         // R3: nothing in a hero advances on a timer (no auto-rotating slides or headlines).
         expect(source, `${folder}/${file}: timer`).not.toMatch(/\bset(Interval|Timeout)\(/);
-        // R9: no bare full-screen height; only a screen height less a visible edge, e.g. calc(100svh-4rem).
-        expect(source, `${folder}/${file}: full-screen height`).not.toMatch(/(?<![\w-])(min-)?h-(screen|svh|dvh|lvh)\b|100[sdl]?vh(?!\s*-)/);
+        // R9: no bare full-screen height; only a screen height less a visible edge, e.g. calc(100svh-4rem). Except a
+        // hero over a photo or video (Stage with a backdrop): it fills the first screen under the nav laid over it
+        // (Randy, 2026-11-06).
+        if (!/hero\/stage/.test(folder)) {
+          expect(source, `${folder}/${file}: full-screen height`).not.toMatch(/(?<![\w-])(min-)?h-(screen|svh|dvh|lvh)\b|100[sdl]?vh(?!\s*-)/);
+        }
       }
     }
     // E10: a pill eyebrow always links. The eyebrow is either a plain <p> label or holds an <a href>.

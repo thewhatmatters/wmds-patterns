@@ -60,8 +60,9 @@ export interface HeroStageProps {
   /** Slot, optional: proof under the hero. Usually `<HeroStageLogos logos={…} />`. */
   logos?: ReactNode;
   /**
-   * Backdrop only: the full screen height less 64px, so the next section's edge shows (Hero R9, R4), with a scroll
-   * cue. Off by default: the hero is its content plus Band `lg` spacing.
+   * Backdrop only: the picture fills the first screen, under the nav laid over it (`SiteNav overMedia`), with a
+   * scroll cue (Randy, 2026-11-06: the photo or video fills the initial viewport). Off by default: the hero is its
+   * content plus Band `lg` spacing.
    */
   fullHeight?: boolean;
   className?: string;
@@ -76,13 +77,13 @@ const rootClasses = "relative w-full overflow-x-clip";
 /** Plain page: the section lays its content on the WMDS page grid; spacing comes from the copy and the last row. */
 const plainSectionClasses = "grid-page relative !py-0";
 /**
- * Over a backdrop: the picture's height, at least 28rem on phones, 36rem from md, 40rem from lg, or the screen
- * less 64px with `fullHeight`. Dark-theme scope, so the WMDS ink, muted text and buttons read on the scrim. The top
+ * Over a backdrop: the picture's height, at least 28rem on phones, 36rem from md, 40rem from lg, or the whole
+ * first screen with `fullHeight` (the nav lies over it). Dark-theme scope, so the WMDS ink, muted text and buttons read on the scrim. The top
  * keeps the nav's height clear, so a nav laid over the picture never sits on the copy.
  */
 const backdropSectionClasses = {
   content: "relative isolate flex w-full flex-col overflow-hidden pt-[var(--site-nav-height)] min-h-[28rem] md:min-h-[36rem] lg:min-h-[40rem]",
-  full: "relative isolate flex w-full flex-col overflow-hidden pt-[var(--site-nav-height)] min-h-[calc(100svh-4rem)]",
+  full: "relative isolate flex w-full flex-col overflow-hidden pt-[var(--site-nav-height)] min-h-svh",
 } as const;
 /** The grid over the backdrop: copy at the bottom of the picture, Band `lg` spacing (96, 64 on phones; S8). */
 const backdropGridClasses =
