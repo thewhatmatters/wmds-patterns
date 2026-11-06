@@ -7,8 +7,8 @@
  * The framed product window (`visual`) and the proof strip (`logos`) are optional in both.
  * Built only from @thewhatmatters/wmds parts. Your Tailwind must scan this file.
  */
-import { useEffect, useId, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import { Badge, cn, IconButton } from "@thewhatmatters/wmds";
+import { useEffect, useId, useRef, type CSSProperties, type ReactNode } from "react";
+import { Badge, cn } from "@thewhatmatters/wmds";
 
 export type HeroStageAlign = "start" | "center" | "end";
 
@@ -160,37 +160,20 @@ const plainBottom = "col-span-full pb-[calc(var(--grid-baseline)*8)] md:pb-[calc
 /** `fullHeight` only: a quiet scroll cue, centred at the bottom. */
 const cueClasses = "pointer-events-none absolute inset-x-0 bottom-4 flex justify-center text-muted";
 
-/** The pause control: a quiet WMDS ghost IconButton in the bottom-end corner, no fill until hover or focus. */
-const pauseClasses = "absolute bottom-3 end-3 z-10 md:bottom-4 md:end-4";
-
-const pauseIcon = (
-  <svg viewBox="0 0 24 24" className="size-5" aria-hidden focusable="false">
-    <path d="M9 5v14M15 5v14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-  </svg>
-);
-const playIcon = (
-  <svg viewBox="0 0 24 24" className="size-5" aria-hidden focusable="false">
-    <path d="M8 5.5v13l10.5-6.5z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
-  </svg>
-);
-
 /**
- * Decorative looping video with a pause control (WCAG 2.2.2: it starts by itself and runs past 5 seconds; Randy,
- * 2026-10-30). Plays only on screen; under reduced motion it holds its poster until someone presses play. The
- * person's choice wins over both.
+ * Decorative looping video, part of the design: muted, looping, inline, hidden from assistive tech, and no player
+ * controls (Randy, 2026-11-06: "for heroes, it doesn't matter"; ux-best-practices Media rule, 2026-10-27). It plays
+ * only while on screen, and under reduced motion it never plays: the poster frame stays.
  */
 function BackgroundVideo({ src, poster, focus }: { src: string; poster: string; focus?: string }) {
   const ref = useRef<HTMLVideoElement>(null);
-  const [choice, setChoice] = useState<"play" | "pause" | null>(null);
-  const [playing, setPlaying] = useState(false);
   useEffect(() => {
     const video = ref.current;
     if (!video) return;
     const motion = matchMedia("(prefers-reduced-motion: reduce)");
     let visible = false;
     const sync = () => {
-      const wanted = choice === "pause" ? false : choice === "play" ? visible : visible && !motion.matches;
-      if (wanted) video.play().catch(() => {});
+      if (visible && !motion.matches) video.play().catch(() => {});
       else video.pause();
     };
     const observer = new IntersectionObserver(([entry]) => {
@@ -203,32 +186,21 @@ function BackgroundVideo({ src, poster, focus }: { src: string; poster: string; 
       observer.disconnect();
       motion.removeEventListener("change", sync);
     };
-  }, [choice]);
+  }, []);
   return (
-    <>
-      <video
-        ref={ref}
-        className={mediaClasses}
-        style={focus ? { objectPosition: focus } : undefined}
-        src={src}
-        poster={poster}
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-hidden
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-      />
-      <IconButton
-        role="ghost"
-        size="lg"
-        className={pauseClasses}
-        icon={playing ? pauseIcon : playIcon}
-        aria-label={playing ? "Pause background video" : "Play background video"}
-        onClick={() => setChoice(playing ? "pause" : "play")}
-      />
-    </>
+    <video
+      ref={ref}
+      className={mediaClasses}
+      style={focus ? { objectPosition: focus } : undefined}
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-hidden
+      tabIndex={-1}
+    />
   );
 }
 

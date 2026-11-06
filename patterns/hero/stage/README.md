@@ -57,7 +57,7 @@ import { HeroStage } from "./HeroStage";
 | `headline` | ReactNode | The page's only H1: 12 words at most, 2 lines at desktop. WMDS `type-display-1` |
 | `lead` | ReactNode | Optional. 1–2 sentences, in ink |
 | `actions` | slot | The CTA row, full width and stacked below 640px: one WMDS `<Button role="primary" size="lg">` and at most one `role="outline"` (R2, U7). Over a backdrop the outline's border is the light ink, 3:1 or more |
-| `backdrop` | `{ kind: "image", media, focus? }` or `{ kind: "video", src, poster, focus? }`, optional | Leave it out for the page colour. `media` is a decorative `<img alt="">` with width and height, cropped to fill. The video is muted, loops, plays only on screen, and has a quiet pause button in the bottom-end corner (a WMDS ghost `IconButton`, 48px, "Pause background video" / "Play background video"; WCAG 2.2.2, Randy 2026-10-30). Under reduced motion it holds its poster until someone presses play; `poster` is required (it's what shows before the video loads, under reduced motion and in Safari's low-power mode). `focus` keeps a part of the picture in view as it crops |
+| `backdrop` | `{ kind: "image", media, focus? }` or `{ kind: "video", src, poster, focus? }`, optional | Leave it out for the page colour. `media` is a decorative `<img alt="">` with width and height, cropped to fill. The video is decorative and part of the design: muted, looping, inline, hidden from assistive tech, playing only while on screen, with no player controls (Randy, 2026-11-06: "for heroes, it doesn't matter"; ux-best-practices Media rule). Under reduced motion it never plays and the poster stays; `poster` is required (it's what shows before the video loads, under reduced motion and in Safari's low-power mode). `focus` keeps a part of the picture in view as it crops |
 | `align` | `"start"` \| `"center"` \| `"end"` | Default `center` on a plain page, `start` over a backdrop. From desktop the copy takes 8 columns (2 headline lines): start = 1–8, centre = 3–10, end = 5–12. `end` needs a backdrop |
 | `visual` | slot, optional | What goes in the framed window (a product shot, a site). Plain page only; over a backdrop it's left out (with a console warning). Centred copy: columns 2–11; start: the full grid |
 | `visualDecorative` | boolean, default `true` | The window is decoration, hidden from screen readers. Set `false` when it carries content people need |
@@ -84,9 +84,9 @@ The first item is the example the gallery's Copy prompt uses.
 - **Headline length:** 12 words at most. A 16-word headline runs to 7 lines at desktop and 10 on a phone (Display D6).
 - **Product with proof:** no backdrop, `align="center"` (or `"start"`, and the window spans the grid), `visual={<YourScreen />}`, `logos={<HeroStageLogos logos={clients} />}`.
 - **Subject on the left of the photo:** `align="end"` with a backdrop, and `focus` to keep the subject in view on phones.
-- **Animation:** none beyond the video, which carries its own pause control.
+- **Animation:** none beyond the background video, which is still under reduced motion.
 
 ## WMDS-GAPs
 
-- **Media component:** no WMDS image or video component with a focal point, a poster under reduced motion and a pause control; the pattern carries its own small player (WMDS IconButton for the control) until WMDS has one.
+- **Media component:** no WMDS image or video component with a focal point and a poster under reduced motion; the pattern carries its own small background video until WMDS has one.
 - Checked against **@thewhatmatters/wmds 0.4.35** (npm).
