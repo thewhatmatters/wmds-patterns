@@ -153,7 +153,8 @@ function PackageOffer({ tier, plan, months, monthlyFee, money, reduce }: Package
           </AnimatePresence>
           {tier.price != null && plan === "monthly" ? <span className={priceNoteClasses}>a month</span> : null}
         </span>
-        <span className="mt-1 block text-muted type-body">
+        {/* Two lines kept, so the CTA under it sits at the same height in every column even when one note fits on one. */}
+        <span className="mt-1 block min-h-[2lh] text-muted type-body">
           {tier.price == null
             ? "Priced after the first call"
             : plan === "once"
