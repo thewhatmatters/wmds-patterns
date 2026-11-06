@@ -1,7 +1,12 @@
 /**
- * Pricing — Ruled Table: packages in ruled cells on the page grid, a toggle between paying once and spreading the
- * cost monthly, and a comparison table under them (after Heron AI's pricing). Built for service businesses that sell
- * fixed-price packages rather than subscriptions.
+ * Pricing — Ruled Table: one ruled grid where the packages head the columns and the comparison rows run under
+ * them in the same columns, with a toggle between paying once and spreading the cost monthly (after Heron AI's
+ * pricing; Randy, 2026-11-06: the packages must line up with the table they belong to). Built for service businesses
+ * that sell fixed-price packages rather than subscriptions.
+ *
+ * From md it's one WMDS `Table` (`rules="grid"`, equal columns from a `colgroup`): an empty corner over the feature
+ * names, then a `TableHead wrap` per package. Phones can't fit the columns, so they get the packages stacked as
+ * ruled cells and the comparison as a scrolling table below.
  *
  * Motion (motion.dev, `motion/react`, the WMDS peer): when the toggle changes, each price slides up into place over
  * 200ms (transform and opacity). Under reduced motion the prices simply change.
@@ -58,14 +63,16 @@ const headerClasses = "col-span-full lg:col-span-6";
 const headingClasses = "text-balance type-heading-1 text-fg";
 /** Intro and toggle start where the second half starts (column 7, Grid rule). */
 const asideClasses = "col-span-full mt-4 flex flex-col items-start gap-6 md:mt-6 lg:col-span-6 lg:col-start-7 lg:mt-0 lg:self-end";
-/** The packages: ruled cells that share their rules (each cell draws its right and bottom edge). */
-const tiersClasses = "col-span-full mt-10 grid border-l border-t border-border md:mt-16";
-const tierColumns = { 2: "md:grid-cols-2", 3: "md:grid-cols-3", 4: "md:grid-cols-2 lg:grid-cols-4" } as const;
-const tierClasses = "flex flex-col gap-6 border-b border-r border-border p-6 lg:p-8";
+/** Phones: the packages stacked as ruled cells that share their rules. */
+const tiersClasses = "col-span-full mt-10 grid border-l border-t border-border md:hidden";
+const tierClasses = "flex flex-col gap-6 border-b border-r border-border p-6";
+/** From md: the one grid, packages heading the columns. */
+const gridClasses = "col-span-full mt-16 hidden md:block";
 const priceRowClasses = "flex min-h-14 items-baseline gap-2 overflow-hidden";
 const priceClasses = "type-display-3 tabular-nums text-fg";
 const priceNoteClasses = "text-muted";
-const tableWrapClasses = "col-span-full mt-10 md:mt-16";
+/** Phones: the comparison under the stacked packages. */
+const tableWrapClasses = "col-span-full mt-10 md:hidden";
 
 function useMoney(currency: string) {
   const format = new Intl.NumberFormat("en-US", { style: "currency", currency, maximumFractionDigits: 0 });
@@ -87,6 +94,66 @@ function Included({ value }: { value: boolean | string }) {
   );
 }
 
+/** One package: name (and badge), who it's for, the price that slides when the plan changes, how it's paid, the CTA. */
+function Package({
+  tier,
+  plan,
+  months,
+  monthlyFee,
+  money,
+  reduce,
+}: {
+  tier: PricingRuledTableTier;
+  plan: "once" | "monthly";
+  months: number;
+  monthlyFee: number;
+  money: (value: number) => string;
+  reduce: boolean | null;
+}) {
+  const monthly = tier.price == null ? null : Math.round((tier.price * (1 + monthlyFee)) / months);
+  const shown = tier.price == null ? "Custom" : plan === "once" ? money(tier.price) : money(monthly ?? 0);
+  return (
+    <>
+      <span className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="type-heading-3 text-fg">{tier.name}</h3>
+        {tier.badge != null ? (
+          <Badge size="sm" emphasis="muted">
+            {tier.badge}
+          </Badge>
+        ) : null}
+      </span>
+      <span className="block text-pretty text-muted type-body">{tier.description}</span>
+      <span className="block">
+        <span className={priceRowClasses} aria-live="polite">
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={shown}
+              className={priceClasses}
+              initial={reduce ? false : { y: "60%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { y: "-60%", opacity: 0 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {shown}
+            </motion.span>
+          </AnimatePresence>
+          {tier.price != null && plan === "monthly" ? <span className={priceNoteClasses}>a month</span> : null}
+        </span>
+        <span className="mt-1 block text-muted type-body">
+          {tier.price == null
+            ? "Priced after the first call"
+            : plan === "once"
+              ? "One payment, in three stages"
+              : `${months} payments, ${money((monthly ?? 0) * months)} in all`}
+        </span>
+      </span>
+      <span className="mt-auto block [&>*]:w-full" data-slot="action">
+        {tier.action}
+      </span>
+    </>
+  );
+}
+
 export function PricingRuledTable({
   eyebrow,
   heading,
@@ -103,7 +170,6 @@ export function PricingRuledTable({
   const [plan, setPlan] = useState<"once" | "monthly">("once");
   const reduce = useReducedMotion();
   const money = useMoney(currency);
-  const columns = tierColumns[Math.min(4, Math.max(2, tiers.length)) as 2 | 3 | 4];
 
   return (
     <div className={cn("relative w-full", className)} data-pattern="pricing-ruled-table">
@@ -132,52 +198,54 @@ export function PricingRuledTable({
           </SegmentedControl>
         </div>
 
-        <ul className={cn(tiersClasses, columns)} data-slot="tiers">
-          {tiers.map((tier) => {
-            const monthly = tier.price == null ? null : Math.round((tier.price * (1 + monthlyFee)) / months);
-            const shown = tier.price == null ? "Custom" : plan === "once" ? money(tier.price) : money(monthly ?? 0);
-            return (
-              <li key={tier.name} className={tierClasses}>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <h3 className="type-heading-3 text-fg">{tier.name}</h3>
-                  {tier.badge != null ? (
-                    <Badge size="sm" emphasis="muted">
-                      {tier.badge}
-                    </Badge>
-                  ) : null}
-                </div>
-                <p className="text-pretty text-muted">{tier.description}</p>
-                <div>
-                  <div className={priceRowClasses} aria-live="polite">
-                    <AnimatePresence mode="popLayout" initial={false}>
-                      <motion.span
-                        key={shown}
-                        className={priceClasses}
-                        initial={reduce ? false : { y: "60%", opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        exit={reduce ? { opacity: 0, transition: { duration: 0 } } : { y: "-60%", opacity: 0 }}
-                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                      >
-                        {shown}
-                      </motion.span>
-                    </AnimatePresence>
-                    {tier.price != null && plan === "monthly" ? <span className={priceNoteClasses}>a month</span> : null}
-                  </div>
-                  <p className="mt-1 text-muted">
-                    {tier.price == null
-                      ? "Priced after the first call"
-                      : plan === "once"
-                        ? "One payment, in three stages"
-                        : `${months} payments, ${money((monthly ?? 0) * months)} in all`}
-                  </p>
-                </div>
-                <div className="mt-auto [&>*]:w-full" data-slot="action">
-                  {tier.action}
-                </div>
-              </li>
-            );
-          })}
+        {/* Phones: the packages stacked. */}
+        <ul className={tiersClasses} data-slot="tiers">
+          {tiers.map((tier) => (
+            <li key={tier.name} className={tierClasses}>
+              <Package tier={tier} plan={plan} months={months} monthlyFee={monthlyFee} money={money} reduce={reduce} />
+            </li>
+          ))}
         </ul>
+
+        {/* From md: one grid, the packages heading the columns the rows run under. */}
+        <div className={gridClasses} data-slot="grid">
+          <Table aria-label="Packages and what each includes" rules="grid">
+            <colgroup>
+              <col />
+              {tiers.map((tier) => (
+                <col key={tier.name} />
+              ))}
+            </colgroup>
+            <TableHeader>
+              <TableRow>
+                <TableHead>
+                  <span className="sr-only">Included</span>
+                </TableHead>
+                {tiers.map((tier) => (
+                  <TableHead key={tier.name} wrap>
+                    <span className="flex h-full flex-col gap-6">
+                      <Package tier={tier} plan={plan} months={months} monthlyFee={monthlyFee} money={money} reduce={reduce} />
+                    </span>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+            {rows != null && rows.length > 0 ? (
+              <TableBody>
+                {rows.map((row) => (
+                  <TableRow key={row.feature}>
+                    <TableHead scope="row">{row.feature}</TableHead>
+                    {tiers.map((tier, index) => (
+                      <TableCell key={tier.name}>
+                        <Included value={row.values[index] ?? false} />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            ) : null}
+          </Table>
+        </div>
 
         {rows != null && rows.length > 0 ? (
           <div className={tableWrapClasses} data-slot="compare">
