@@ -8,7 +8,11 @@ import { LogosMarquee, type LogosMarqueeLogo, type LogosMarqueeProps } from "./L
 export const meta = {
   type: "Logos",
   name: "Logos — Marquee",
-  purpose: "A quiet proof strip: a short label, then client marks drifting slowly past, fading at both edges, with Pause.",
+  purpose: "A quiet proof strip: a short label beside or above client marks drifting slowly past, fading at both edges.",
+  variants: [
+    { id: "inline", label: "Label inline" },
+    { id: "above", label: "Label above" },
+  ],
 };
 
 type MarkSpec = { name: string; text: string; width: number; weight: number; caps?: boolean; italic?: boolean; symbol?: "circle" | "bar" | "book" };
@@ -53,6 +57,14 @@ function Wordmark({ spec }: { spec: MarkSpec }) {
 }
 const logos: LogosMarqueeLogo[] = marks.map((spec) => ({ name: spec.name, logo: <Wordmark spec={spec} /> }));
 
-export default function Example(props: Partial<LogosMarqueeProps>) {
-  return <LogosMarquee label="Trusted by 140 local businesses" logos={logos} {...props} />;
+/** The gallery passes `variant`: the label beside the marks (`inline`) or above them (`above`). */
+export default function Example({ variant = "inline", ...props }: Partial<LogosMarqueeProps> & { variant?: string }) {
+  return (
+    <LogosMarquee
+      label="Trusted by 140 local businesses"
+      logos={logos}
+      labelPlacement={variant === "above" ? "above" : "inline"}
+      {...props}
+    />
+  );
 }

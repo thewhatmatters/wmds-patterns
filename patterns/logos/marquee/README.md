@@ -31,13 +31,14 @@ import { LogosMarquee } from "./LogosMarquee";
 |---|---|---|
 | `label` | ReactNode | The strip's name, short: "Trusted by", "Clients". It's the section's `h2` and names the row |
 | `logos` | array | 8–16 marks: `name` (the company, read by screen readers) and `logo` (slot: a monochrome `<svg>` in `currentColor`) |
+| `labelPlacement` | `"inline"` (default) or `"above"` | The label beside the marks (first columns), or on its own line above them with the marks across the full width (Randy, 2026-11-05) |
 | `speed` | number, default `32` | Drift in px a second |
 | `tone` | `"default"` (default), `"inverse"`, `"field"` | The WMDS Band tone |
 
 ## Motion
 
 - **What:** the row drifts right to left at 32px a second and wraps seamlessly (WMDS Carousel `loop`: a copy follows the last mark).
-- **When it stops:** under a pointer, while anything in the row has focus, during a drag, while the row is off screen or the tab is hidden, and always under reduced motion. The WMDS Pause button beside the row stops it for good (Logo strip O5, WCAG 2.2.2).
+- **When it stops:** under a pointer, while anything in the row has focus, during a drag, while the row is off screen or the tab is hidden, and always under reduced motion. No visible control (Randy, 2026-11-05): the WMDS Pause button is out of sight until a keyboard user tabs to it (`autoplay.pause: "on-focus"`), and then stops it for good (Logo strip O5, WCAG 2.2.2).
 - **Hands on:** the row can also be dragged or scrolled sideways, like any WMDS Carousel.
 
 ## Knobs
@@ -59,7 +60,7 @@ Full width; Band `md` spacing (48 top and bottom); label above the row with 16 b
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.35** (npm): `Band`, `Carousel` (`autoplay`, `loop`, `fade`). No Motion import, no new library.
+Built on **@thewhatmatters/wmds** with `Carousel` `autoplay.pause: "on-focus"` (WMDS branch `lead-engineer/carousel-pause-on-focus`, after 0.4.45; the pin bump follows its release): `Band`, `Carousel` (`autoplay`, `loop`, `fade`). No Motion import, no new library.
 
 - **Check change:** `npm run check` has a rule for the new Logos type (one h2, no h1, no nav, every mark with its company name as text). The existing Logo strip O4/O5 checks run on it too.
 - **WMDS-GAP (bug): Carousel `loop` widens the page.** The looped copies spill about 4,200px past the row (measured at 1440: the document scrolled sideways to 4,638px). The pattern clips its own row cell (`overflow-x-clip`) so the page stays 1,440 / 390 wide; WMDS should contain its loop inside the Carousel.

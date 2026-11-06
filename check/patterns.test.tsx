@@ -29,11 +29,12 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
   });
 
-  it("imports only @thewhatmatters/wmds, React and its own files", () => {
+  it("imports only @thewhatmatters/wmds, React, Motion and its own files", () => {
     for (const file of files.filter((name) => name.endsWith(".tsx"))) {
       const source = readFileSync(join(dir, file), "utf8");
       for (const [, from] of source.matchAll(/from "([^"]+)"/g)) {
-        expect(from, `${folder}/${file}`).toMatch(/^(@thewhatmatters\/wmds|react|\.\/)/);
+        // Motion (motion.dev) is a WMDS peer, so patterns may use it for motion (Randy, 2026-10-29).
+        expect(from, `${folder}/${file}`).toMatch(/^(@thewhatmatters\/wmds|react|motion\/react$|\.\/)/);
       }
     }
   });
@@ -71,6 +72,18 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/class="sr-only">[^<]+</);
+    } else if (mod.meta.type === "Steps") {
+      // A steps section: one h2 that names it, no h1 and no nav, the steps as an ordered list, each with an h3.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<ol[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
+    } else if (mod.meta.type === "Stats") {
+      // A stats section: one h2 that names it, no h1 and no nav, and every figure readable as text (a dl).
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
     } else if (mod.meta.type === "Testimonial") {
       // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
@@ -292,7 +305,7 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
     // H8: a heading is centred on phones (a bare `text-center`, not `md:text-center`) only in patterns
     // measured to stay within 2 lines at 390 (2026-10-28). Others left-align below md.
-    const centredOnPhones = ["footer/over-image", "testimonial/tilted-cards"];
+    const centredOnPhones = ["footer/over-image", "testimonial/tilted-cards", "stats/pinned-counter"]; // stats: the centred text is the figure, not the h2 (left-aligned)
     if (/<h[12][\s>]/.test(html) && !centredOnPhones.includes(folder)) {
       expect(html, `${folder}: heading centred on phones`).not.toMatch(/class="[^"]*(?<![:\w-])text-center\b/);
     }
