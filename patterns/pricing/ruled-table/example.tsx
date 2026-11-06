@@ -9,6 +9,8 @@ export const meta = {
   type: "Pricing",
   name: "Pricing — Ruled Table",
   purpose: "Fixed-price packages in ruled cells, a pay-once / spread-monthly toggle, and a comparison table.",
+  /** The package headers pin while the rows scroll: the gallery shows it a screen tall and scrolls inside the frame. */
+  scroll: true,
 };
 
 const tiers: PricingRuledTableTier[] = [
