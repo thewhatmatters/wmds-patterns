@@ -115,6 +115,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
+    } else if (mod.meta.type === "Journal") {
+      // A journal section: one h2, an h3 per post, no h1 and no nav; every post title is a link.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<h3[\s>][\s\S]*?<a [^>]*href="[^"]+"/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
     } else if (mod.meta.type === "Pricing") {
       // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
       // somewhere, and the comparison (when present) is a real table with row headers.
