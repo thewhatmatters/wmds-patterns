@@ -23,9 +23,10 @@ function Bust({ field, body, hair, shape }: { field: string; body: string; hair:
     long: <path d="M116 156c0-52 36-84 84-84s84 32 84 84v120h-30v-116c0-30-24-50-54-50s-54 20-54 50v116h-30z" fill={hair} />,
   }[shape];
   return (
-    <svg viewBox="0 0 400 500" width={400} height={500} aria-hidden className="block size-full">
+    // data-theme="light": the WMDS light palette inside the drawing, so faces stay light in dark mode too.
+    <svg viewBox="0 0 400 500" width={400} height={500} aria-hidden data-theme="light" className="block size-full">
       <rect width="400" height="500" fill={field} />
-      <rect x="174" y="200" width="52" height="190" rx="22" fill="var(--color-background-body)" />
+      <rect x="176" y="210" width="48" height="160" rx="20" fill="var(--color-background-body)" />
       <path d="M70 500c0-90 58-150 130-150s130 60 130 150z" fill={body} />
       <circle cx="200" cy="170" r="70" fill="var(--color-background-body)" />
       {hairShape}
