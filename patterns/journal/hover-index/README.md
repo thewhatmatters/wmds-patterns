@@ -1,6 +1,6 @@
 # Journal — Hover Index
 
-status: draft
+status: approved
 
 After United Carriers' "What's moving in your industry" (details.so, https://www.details.so/inspo/unitedcarriers-702f7b), with the two-tone heading from Atlas (Inspiration board). Nothing copied but the idea: the latest posts as a quiet ruled index. Laid out like a table (Randy, 2026-11-06): the date in its own columns, the title across the width, the post's tags at the end, a fill on the hovered row, and a small cover that follows the mouse over the row it's on. No arrows.
 **File:** `JournalHoverIndex.tsx` (copy it). **Example:** `example.tsx`, six made-up posts (one on another site) with cut-paper SVG covers in WMDS chart colours (licence-free).
@@ -65,6 +65,6 @@ Full width; Band `md` spacing (48 top and bottom); header → list 40 / 64 (phon
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds** with `IndexList` `columns="page"` and `IndexList.Item` `tags`, `rowLink`, `external` (WMDS branch `lead-engineer/indexlist-rows`, after 0.4.47; the pin bump follows its release): `Band`, `IndexList`, `Badge`; the example adds `Button`. Motion **13.5.1** (the WMDS peer).
+Built on **@thewhatmatters/wmds 0.4.48** (npm, IndexList `columns="page"`, Item `tags` and `rowLink` new in 0.4.48): `Band`, `IndexList`, `Badge`; the example adds `Button`. Motion **13.5.1** (the WMDS peer).
 
 - **Check change:** `npm run check` has a rule for the new Journal type (one h2, every post title an `h3` link, no h1, no nav).

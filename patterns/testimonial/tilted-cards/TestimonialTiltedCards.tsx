@@ -5,7 +5,7 @@
  * holds the quote, centred between two quotation marks, and a small byline. No photos.
  *
  * Motion: the row repeats seamlessly (WMDS Carousel `loop`) and drifts slowly one way (`autoplay`). It holds on
- * hover and focus, has a Pause button, and doesn't move under reduced motion. A drag stays where it's let go (no
+ * hover and focus, shows no Pause button (it appears only on keyboard focus), and doesn't move under reduced motion. A drag stays where it's let go (no
  * snap), and the cards lean the way the row moves (`--carousel-velocity`), then ease upright. A hand badge follows a mouse over the row (Carousel `cursor`).
  */
 import { useId, type ReactNode } from "react";
@@ -133,7 +133,7 @@ export function TestimonialTiltedCards({
             itemWidth={{ base: 85, md: 46, lg: 30 }}
             loop
             snap={false}
-            autoplay={autoplay}
+            autoplay={autoplay ? { pause: "on-focus" } : false}
             cursor={cursor ?? undefined}
           >
             {quotes.map((item, index) => (

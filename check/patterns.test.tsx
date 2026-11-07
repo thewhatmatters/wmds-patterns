@@ -12,7 +12,10 @@ const root = join(import.meta.dirname, "..");
 const patternsDir = join(root, "patterns");
 const skill = readFileSync(join(root, "SKILL.md"), "utf8");
 
-type ExampleModule = { default: ComponentType<{ nav?: undefined; as?: "h1" | "h2" }>; meta: { name: string; purpose: string; type: string } };
+type ExampleModule = {
+  default: ComponentType<{ nav?: undefined; as?: "h1" | "h2"; variant?: string }>;
+  meta: { name: string; purpose: string; type: string; variants?: { id: string; label: string }[] };
+};
 const examples = import.meta.glob<ExampleModule>("../patterns/*/*/example.tsx");
 
 const folders = readdirSync(patternsDir).flatMap((type) =>
@@ -36,6 +39,34 @@ describe.each(folders)("patterns/%s", (folder) => {
         // Motion (motion.dev) is a WMDS peer, so patterns may use it for motion (Randy, 2026-10-29).
         expect(from, `${folder}/${file}`).toMatch(/^(@thewhatmatters\/wmds|react|motion\/react$|\.\/)/);
       }
+    }
+  });
+
+  it("keeps any background video decorative: muted, looping, inline, hidden, no controls (ux-best-practices Media)", async () => {
+    const load = examples[`../patterns/${folder}/example.tsx`];
+    const mod = await load();
+    const Example = mod.default;
+    const variants: (string | undefined)[] = mod.meta.variants ? mod.meta.variants.map((option) => option.id) : [undefined];
+    for (const variant of variants) {
+      const html = renderToString(variant ? <Example variant={variant} /> : <Example />);
+      for (const tag of html.match(/<video[^>]*>/g) ?? []) {
+        expect(tag, `${folder} ${variant ?? ""}`).toMatch(/\smuted(=|\s|>)/);
+        expect(tag).toMatch(/\sloop(=|\s|>)/);
+        expect(tag).toMatch(/\splaysInline|\splaysinline/);
+        expect(tag).toMatch(/aria-hidden="true"/);
+        expect(tag).not.toMatch(/\scontrols(=|\s|>)/);
+      }
+      // No play / pause control for a background video (Randy, 2026-11-06: "for heroes, it doesn't matter").
+      expect(html, `${folder} ${variant ?? ""}`).not.toMatch(/aria-label="(Play|Pause) background video"/);
+    }
+  });
+
+  it("shows no visible pause / play control (Randy, 2026-11-06: none on any pattern)", () => {
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      const source = readFileSync(join(dir, file), "utf8");
+      // A drifting WMDS Carousel keeps its Pause out of sight until keyboard focus.
+      if (/<Carousel[\s\S]*?autoplay=/.test(source)) expect(source, `${folder}/${file}: Carousel pause`).toMatch(/pause: "on-focus"/);
+      expect(source, `${folder}/${file}: play/pause button`).not.toMatch(/aria-label=\{?[^}\n]*"(Pause|Play)\b/);
     }
   });
 
@@ -66,6 +97,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<header[\s>]/);
       expect(html).toMatch(/<nav[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
+    } else if (mod.meta.type === "Logos") {
+      // A logo strip: one h2 (its label) that names it, no h1 and no nav; every mark has its company name as text.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/class="sr-only">[^<]+</);
     } else if (mod.meta.type === "Steps") {
       // A steps section: one h2 that names it, no h1 and no nav, the steps as an ordered list, each with an h3.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
@@ -84,6 +121,15 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<h3[\s>][\s\S]*?<a [^>]*href="[^"]+"/);
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
+    } else if (mod.meta.type === "Pricing") {
+      // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
+      // somewhere, and the comparison (when present) is a real table with row headers.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<h3[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/data-slot="action"[\s\S]*?<a [^>]*href="[^"]+"/);
+      if (/data-slot="compare"/.test(html)) expect(html).toMatch(/<th[^>]*scope="row"/);
     } else if (mod.meta.type === "Testimonial") {
       // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);

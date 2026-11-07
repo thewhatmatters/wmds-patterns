@@ -24,7 +24,7 @@ export interface HeroPhoneCenterProps {
   actions?: ReactNode;
   /**
    * Slot: the picture behind the phone, usually a decorative `<img alt="">`; it's cropped to fill the
-   * stage. For a video use `video` instead, which adds the pause control moving media needs.
+   * stage. For a video use `video` instead: muted, looping, no controls.
    */
   media?: ReactNode;
   /** A looping background video (muted, no controls). Used instead of `media`. Held on its poster under reduced motion. */
@@ -37,8 +37,8 @@ export interface HeroPhoneCenterProps {
   screen?: ReactNode;
   /**
    * Slot, optional: a full app screen on the phone, edge to edge under the glass: a screenshot, a
-   * recording (`<video>` 9:19.5, e.g. 1206 × 2622) or live UI. It's cropped to the screen's shape. A
-   * recording that plays on its own for over 5 seconds needs a pause control in your page.
+   * recording (`<video>` 9:19.5, e.g. 1206 × 2622) or live UI. It's cropped to the screen's shape. Recordings play
+   * muted and looping with no controls (Randy: no play/pause on patterns).
    */
   app?: ReactNode;
   /**
