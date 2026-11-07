@@ -46,7 +46,7 @@ import { TestimonialTiltedCards } from "./TestimonialTiltedCards";
 ## Behaviour
 
 - **The row** is WMDS `Carousel` (`bleed`, `loop`): the quotes repeat seamlessly, so the row never ends (Randy 2026-10-29). Drag, trackpad, touch and keyboard from WMDS, named by the heading; no scrubber, since a loop has no end. Cards are 85% of the row on phones, 46% on tablet, 30% on desktop.
-- **Drift** (`autoplay`): about 24px a second, one way, wrapping invisibly. It holds on hover, on focus inside the row, during a drag, off screen and in a hidden tab; a Pause / Play button sits under the row (WCAG 2.2.2: anything that moves on its own for more than 5 seconds needs a way to stop it); it never moves under reduced motion.
+- **Drift** (`autoplay`): about 24px a second, one way, wrapping invisibly. It holds on hover, on focus inside the row, during a drag, off screen and in a hidden tab; no visible Pause / Play button (Randy, 2026-11-06): it's out of sight until a keyboard user tabs to it, so motion can still be stopped (WCAG 2.2.2); it never moves under reduced motion.
 - **Drag:** the row stays where it's let go (no snap), and keeps a little momentum.
 - **Lean:** while the row moves, the cards tip toward the way it's going (up to 8°, from WMDS Carousel's `--carousel-velocity`, smoothed by a Motion spring) and ease back upright when it stops. The row doesn't select text, so a drag never paints selection over the cards. None under reduced motion.
 - **Cursor:** a hand badge follows a mouse over the row (devices with a fine pointer that can hover only); decorative.

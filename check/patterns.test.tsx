@@ -61,6 +61,15 @@ describe.each(folders)("patterns/%s", (folder) => {
     }
   });
 
+  it("shows no visible pause / play control (Randy, 2026-11-06: none on any pattern)", () => {
+    for (const file of files.filter((name) => name.endsWith(".tsx"))) {
+      const source = readFileSync(join(dir, file), "utf8");
+      // A drifting WMDS Carousel keeps its Pause out of sight until keyboard focus.
+      if (/<Carousel[\s\S]*?autoplay=/.test(source)) expect(source, `${folder}/${file}: Carousel pause`).toMatch(/pause: "on-focus"/);
+      expect(source, `${folder}/${file}: play/pause button`).not.toMatch(/aria-label=\{?[^}\n]*"(Pause|Play)\b/);
+    }
+  });
+
   it("is listed in SKILL.md", () => {
     expect(skill).toContain(`patterns/${folder}`);
   });
@@ -88,6 +97,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<header[\s>]/);
       expect(html).toMatch(/<nav[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
+    } else if (mod.meta.type === "Logos") {
+      // A logo strip: one h2 (its label) that names it, no h1 and no nav; every mark has its company name as text.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/class="sr-only">[^<]+</);
     } else if (mod.meta.type === "Steps") {
       // A steps section: one h2 that names it, no h1 and no nav, the steps as an ordered list, each with an h3.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
@@ -100,6 +115,21 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
+    } else if (mod.meta.type === "Journal") {
+      // A journal section: one h2, an h3 per post, no h1 and no nav; every post title is a link.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<h3[\s>][\s\S]*?<a [^>]*href="[^"]+"/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+    } else if (mod.meta.type === "Pricing") {
+      // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
+      // somewhere, and the comparison (when present) is a real table with row headers.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<h3[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/data-slot="action"[\s\S]*?<a [^>]*href="[^"]+"/);
+      if (/data-slot="compare"/.test(html)) expect(html).toMatch(/<th[^>]*scope="row"/);
     } else if (mod.meta.type === "Testimonial") {
       // A testimonial section: one h2 that names it, no h1 and no nav; each quote is a figure with its caption.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
