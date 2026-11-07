@@ -3,7 +3,7 @@
 status: approved
 
 One hero for two jobs (Randy, 2026-10-30). It replaced **Hero — Feature Center** and **Hero — Over Media** (approved 2026-11-01).
-**File:** `HeroStage.tsx` (copy it). **Example:** `example.tsx`, in five variants (the gallery's **Variant** control passes `variant` to the example). The backdrop variants use Randy's Envato pick ("Blurred Restaurant Interior With Bartender in Background"), licensed for the private gallery and kept in `gallery/public/local/`, never committed here; without it the hero shows the dark page colour under the scrim.
+**File:** `HeroStage.tsx` (copy it). **Example:** `example.tsx`, in four variants (the gallery's **Variant** control passes `variant` to the example). The backdrop variants use Randy's Envato pick ("Blurred Restaurant Interior With Bartender in Background"), licensed for the private gallery and kept in `gallery/public/local/`, never committed here; without it the hero shows the dark page colour under the scrim.
 
 Two choices make the layouts:
 
@@ -51,13 +51,13 @@ import { HeroStage } from "./HeroStage";
 
 | Prop | Kind | Notes |
 |---|---|---|
-| `nav` | slot, optional | Leave it empty when the page already has a nav |
+| `nav` | slot, optional | Leave it empty when the page already has a nav. Over a backdrop, give the page's WMDS `SiteNav` `overMedia`: it lays over the picture with no fill and light links, and the hero adds a top fade so they read on bright frames; once you scroll, it's the usual frosted pill (Randy, 2026-11-01) |
 | `eyebrow` | ReactNode | Optional. 1–3 words in sentence case, 12px above the headline. Plain `type-eyebrow` unless `eyebrowHref` is set (then one outlined pill link with an arrow, E10) |
 | `eyebrowHref` | string, optional | Where the eyebrow links |
 | `headline` | ReactNode | The page's only H1: 12 words at most, 2 lines at desktop. WMDS `type-display-1` |
 | `lead` | ReactNode | Optional. 1–2 sentences, in ink |
 | `actions` | slot | The CTA row, full width and stacked below 640px: one WMDS `<Button role="primary" size="lg">` and at most one `role="outline"` (R2, U7). Over a backdrop the outline's border is the light ink, 3:1 or more |
-| `backdrop` | `{ kind: "image", media, focus? }` or `{ kind: "video", src, poster, focus? }`, optional | Leave it out for the page colour. `media` is a decorative `<img alt="">` with width and height, cropped to fill. The video is muted, loops, plays only on screen, is hidden from assistive tech and has no player controls (Randy, 2026-11-06). Under reduced motion it never plays and the poster stays; `poster` is required (it's what shows before the video loads, under reduced motion and in Safari's low-power mode). `focus` keeps a part of the picture in view as it crops |
+| `backdrop` | `{ kind: "image", media, focus? }` or `{ kind: "video", src, poster, focus? }`, optional | Leave it out for the page colour. `media` is a decorative `<img alt="">` with width and height, cropped to fill. The video is decorative and part of the design: muted, looping, inline, hidden from assistive tech, playing only while on screen, with no player controls (Randy, 2026-11-06: "for heroes, it doesn't matter"; ux-best-practices Media rule). Under reduced motion it never plays and the poster stays; `poster` is required (it's what shows before the video loads, under reduced motion and in Safari's low-power mode). `focus` keeps a part of the picture in view as it crops |
 | `align` | `"start"` \| `"center"` \| `"end"` | Default `center` on a plain page, `start` over a backdrop. From desktop the copy takes 8 columns (2 headline lines): start = 1–8, centre = 3–10, end = 5–12. `end` needs a backdrop |
 | `visual` | slot, optional | What goes in the framed window (a product shot, a site). Plain page only; over a backdrop it's left out (with a console warning). Centred copy: columns 2–11; start: the full grid |
 | `visualDecorative` | boolean, default `true` | The window is decoration, hidden from screen readers. Set `false` when it carries content people need |
@@ -88,5 +88,5 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## WMDS-GAPs
 
-- **Media component:** no WMDS image or video component with a focal point, and a poster under reduced motion; the pattern carries its own small background video until WMDS has one.
+- **Media component:** no WMDS image or video component with a focal point and a poster under reduced motion; the pattern carries its own small background video until WMDS has one.
 - Checked against **@thewhatmatters/wmds 0.4.35** (npm).
