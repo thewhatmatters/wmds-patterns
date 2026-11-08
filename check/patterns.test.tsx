@@ -115,6 +115,13 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
+    } else if (mod.meta.type === "Blog" || mod.meta.type === "Resources") {
+      // A blog or resources page: the page's main landmark with its one h1 (the title and count), no nav of its own,
+      // and a live status line that reads the count out when a filter changes it.
+      expect(html).toMatch(/<main[\s>]/);
+      expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      if (/data-slot="(posts|items)"/.test(html)) expect(html).toMatch(/role="status"/);
     } else if (mod.meta.type === "Journal") {
       // A journal section: one h2, an h3 per post, no h1 and no nav; every post title is a link.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
