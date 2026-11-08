@@ -121,6 +121,15 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<h3[\s>][\s\S]*?<a [^>]*href="[^"]+"/);
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
+    } else if (mod.meta.type === "Signup") {
+      // A signup section: one h2, no h1 and no nav; a real form with a labelled email field and a submit button.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      expect(html).toMatch(/<form[\s>]/);
+      expect(html).toMatch(/<label[\s>]/);
+      expect(html).toMatch(/<input[^>]*type="email"/);
+      expect(html).toMatch(/<button[^>]*type="submit"/);
     } else if (mod.meta.type === "Pricing") {
       // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
       // somewhere, and the comparison (when present) is a real table with row headers.
