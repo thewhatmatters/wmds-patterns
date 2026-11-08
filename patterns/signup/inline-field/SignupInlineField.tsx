@@ -33,8 +33,11 @@ export interface SignupInlineFieldProps {
 /** Centred on the middle 6 columns from lg (Grid rule: a centred lead takes columns 4–9); full width below. */
 const innerClasses = "col-span-full flex flex-col items-start lg:col-span-6 lg:col-start-4 lg:items-center lg:text-center";
 const headingClasses = "text-balance type-heading-1 text-fg";
-/** Field and button on one row from md (the button lines up with the field, under its label); stacked full width on phones. */
-const formClasses = "mt-8 flex w-full flex-col gap-3 text-left md:flex-row md:items-end";
+/**
+ * Field and button on one row from md; stacked full width on phones. The row aligns to the top and the button
+ * drops by the label's height (24px), so it stays level with the field when an error band opens under it.
+ */
+const formClasses = "mt-8 flex w-full flex-col gap-3 text-left md:flex-row md:items-start";
 const noteClasses = "mt-4 text-pretty text-muted";
 const hintClasses = "mt-3 hidden items-center gap-2 text-muted md:flex";
 
@@ -115,7 +118,7 @@ export function SignupInlineField({
                   disabled={state === "sending"}
                   className="md:flex-1"
                 />
-                <Button role="primary" size="lg" type="submit" status={state === "sending" ? "loading" : "idle"} statusLabels={{ loading: "Sending…" }} className="shrink-0">
+                <Button role="primary" size="lg" type="submit" status={state === "sending" ? "loading" : "idle"} statusLabels={{ loading: "Sending…" }} className="shrink-0 md:mt-6">
                   {submitLabel}
                 </Button>
               </form>
