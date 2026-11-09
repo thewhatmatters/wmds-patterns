@@ -2,10 +2,12 @@
 
 status: draft
 
+Needs WMDS with Search `actionType`, `status` and `message` (branch lead-engineer/search-status, next release).
+
 After Plnty's "Join early & claim" (details.so, https://www.details.so/inspo/plnty-217df2). Nothing copied but the structure: one big line, one email field you send with Enter, and a short line under it about what you'll get.
 **File:** `SignupInlineField.tsx` (copy it). **Example:** `example.tsx`, a studio's monthly newsletter that pretends to store the address (nothing is sent).
 
-A WMDS `Band`: eyebrow and heading, then a form with a labelled WMDS `Input` (email) and a WMDS `Button` on one row from md (stacked full width on phones), a "Press Enter to send" hint with a WMDS `Kbd` (pointer devices), and a note on what people get. Left-aligned on phones; centred on the middle six columns from lg (Grid rule). Plain and content-led: the only change on screen is the form's own state.
+A WMDS `Band`: eyebrow and heading, then a form with a labelled email field whose **Subscribe** button sits inside it at the right end (WMDS `Field` + `Search` with `actionType="submit"`, Randy 2026-11-09), on phones too, a "Press Enter to send" hint with a WMDS `Kbd` (pointer devices), and a note on what people get. Left-aligned on phones; centred on the middle six columns from lg (Grid rule). Plain and content-led: the only change on screen is the form's own state.
 
 | Light | Dark (invalid address) | Mobile (390) |
 |---|---|---|

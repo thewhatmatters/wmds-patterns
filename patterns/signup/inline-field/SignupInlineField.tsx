@@ -1,6 +1,7 @@
 /**
  * Signup — Inline Field: one big line and one email field, for a newsletter, a waitlist or "send me the guide"
- * (after Plnty's "Join early & claim"). The field and its button sit on one row; Enter submits; a short line under
+ * (after Plnty's "Join early & claim"). The button sits inside the field at its right end (WMDS Search's inset
+ * action, Randy 2026-11-09: "the call to action is inside of the input field on the right-hand side"); Enter submits; a short line under
  * it says what people get and how often. Plain and content-led: the only change on screen is the form's own state
  * (sending, done, or a message to fix the address).
  *
@@ -8,7 +9,7 @@
  * stored (or throws with a message to show).
  */
 import { useId, useState, type FormEvent, type ReactNode } from "react";
-import { Band, Button, Input, Kbd, cn, type BandTone } from "@thewhatmatters/wmds";
+import { Band, Field, Kbd, Search, cn, type BandTone } from "@thewhatmatters/wmds";
 
 export interface SignupInlineFieldProps {
   /** Optional: a short label above the heading, e.g. "Newsletter". */
@@ -33,11 +34,8 @@ export interface SignupInlineFieldProps {
 /** Centred on the middle 6 columns from lg (Grid rule: a centred lead takes columns 4–9); full width below. */
 const innerClasses = "col-span-full flex flex-col items-start lg:col-span-6 lg:col-start-4 lg:items-center lg:text-center";
 const headingClasses = "text-balance type-heading-1 text-fg";
-/**
- * Field and button on one row from md; stacked full width on phones. The row aligns to the top and the button
- * drops by the label's height (24px), so it stays level with the field when an error band opens under it.
- */
-const formClasses = "mt-8 flex w-full flex-col gap-3 text-left md:flex-row md:items-start";
+/** The labelled field, full width of the column, its button inset at the right end. */
+const formClasses = "mt-8 w-full text-left";
 const noteClasses = "mt-4 text-pretty text-muted";
 const hintClasses = "mt-3 hidden items-center gap-2 text-muted md:flex";
 
@@ -99,28 +97,28 @@ export function SignupInlineField({
           ) : (
             <>
               <form className={formClasses} onSubmit={submit} noValidate aria-labelledby={headingId} data-slot="form">
-                <Input
-                  type="email"
-                  name="email"
-                  required
-                  autoComplete="email"
-                  inputMode="email"
-                  size="lg"
-                  width="full"
-                  label="Email address"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(event.target.value);
-                    if (error) setError(null);
-                  }}
-                  status={error ? "error" : undefined}
-                  message={error ?? undefined}
-                  disabled={state === "sending"}
-                  className="md:flex-1"
-                />
-                <Button role="primary" size="lg" type="submit" status={state === "sending" ? "loading" : "idle"} statusLabels={{ loading: "Sending…" }} className="shrink-0 md:mt-6">
-                  {submitLabel}
-                </Button>
+                <Field label="Email address">
+                  <Search
+                    type="email"
+                    name="email"
+                    required
+                    autoComplete="email"
+                    inputMode="email"
+                    size="md"
+                    value={email}
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                      if (error) setError(null);
+                    }}
+                    status={error ? "error" : undefined}
+                    message={error ?? undefined}
+                    disabled={state === "sending"}
+                    actionLabel={state === "sending" ? "Sending…" : submitLabel}
+                    // The inset button is the form's submit button: a click and Enter do the same thing.
+                    actionType="submit"
+                    actionDisabled={state === "sending"}
+                  />
+                </Field>
               </form>
               <p className={hintClasses} aria-hidden>
                 Press <Kbd size="sm">Enter</Kbd> to send
