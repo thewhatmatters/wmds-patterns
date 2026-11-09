@@ -1,6 +1,6 @@
 # Resources — Filtered Grid
 
-status: draft
+status: approved
 
 Taken from whatmatters.so/resources (Randy, 2026-11-07: "I like how the blog and resources pages are already set up. I like that style."). The site pastes WMDS's Storybook "Pattern — filtered grid"; this is that page as a wmds-patterns pattern, with every word a prop.
 **File:** `ResourcesFilteredGrid.tsx` (copy it). **Example:** `example.tsx`, nine made-up resources with SVG stand-in previews in WMDS chart colours (licence-free).

@@ -1,6 +1,6 @@
 # Blog — Filtered Index
 
-status: draft
+status: approved
 
 Taken from whatmatters.so/blog (Randy, 2026-11-07: "I like how the blog and resources pages are already set up. I like that style."). The site pastes WMDS's Storybook "Pattern — filtered index"; this is that page as a wmds-patterns pattern, with every word a prop so a site can keep them in its copy file.
 **File:** `BlogFilteredIndex.tsx` (copy it). **Example:** `example.tsx`, eight made-up studio posts under four topics.
