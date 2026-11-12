@@ -1,6 +1,6 @@
 # Signup — Inline Field
 
-status: draft
+status: approved
 
 Needs WMDS 0.4.50 or later (Search `actionType`, `status` and `message`).
 
