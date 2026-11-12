@@ -2,7 +2,7 @@
 
 status: draft
 
-Needs WMDS with Search `actionType`, `status` and `message` (branch lead-engineer/search-status, next release).
+Needs WMDS 0.4.50 or later (Search `actionType`, `status` and `message`).
 
 After Plnty's "Join early & claim" (details.so, https://www.details.so/inspo/plnty-217df2). Nothing copied but the structure: one big line, one email field you send with Enter, and a short line under it about what you'll get.
 **File:** `SignupInlineField.tsx` (copy it). **Example:** `example.tsx`, a studio's monthly newsletter that pretends to store the address (nothing is sent).
@@ -61,11 +61,11 @@ The first item is the example the gallery's Copy prompt uses.
 
 ## Spacing
 
-Full width; Band `md` spacing (48 top and bottom); eyebrow → heading 12; heading → form 32; field ↔ button 12; form → hint 12; → note 16.
+Full width; Band `md` spacing (48 top and bottom); eyebrow → heading 12; heading → form 32; form → hint 12; → note 16.
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.48** (npm): `Band`, `Input` (`label`, `status`, `message`), `Button` (`status`), `Kbd`; the example adds `TextLink`. No Motion, no new library.
+Built on **@thewhatmatters/wmds 0.4.50** (npm): `Band`, `Field`, `Search` (`actionType="submit"`, `status`, `message`, new in 0.4.50), `Kbd`; the example adds `TextLink`. No Motion, no new library.
 
 - **Check change:** `npm run check` has a rule for the new Signup type: one h2, no h1, no nav, a real form with a labelled email field and a submit button. The existing form rules (no placeholder; a one-field form's field is required) run on it too.
 - **WMDS-GAP: no display-size input.** Plnty's field is oversized, the moment of the section; WMDS `Input` tops out at `lg` (48px). Proposed: `Input` `size="xl"` (display type, taller) for single-field moments like this, with Button to match.

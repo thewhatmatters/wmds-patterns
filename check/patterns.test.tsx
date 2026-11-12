@@ -115,6 +115,13 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       expect(html).toMatch(/<dl[\s>][\s\S]*<dt[\s>][\s\S]*<dd[\s>]/);
+    } else if (mod.meta.type === "Blog" || mod.meta.type === "Resources") {
+      // A blog or resources page: the page's main landmark with its one h1 (the title and count), no nav of its own,
+      // and a live status line that reads the count out when a filter changes it.
+      expect(html).toMatch(/<main[\s>]/);
+      expect(html.match(/<h1[\s>]/g)).toHaveLength(1);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      if (/data-slot="(posts|items)"/.test(html)) expect(html).toMatch(/role="status"/);
     } else if (mod.meta.type === "Journal") {
       // A journal section: one h2, an h3 per post, no h1 and no nav; every post title is a link.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
@@ -130,6 +137,12 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<label[\s>]/);
       expect(html).toMatch(/<input[^>]*type="email"/);
       expect(html).toMatch(/<button[^>]*type="submit"/);
+    } else if (mod.meta.type === "Team") {
+      // A team section: one h2, an h3 per person (their name), no h1 and no nav; the people are a list.
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<ul[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
     } else if (mod.meta.type === "Pricing") {
       // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
       // somewhere, and the comparison (when present) is a real table with row headers.
