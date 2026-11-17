@@ -1,14 +1,19 @@
 /**
- * Features — Bento: a features section as an offset grid of cells (after Hebbia's "knowledge at work" section).
- * Each cell is a WMDS Card with a title and one line of description at its top, and below them a picture of the
- * feature at work that runs off the cell's edge. Cells take turns wide and narrow (8 + 4, then 4 + 8 on desktop),
- * sit side by side in pairs on tablets and stack on phones.
+ * Features — Bento: a layout for a features section, as an offset grid of cells (after Hebbia's "knowledge at
+ * work" section). The layout is the pattern: a heading, then WMDS Cards that take turns wide and narrow
+ * (8 + 4, then 4 + 8 on desktop), sit side by side in pairs on tablets and stack on phones. Each cell holds a
+ * title, one line of description and a `visual` slot.
  *
- * The picture is the point: fill each cell's `visual` with the product's own output (a table, a list of cards,
- * a chart) built from WMDS components, never a stock illustration. It is a picture, so it is hidden from
- * assistive tech and can't take focus; the title and description carry the meaning.
+ * What goes in a cell's `visual` follows the site's direction, not this file: a still screen built from WMDS
+ * components, a photograph, a picture that wakes while the pointer is over its cell, or a small working demo.
+ * A visual is a picture by default (hidden from assistive tech, out of the tab order; the words carry the
+ * meaning). Mark an item `interactive` when its visual is something the reader can use: it then keeps its
+ * controls, its focus order and its full height.
  *
- * Motion (motion.dev, `motion/react`, the WMDS peer): each picture settles up into its cell once, as the cell
+ * Layout knobs: `media` puts the visual under the words (it runs off the cell's bottom edge) or above them (a
+ * framed picture with the words beneath), and an item's `span` overrides the wide / narrow turn-taking.
+ *
+ * Motion (motion.dev, `motion/react`, the WMDS peer): each visual settles up into its cell once, as the cell
  * comes on screen (transform only). `FeaturesBentoDrift` is an optional row that glides sideways for a few
  * seconds on arrival and again while the pointer is over its cell; it is never moving on its own for more than
  * five seconds, so it needs no pause control. Reduced motion gives a still section.
@@ -22,8 +27,15 @@ export interface FeaturesBentoItem {
   title: string;
   /** One or two lines on what it does for the reader. */
   description: ReactNode;
-  /** A picture of the feature at work, built from WMDS components. It fills the box under the text and is cut at its edges. */
+  /** Whatever shows the feature: a screen, a photograph, a moving picture, a working demo. A picture fills the cell's box and is cut at its edges. */
   visual: ReactNode;
+  /**
+   * The visual is something the reader can use (controls, links), not a picture. It keeps its semantics and its
+   * place in the tab order, sets the box's height itself and is never faded or cut at the bottom. Label its controls.
+   */
+  interactive?: boolean;
+  /** The cell's width from tablets up. Left out, cells take turns: wide, narrow, narrow, wide, and an odd last cell is full. */
+  span?: "wide" | "narrow" | "full";
 }
 
 export interface FeaturesBentoProps {
@@ -35,6 +47,8 @@ export interface FeaturesBentoProps {
   intro?: ReactNode;
   /** The cells, in reading order. Two or four read best; an odd last cell takes the full width. */
   items: FeaturesBentoItem[];
+  /** Where a cell's visual sits: under the words, running off the cell's bottom edge, or above them with a rule between. */
+  media?: "below" | "above";
   /** The band's WMDS tone. */
   tone?: BandTone;
   className?: string;
@@ -43,21 +57,33 @@ export interface FeaturesBentoProps {
 // Every class is written out in full (never interpolated) so Tailwind sees it.
 const HEADER = "col-span-full lg:col-span-6";
 const INTRO = "col-span-full mt-4 max-w-[40em] text-pretty type-lead text-fg lg:col-span-6 lg:mt-0 lg:self-end";
-// The rows sit one grid gutter apart, the same gap as the columns.
-const CELLS = "col-span-full mt-10 grid grid-cols-subgrid gap-y-[var(--grid-gutter)] md:mt-16";
+// Every cell is two rows of this grid (its words and its visual), so the cells of a row line up part by part.
+// The rows of cells sit one grid gutter apart, the same gap as the columns: each cell carries that gap as its
+// top padding, and the list gives the first row's back.
+const CELLS =
+  "col-span-full mt-[calc(2.5rem_-_var(--grid-gutter))] grid grid-cols-subgrid gap-y-0 md:mt-[calc(4rem_-_var(--grid-gutter))]";
+const CELL = "row-span-2 grid grid-rows-subgrid pt-[var(--grid-gutter)]";
 const CELL_WIDE = "col-span-full md:col-span-4 lg:col-span-8";
 const CELL_NARROW = "col-span-full md:col-span-4 lg:col-span-4";
 const CELL_FULL = "col-span-full";
-// The picture's last 3rem fade out, so whatever runs off the cell's bottom edge leaves softly instead of being cut mid-row.
-const VISUAL =
-  "relative mt-auto h-64 overflow-hidden [mask-image:linear-gradient(to_bottom,black_calc(100%_-_3rem),transparent)] md:h-72 lg:h-80";
+// The Card passes the two rows on to its words and its visual. A WMDS layout card keeps room for a header and
+// a footer (16px above and below, 12px between parts); a cell has neither, so its parts meet its edges.
+const CARD = "group/cell row-span-2 !grid grid-rows-subgrid !gap-0 !py-0";
+// The visual's box grows with its cell and never drops under these heights.
+const VISUAL = "relative min-h-64 overflow-hidden md:min-h-72 lg:min-h-80";
+// Under the words, a picture's last 3rem fade out, so whatever runs off the cell's bottom edge leaves softly instead of being cut mid-row.
+const VISUAL_FADE = "[mask-image:linear-gradient(to_bottom,black_calc(100%_-_3rem),transparent)]";
+// Above the words, a rule closes the picture's frame.
+const VISUAL_ABOVE = "order-first border-b border-border";
+const SPANS = { wide: CELL_WIDE, narrow: CELL_NARROW, full: CELL_FULL };
 
 /** How far a picture rises into place, in px. */
 const RISE = 32;
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
 /** Wide, narrow, narrow, wide: each row is the mirror of the one above. */
-function span(index: number, count: number) {
+function span(index: number, count: number, set?: FeaturesBentoItem["span"]) {
+  if (set) return SPANS[set];
   if (count % 2 === 1 && index === count - 1) return CELL_FULL;
   return index % 4 === 0 || index % 4 === 3 ? CELL_WIDE : CELL_NARROW;
 }
@@ -66,7 +92,7 @@ function span(index: number, count: number) {
  * Settles its children up into place the first time they come on screen. The server and the first client render
  * are the finished state, so nothing is out of place without JavaScript or with reduced motion.
  */
-function Rise({ delay, children }: { delay: number; children: ReactNode }) {
+function Rise({ delay, fill, children }: { delay: number; fill: boolean; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const armed = useRef(false);
   const reduce = useReducedMotion();
@@ -86,7 +112,7 @@ function Rise({ delay, children }: { delay: number; children: ReactNode }) {
   }, [inView, delay, y]);
 
   return (
-    <motion.div ref={ref} className="relative size-full" style={{ y }}>
+    <motion.div ref={ref} className={fill ? "absolute inset-0" : "relative h-full"} style={{ y }}>
       {children}
     </motion.div>
   );
@@ -159,7 +185,7 @@ export function FeaturesBentoDrift({ children, direction = "left", duration = 40
   );
 }
 
-export function FeaturesBento({ eyebrow, heading, intro, items, tone = "default", className }: FeaturesBentoProps) {
+export function FeaturesBento({ eyebrow, heading, intro, items, media = "below", tone = "default", className }: FeaturesBentoProps) {
   const headingId = useId();
 
   return (
@@ -183,16 +209,31 @@ export function FeaturesBento({ eyebrow, heading, intro, items, tone = "default"
 
         <ul className={CELLS} data-slot="cells">
           {items.map((item, index) => (
-            <li key={item.title} className={span(index, items.length)}>
-              <Card as="article" padding="none" className="h-full" data-slot="cell">
+            <li key={item.title} className={cn(CELL, span(index, items.length, item.span))}>
+              <Card as="article" padding="none" className={CARD} data-slot="cell">
                 <div className="p-6 md:p-8">
                   <h3 className="text-balance type-heading-3 text-fg">{item.title}</h3>
                   <p className="mt-2 max-w-[30em] text-pretty font-normal text-muted type-large">{item.description}</p>
                 </div>
-                {/* A picture of the feature, not a control: out of the tab order and hidden from assistive tech. */}
-                <div className={VISUAL} data-slot="visual" aria-hidden="true" inert>
-                  <Rise delay={(index % 2) * 0.08}>{item.visual}</Rise>
-                </div>
+                {item.interactive ? (
+                  <div className={cn(VISUAL, media === "above" && VISUAL_ABOVE)} data-slot="visual" data-interactive="">
+                    <Rise delay={(index % 2) * 0.08} fill={false}>
+                      {item.visual}
+                    </Rise>
+                  </div>
+                ) : (
+                  // A picture of the feature, not a control: out of the tab order and hidden from assistive tech.
+                  <div
+                    className={cn(VISUAL, media === "above" ? VISUAL_ABOVE : VISUAL_FADE)}
+                    data-slot="visual"
+                    aria-hidden="true"
+                    inert
+                  >
+                    <Rise delay={(index % 2) * 0.08} fill>
+                      {item.visual}
+                    </Rise>
+                  </div>
+                )}
               </Card>
             </li>
           ))}

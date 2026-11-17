@@ -1,14 +1,24 @@
 /**
- * Example content for Features — Bento: a made-up client portal for a small studio. The product, the projects
- * and the people are invented, and every picture is built from WMDS components (Table, Badge, Avatar, Chip,
- * Chart), so nothing here needs a licence. A client page shows its own product's screens the same way.
+ * Example content for Features — Bento: a made-up client portal for a small studio, shown in two directions
+ * (the gallery's Variant control). The layout and the words are the same in both; only what sits in the cells'
+ * `visual` slots changes, which is how a site makes the pattern its own.
+ *
+ * - `interactive`: the visuals sit above the words and three of them work. The reader can filter the board,
+ *   tick off a sign-off and switch the hours between periods. The fourth wakes while the pointer is over it.
+ * - `screens`: the visuals are still pictures of the product under the words, running off the cells' edges.
+ *
+ * The product, the projects and the people are invented, and every visual is built from WMDS components, so
+ * nothing here needs a licence.
  */
+import { useState } from "react";
 import {
   Avatar,
   Badge,
   Card,
   ChartRankedBars,
+  Checkbox,
   Chip,
+  SegmentedControl,
   Table,
   TableBody,
   TableCell,
@@ -22,7 +32,12 @@ import { FeaturesBento, FeaturesBentoDrift, type FeaturesBentoItem, type Feature
 export const meta = {
   type: "Features",
   name: "Features — Bento",
-  purpose: "What the product does, as an offset grid of cells: each one a title, a line of description and a picture of the feature at work.",
+  purpose:
+    "A bento layout for a features section: an offset grid of cells, each a title, a line of description and a slot for whatever shows the feature. The visuals follow the site's direction: still screens, moving pictures or small working demos.",
+  variants: [
+    { id: "interactive", label: "Interactive" },
+    { id: "screens", label: "Product screens" },
+  ],
 };
 
 // A picture's panel starts at the cell's text edge and runs off the cell's right and bottom edges.
@@ -143,6 +158,116 @@ function Hours() {
   );
 }
 
+const boardStages = ["All", "Building", "In review"];
+
+/** The board as a working demo: the control filters the rows. */
+function BoardLive() {
+  const [stage, setStage] = useState("All");
+  const shown = projects.slice(0, 5).filter((project) => stage === "All" || project.stage === stage);
+  return (
+    // The height holds five rows, so the section doesn't move as the filter narrows them.
+    <div className="flex h-full min-h-108 flex-col items-start gap-4 px-6 pt-6 md:px-8 md:pt-8">
+      <SegmentedControl aria-label="Show projects by stage" value={stage} onValueChange={setStage}>
+        {boardStages.map((name) => (
+          <SegmentedControl.Item key={name} value={name}>
+            {name}
+          </SegmentedControl.Item>
+        ))}
+      </SegmentedControl>
+      <Card variant="outlined" className="min-h-0 w-full flex-1 overflow-hidden rounded-b-none border-b-0">
+        <Table aria-label="Projects">
+          <TableHeader>
+            <TableRow>
+              <TableHead>Project</TableHead>
+              <TableHead>Stage</TableHead>
+              <TableHead className="hidden lg:table-cell">Next date</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {shown.map((project) => (
+              <TableRow key={project.name}>
+                <TableCell className="text-fg">{project.name}</TableCell>
+                <TableCell>
+                  <Badge status={project.status}>{project.stage}</Badge>
+                </TableCell>
+                <TableCell className="hidden whitespace-nowrap lg:table-cell">{project.next}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Card>
+    </div>
+  );
+}
+
+const drafts = reviews.slice(0, 4);
+
+/** Sign-off as a working demo: ticking a draft signs it off, and the count follows. */
+function SignOffLive() {
+  const [signed, setSigned] = useState<string[]>([drafts[0].note, drafts[1].note]);
+  const toggle = (note: string) =>
+    setSigned((now) => (now.includes(note) ? now.filter((each) => each !== note) : [...now, note]));
+  return (
+    <div className="flex flex-col gap-3 p-6 md:p-8">
+      <p className="flex items-baseline justify-between gap-3 type-eyebrow text-muted">
+        <span>This week</span>
+        <span aria-live="polite">
+          {signed.length} of {drafts.length} signed off
+        </span>
+      </p>
+      <ul className="flex flex-col gap-2">
+        {drafts.map((draft) => (
+          <li key={draft.note}>
+            <Card variant="outlined" padding="none" className="!py-0">
+              <Checkbox
+                className="p-3"
+                label={draft.note}
+                description={draft.who}
+                checked={signed.includes(draft.note)}
+                onChange={() => toggle(draft.note)}
+              />
+            </Card>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+const periods: Record<string, { total: string; shares: number[] }> = {
+  Week: { total: "This week, 96 hours", shares: [44, 27, 9, 14, 5, 1] },
+  Month: { total: "March, 412 hours", shares: [38, 31, 14, 11, 4, 2] },
+  Quarter: { total: "January to March, 1,180 hours", shares: [33, 35, 16, 9, 5, 2] },
+};
+const kinds = ["Design", "Build", "Content", "Meetings", "Admin", "Travel"];
+
+/** The hours as a working demo: the control switches the period, and the bars follow. */
+function HoursLive() {
+  const [period, setPeriod] = useState("Month");
+  const { total, shares } = periods[period];
+  return (
+    <div className="flex flex-col items-start gap-4 p-6 md:p-8">
+      <SegmentedControl aria-label="Show hours for a period" value={period} onValueChange={setPeriod}>
+        {Object.keys(periods).map((name) => (
+          <SegmentedControl.Item key={name} value={name}>
+            {name}
+          </SegmentedControl.Item>
+        ))}
+      </SegmentedControl>
+      <p className="type-eyebrow text-muted" aria-live="polite">
+        {total}
+      </p>
+      <ChartRankedBars
+        className="w-full"
+        aria-label="Hours by kind of work"
+        animate="none"
+        max={50}
+        items={kinds.map((label, index) => ({ label, value: shares[index], valueLabel: `${shares[index]}%` }))}
+      />
+    </div>
+  );
+}
+
 const items: FeaturesBentoItem[] = [
   {
     title: "Every project on one board",
@@ -166,13 +291,28 @@ const items: FeaturesBentoItem[] = [
   },
 ];
 
-export default function Example(props: Partial<FeaturesBentoProps>) {
+/** The same four cells with working visuals in three of them. */
+const liveVisuals = [<BoardLive key="board" />, <SignOffLive key="sign-off" />, undefined, <HoursLive key="hours" />];
+const liveItems: FeaturesBentoItem[] = items.map((item, index) => {
+  const visual = liveVisuals[index];
+  return visual ? { ...item, visual, interactive: true } : item;
+});
+
+/** What changes between the two directions: the cells' visuals and where they sit. */
+export const variants: Record<string, Pick<FeaturesBentoProps, "items" | "media">> = {
+  interactive: { items: liveItems, media: "above" },
+  screens: { items, media: "below" },
+};
+
+/** The pattern filled with the example content, in one of the variants (the gallery passes `variant`). */
+export default function Example({ variant = "interactive", ...props }: Partial<FeaturesBentoProps> & { variant?: string }) {
+  const chosen = variants[variant] ?? variants.interactive;
   return (
     <FeaturesBento
       eyebrow="Features"
       heading="One place for the whole project"
       intro="Briefs, sign-off, hours and the tools you already use, kept together so nobody has to ask where things stand."
-      items={items}
+      {...chosen}
       {...props}
     />
   );

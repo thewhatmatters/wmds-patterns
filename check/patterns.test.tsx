@@ -144,15 +144,20 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
     } else if (mod.meta.type === "Features") {
-      // A features section: one h2, an h3 per feature, no h1 and no nav; the features are a list, and each one's
-      // picture is hidden from assistive tech and out of the tab order (the words carry the meaning).
+      // A features section: one h2, an h3 per feature, no h1 and no nav; the features are a list. A feature's visual
+      // is a picture (hidden from assistive tech and out of the tab order; the words carry the meaning) unless the
+      // cell says it can be used (data-interactive), in which case it is neither.
       expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
       expect(html).toMatch(/<ul[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
       for (const [tag] of html.matchAll(/<div[^>]*data-slot="visual"[^>]*>/g)) {
-        expect(tag).toMatch(/aria-hidden="true"/);
-        expect(tag).toMatch(/\binert\b/);
+        if (/data-interactive/.test(tag)) {
+          expect(tag).not.toMatch(/aria-hidden|\binert\b/);
+        } else {
+          expect(tag).toMatch(/aria-hidden="true"/);
+          expect(tag).toMatch(/\binert\b/);
+        }
       }
     } else if (mod.meta.type === "Pricing") {
       // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
