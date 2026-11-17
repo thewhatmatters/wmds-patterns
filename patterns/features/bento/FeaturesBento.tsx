@@ -48,7 +48,9 @@ const CELLS = "col-span-full mt-10 grid grid-cols-subgrid gap-y-[var(--grid-gutt
 const CELL_WIDE = "col-span-full md:col-span-4 lg:col-span-8";
 const CELL_NARROW = "col-span-full md:col-span-4 lg:col-span-4";
 const CELL_FULL = "col-span-full";
-const VISUAL = "relative mt-auto h-64 overflow-hidden md:h-72 lg:h-80";
+// The picture's last 3rem fade out, so whatever runs off the cell's bottom edge leaves softly instead of being cut mid-row.
+const VISUAL =
+  "relative mt-auto h-64 overflow-hidden [mask-image:linear-gradient(to_bottom,black_calc(100%_-_3rem),transparent)] md:h-72 lg:h-80";
 
 /** How far a picture rises into place, in px. */
 const RISE = 32;

@@ -34,6 +34,8 @@ const projects: { name: string; stage: string; status: BadgeStatus; owner: strin
   { name: "Slate Cycles, shop", stage: "Signed off", status: "success", owner: "Ines Okafor", next: "Fri 20 Mar" },
   { name: "Juniper Rooms, brand", stage: "Brief", status: "idle", owner: "Jun Hale", next: "Tue 24 Mar" },
   { name: "Kiln Pottery, menu", stage: "Building", status: "active", owner: "Mara Lindqvist", next: "Wed 1 Apr" },
+  { name: "Orchard School, prospectus", stage: "In review", status: "warning", owner: "Ines Okafor", next: "Fri 3 Apr" },
+  { name: "Tidewater Tours, booking", stage: "Brief", status: "idle", owner: "Tomas Reyes", next: "Tue 7 Apr" },
 ];
 
 function Board() {
@@ -75,6 +77,7 @@ const reviews: { who: string; note: string; verdict: string; status: BadgeStatus
   { who: "Tomas Reyes", note: "Menu photography", verdict: "Approved", status: "success" },
   { who: "Jun Hale", note: "Booking flow", verdict: "Waiting", status: "idle" },
   { who: "Mara Lindqvist", note: "Opening hours copy", verdict: "Changes", status: "warning" },
+  { who: "Ines Okafor", note: "Launch checklist", verdict: "Waiting", status: "idle" },
 ];
 
 function SignOff() {
@@ -104,7 +107,7 @@ const tools = [
 
 function Tools() {
   return (
-    <div className="flex flex-col gap-3 pt-2">
+    <div className="flex h-full flex-col justify-center gap-3">
       {tools.map((row, index) => (
         <FeaturesBentoDrift key={row[0]} direction={index % 2 === 0 ? "left" : "right"} duration={36 + index * 6}>
           {row.map((tool) => (
@@ -131,7 +134,8 @@ function Hours() {
             { label: "Build", value: 31, valueLabel: "31%" },
             { label: "Content", value: 14, valueLabel: "14%" },
             { label: "Meetings", value: 11, valueLabel: "11%" },
-            { label: "Admin", value: 6, valueLabel: "6%" },
+            { label: "Admin", value: 4, valueLabel: "4%" },
+            { label: "Travel", value: 2, valueLabel: "2%" },
           ]}
         />
       </div>
