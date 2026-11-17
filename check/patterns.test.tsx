@@ -143,6 +143,17 @@ describe.each(folders)("patterns/%s", (folder) => {
       expect(html).toMatch(/<ul[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
       expect(html).not.toMatch(/<h1[\s>]/);
       expect(html).not.toMatch(/<nav[\s>]/);
+    } else if (mod.meta.type === "Features") {
+      // A features section: one h2, an h3 per feature, no h1 and no nav; the features are a list, and each one's
+      // picture is hidden from assistive tech and out of the tab order (the words carry the meaning).
+      expect(html.match(/<h2[\s>]/g)).toHaveLength(1);
+      expect(html).toMatch(/<ul[\s>][\s\S]*<li[\s>][\s\S]*<h3[\s>]/);
+      expect(html).not.toMatch(/<h1[\s>]/);
+      expect(html).not.toMatch(/<nav[\s>]/);
+      for (const [tag] of html.matchAll(/<div[^>]*data-slot="visual"[^>]*>/g)) {
+        expect(tag).toMatch(/aria-hidden="true"/);
+        expect(tag).toMatch(/\binert\b/);
+      }
     } else if (mod.meta.type === "Pricing") {
       // A pricing section: one h2, an h3 per package, no h1 and no nav; every package has an action that goes
       // somewhere, and the comparison (when present) is a real table with row headers.
