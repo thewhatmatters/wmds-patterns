@@ -11,7 +11,8 @@
  * controls, its focus order and its full height.
  *
  * Layout knobs: `media` puts the visual under the words (it runs off the cell's bottom edge) or above them (a
- * framed picture with the words beneath), and an item's `span` overrides the wide / narrow turn-taking.
+ * framed picture with the words beneath), an item's `span` overrides the wide / narrow turn-taking, and `fill`
+ * turns the cells quiet so the surface panels in their visuals stand out.
  *
  * Motion (motion.dev, `motion/react`, the WMDS peer): each visual settles up into its cell once, as the cell
  * comes on screen (transform only). `FeaturesBentoDrift` is an optional row that glides sideways for a few
@@ -49,6 +50,11 @@ export interface FeaturesBentoProps {
   items: FeaturesBentoItem[];
   /** Where a cell's visual sits: under the words, running off the cell's bottom edge, or above them with a rule between. */
   media?: "below" | "above";
+  /**
+   * The cells' fill. `surface` (default): the layout card, raised off the page. `muted`: WMDS's quiet card (the
+   * muted background, a hairline edge, no shadow), so a surface panel in a cell's visual is the brightest thing in it.
+   */
+  fill?: "surface" | "muted";
   /** The band's WMDS tone. */
   tone?: BandTone;
   className?: string;
@@ -185,7 +191,16 @@ export function FeaturesBentoDrift({ children, direction = "left", duration = 40
   );
 }
 
-export function FeaturesBento({ eyebrow, heading, intro, items, media = "below", tone = "default", className }: FeaturesBentoProps) {
+export function FeaturesBento({
+  eyebrow,
+  heading,
+  intro,
+  items,
+  media = "below",
+  fill = "surface",
+  tone = "default",
+  className,
+}: FeaturesBentoProps) {
   const headingId = useId();
 
   return (
@@ -210,7 +225,7 @@ export function FeaturesBento({ eyebrow, heading, intro, items, media = "below",
         <ul className={CELLS} data-slot="cells">
           {items.map((item, index) => (
             <li key={item.title} className={cn(CELL, span(index, items.length, item.span))}>
-              <Card as="article" padding="bare" className={CARD} data-slot="cell">
+              <Card as="article" variant={fill} padding="bare" className={CARD} data-slot="cell">
                 <div className="p-6 md:p-8">
                   <h3 className="text-balance type-heading-3 text-fg">{item.title}</h3>
                   <p className="mt-2 max-w-[30em] text-pretty font-normal text-muted type-large">{item.description}</p>
