@@ -175,7 +175,8 @@ function BoardLive() {
         ))}
       </SegmentedControl>
       <Card variant="outlined" className="min-h-0 w-full flex-1 overflow-hidden rounded-b-none border-b-0">
-        <Table aria-label="Projects">
+        {/* `fit` (WMDS 0.4.54): the rows wrap inside a narrow cell, so the board never scrolls sideways on a phone. */}
+        <Table aria-label="Projects" fit>
           <TableHeader>
             <TableRow>
               <TableHead>Project</TableHead>
@@ -187,7 +188,8 @@ function BoardLive() {
             {shown.map((project) => (
               <TableRow key={project.name}>
                 <TableCell className="text-fg">{project.name}</TableCell>
-                <TableCell>
+                {/* The project's name wraps; its stage stays on one line. */}
+                <TableCell className="whitespace-nowrap">
                   <Badge status={project.status}>{project.stage}</Badge>
                 </TableCell>
                 <TableCell className="hidden whitespace-nowrap lg:table-cell">{project.next}</TableCell>

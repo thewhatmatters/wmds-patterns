@@ -69,6 +69,7 @@ import { FeaturesBento, FeaturesBentoDrift } from "./FeaturesBento";
 | `items[].interactive` | boolean | Set it when the visual is something the reader can use. Default `false`: the visual is a picture |
 | `items[].span` | `"wide"`, `"narrow"`, `"full"` | Optional: the cell's width from tablets up. Left out, cells take turns wide, narrow, narrow, wide |
 | `media` | `"below"` (default), `"above"` | Where the visuals sit: under the words, running off the cell's bottom edge with a fade, or above the words in a frame closed by a rule |
+| `fill` | `"surface"` (default), `"muted"` | The cells' fill. `surface`: the layout card, raised off the page. `muted`: WMDS's quiet card (muted background, hairline edge, no shadow), so the surface panels in the visuals stand out, as in the reference |
 | `tone` | `"default"` (default), `"inverse"`, `"field"` | The WMDS Band tone |
 
 `FeaturesBentoDrift` (optional, for a cell's `visual`): `children` (the row's items, drawn twice so it loops), `direction` (`"left"` default, `"right"`), `duration` (seconds per loop, default 40).
@@ -105,6 +106,7 @@ The first item is the example the gallery's Copy prompt uses.
 - **Pick the direction first, then fill the slots:** keep the layout and write each cell's `visual` in your site's own manner. A quiet product site: still screens (`media="below"`). A studio or a launch page: pictures that wake on hover, or demos the reader can use (`media="above"`, `interactive`).
 - **Your product's own screens:** build each `visual` from the WMDS components your product uses (a `Table`, a list of `Card`s, a chart), with real-looking content; start a panel at the text edge and let it run off the right and bottom (`absolute -right-6 top-0 left-6 md:left-8`).
 - **Screenshots or photographs:** an `<img alt="">` with `absolute inset-0 size-full object-cover`, or wider than the cell with `max-w-none` so the cell crops it.
+- **Quiet cells:** `fill="muted"` when the visuals are panels (a table, a list of cards) and you want them, not the cells, to carry the light. Leave the default when a visual sits straight on the cell (a chart, a row of chips).
 - **A working demo:** a small client component with its own state, built from WMDS controls (`SegmentedControl`, `Checkbox`, `Search`), marked `interactive`. Give it a fixed minimum height and two or three states, not a whole product.
 - **One hero cell:** `span: "full"` on the first item, then two halves under it.
 - **No moving row:** leave `FeaturesBentoDrift` out; the visuals still settle once.
@@ -115,12 +117,9 @@ Full width; Band `md` spacing (48 top and bottom); header → cells 40 / 64 (pho
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.54** (npm): `Band`, `Card` (`padding="bare"`, new in 0.4.54); the example adds `Table`, `Badge`, `Avatar`, `Chip`, `ChartRankedBars`, `SegmentedControl` and `Checkbox`. Motion 13 (already a dependency). No new library.
+Built on **@thewhatmatters/wmds 0.4.54** (npm): `Band`, `Card` (`padding="bare"` and `variant="muted"`, new in 0.4.54); the example adds `Table` (`fit`, new in 0.4.54), `Badge`, `Avatar`, `Chip`, `ChartRankedBars`, `SegmentedControl` and `Checkbox`. Motion 13 (already a dependency). No new library.
 
 - **Check change:** `npm run check` has a rule for the Features type: one h2, the features as a list with an h3 each, no h1, no nav, and every `data-slot="visual"` is `aria-hidden` and `inert` unless it is marked `data-interactive`, in which case it must be neither.
-- **WMDS-GAP: Card has no quiet fill.** The reference sets white product panels on grey cells. WMDS `Card` variants `surface` and `outlined` both draw the surface colour, so here a panel inside a cell is told apart only by its soft shadow. Proposed: a `Card variant="muted"` (the page's muted background, no shadow).
-- **Card room: fixed in 0.4.54.** Cells use `padding="bare"` (no header/footer room), replacing the `!py-0 !gap-0` overrides. The visual box stays a plain `div` because it rides the cell's subgrid rows; WMDS 0.4.54's `Card.Media` (`bleed`, `fade`) fits a card without the shared rows.
+- **Fixed in 0.4.54, and used here:** cells use Card `padding="bare"` (it replaced the `!py-0 !gap-0` overrides); `fill="muted"` is Card `variant="muted"`; the example's working board is a Table with `fit`, so its rows wrap in a narrow cell (at 320 the board is 240px wide in a 240px box; it scrolled 41px sideways before). SegmentedControl now carries a 44px tap layer on touch screens and takes arrow keys, and the active Badge measures 5.23:1 on the board in the dark theme (4.29:1 before).
+- **Card.Media isn't used.** The visual box stays a plain `div` because it rides the cell's subgrid rows; WMDS 0.4.54's `Card.Media` (`bleed`, `fade`) fits a card without the shared rows.
 - **WMDS-GAP: no short-run marquee.** WMDS `Carousel` autoplay drifts without end and brings a pause control on focus; a row that moves a few seconds on arrival and on hover has no WMDS part, so `FeaturesBentoDrift` lives in the pattern. Proposed: `autoplay={{ run: "arrival" | "hover" }}` on Carousel, or a small `Ticker`.
-- **WMDS-GAP: SegmentedControl has no 44px tap area.** Its items are 32px tall (`md`) and, unlike `IconButton`, carry no larger tap layer on coarse pointers. The example uses it as shipped. Proposed: the same coarse-pointer `::after` tap area as IconButton.
-- **WMDS-GAP: Table can't wrap inside a narrow box.** The `table` is `min-w-max` and `className` reaches only the wrapper, so in a 272px cell (a 320px phone) the board scrolls 41px sideways inside the table's own labelled, focusable region; the page itself doesn't scroll. Proposed: a `fit` option that lets cells wrap.
-- **WMDS-GAP: Badge `status="active"` is under AA in the dark theme.** Measured 4.29:1 on a Card ("Building" in the example's board; the other statuses measure 6.1:1 or more, and 4.6:1 or more in light). The example uses it as shipped. Proposed: lighten the active badge's ink in the dark palette to 4.5:1 or more.
