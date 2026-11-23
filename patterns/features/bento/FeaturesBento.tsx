@@ -66,9 +66,9 @@ const CELL = "row-span-2 grid grid-rows-subgrid pt-[var(--grid-gutter)]";
 const CELL_WIDE = "col-span-full md:col-span-4 lg:col-span-8";
 const CELL_NARROW = "col-span-full md:col-span-4 lg:col-span-4";
 const CELL_FULL = "col-span-full";
-// The Card passes the two rows on to its words and its visual. A WMDS layout card keeps room for a header and
-// a footer (16px above and below, 12px between parts); a cell has neither, so its parts meet its edges.
-const CARD = "group/cell row-span-2 !grid grid-rows-subgrid !gap-0 !py-0";
+// The Card passes the two rows on to its words and its visual. `padding="bare"` (WMDS 0.4.54) gives the layout
+// card's surface with no section room, so its parts meet its edges.
+const CARD = "group/cell row-span-2 !grid grid-rows-subgrid";
 // The visual's box grows with its cell and never drops under these heights.
 const VISUAL = "relative min-h-64 overflow-hidden md:min-h-72 lg:min-h-80";
 // Under the words, a picture's last 3rem fade out, so whatever runs off the cell's bottom edge leaves softly instead of being cut mid-row.
@@ -210,7 +210,7 @@ export function FeaturesBento({ eyebrow, heading, intro, items, media = "below",
         <ul className={CELLS} data-slot="cells">
           {items.map((item, index) => (
             <li key={item.title} className={cn(CELL, span(index, items.length, item.span))}>
-              <Card as="article" padding="none" className={CARD} data-slot="cell">
+              <Card as="article" padding="bare" className={CARD} data-slot="cell">
                 <div className="p-6 md:p-8">
                   <h3 className="text-balance type-heading-3 text-fg">{item.title}</h3>
                   <p className="mt-2 max-w-[30em] text-pretty font-normal text-muted type-large">{item.description}</p>

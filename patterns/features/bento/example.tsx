@@ -218,7 +218,7 @@ function SignOffLive() {
       <ul className="flex flex-col gap-2">
         {drafts.map((draft) => (
           <li key={draft.note}>
-            <Card variant="outlined" padding="none" className="!py-0">
+            <Card variant="outlined" padding="bare">
               <Checkbox
                 className="p-3"
                 label={draft.note}

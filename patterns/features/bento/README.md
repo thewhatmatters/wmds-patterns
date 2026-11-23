@@ -1,6 +1,6 @@
 # Features — Bento
 
-status: draft
+status: approved
 
 A layout pattern: the bento grid is the pattern, and what sits in its cells follows the site's direction. After Hebbia's "knowledge at work" features section (details.so, https://details.so/inspo/hebbia-5a8069) for the grid, and the WhatMatters home's "one team" section for cells the reader can use. Nothing copied but the structure.
 **File:** `FeaturesBento.tsx` (copy it). **Example:** `example.tsx`, a made-up client portal for a small studio, shown in two directions with the same words; every visual is built from WMDS components, so nothing in it needs a licence.
@@ -115,11 +115,11 @@ Full width; Band `md` spacing (48 top and bottom); header → cells 40 / 64 (pho
 
 ## WMDS
 
-Built on **@thewhatmatters/wmds 0.4.50** (npm): `Band`, `Card`; the example adds `Table`, `Badge`, `Avatar`, `Chip`, `ChartRankedBars`, `SegmentedControl` and `Checkbox`. Motion 13 (already a dependency). No new library.
+Built on **@thewhatmatters/wmds 0.4.54** (npm): `Band`, `Card` (`padding="bare"`, new in 0.4.54); the example adds `Table`, `Badge`, `Avatar`, `Chip`, `ChartRankedBars`, `SegmentedControl` and `Checkbox`. Motion 13 (already a dependency). No new library.
 
 - **Check change:** `npm run check` has a rule for the Features type: one h2, the features as a list with an h3 each, no h1, no nav, and every `data-slot="visual"` is `aria-hidden` and `inert` unless it is marked `data-interactive`, in which case it must be neither.
 - **WMDS-GAP: Card has no quiet fill.** The reference sets white product panels on grey cells. WMDS `Card` variants `surface` and `outlined` both draw the surface colour, so here a panel inside a cell is told apart only by its soft shadow. Proposed: a `Card variant="muted"` (the page's muted background, no shadow).
-- **WMDS-GAP: Card has no media slot.** The visual box (cut at the card's edges, bottom fade or a rule) is built in the pattern with `padding="none"` and a plain `div`. A `padding="none"` Card also keeps room for a header and footer (16px above and below, 12px between parts), which the pattern takes back with `!py-0 !gap-0`. Proposed: `Card.Media` with `bleed`, `fade` and `position` options.
+- **Card room: fixed in 0.4.54.** Cells use `padding="bare"` (no header/footer room), replacing the `!py-0 !gap-0` overrides. The visual box stays a plain `div` because it rides the cell's subgrid rows; WMDS 0.4.54's `Card.Media` (`bleed`, `fade`) fits a card without the shared rows.
 - **WMDS-GAP: no short-run marquee.** WMDS `Carousel` autoplay drifts without end and brings a pause control on focus; a row that moves a few seconds on arrival and on hover has no WMDS part, so `FeaturesBentoDrift` lives in the pattern. Proposed: `autoplay={{ run: "arrival" | "hover" }}` on Carousel, or a small `Ticker`.
 - **WMDS-GAP: SegmentedControl has no 44px tap area.** Its items are 32px tall (`md`) and, unlike `IconButton`, carry no larger tap layer on coarse pointers. The example uses it as shipped. Proposed: the same coarse-pointer `::after` tap area as IconButton.
 - **WMDS-GAP: Table can't wrap inside a narrow box.** The `table` is `min-w-max` and `className` reaches only the wrapper, so in a 272px cell (a 320px phone) the board scrolls 41px sideways inside the table's own labelled, focusable region; the page itself doesn't scroll. Proposed: a `fit` option that lets cells wrap.
