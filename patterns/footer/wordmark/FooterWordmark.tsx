@@ -139,7 +139,7 @@ function FittedName({ name }: { name: string }) {
   }, [name]);
   return (
     <svg viewBox={`${box.x} ${box.y} ${box.w} ${box.h}`} className="block h-auto w-full overflow-visible" role="img" aria-label={name}>
-      <text ref={textRef} x="0" y="0" fill="currentColor" style={{ fontFamily: "var(--font-family-heading)", fontSize: 100, letterSpacing: "-0.03em" }}>
+      <text ref={textRef} x="0" y="0" fill="currentColor" style={{ fontFamily: "var(--font-family-heading)", fontWeight: "var(--font-display-weight, var(--text-display-hero-weight))", textTransform: "var(--font-display-case)" as CSSProperties["textTransform"], fontSize: 100, letterSpacing: "-0.03em" }}>
         {name}
       </text>
     </svg>
